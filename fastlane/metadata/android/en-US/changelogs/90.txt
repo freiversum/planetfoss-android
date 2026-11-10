@@ -1,0 +1,5 @@
+- Night-sky header and splash screen as on planetfoss.net
+- In orbit with live dot and comets
+- A burning supernova as a band on top of Latest
+- Rubric modules in their colour, section heads as on the website
+- A short intro hint for new users

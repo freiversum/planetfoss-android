@@ -1,0 +1,346 @@
+<title>PlanetFOSS Startseite</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: Konzepttext links schmal, darunter Telefonreihen nebeneinander (Ist / Vorschlag), Telefone im App-Farbschema */
+:root{
+  --bg:#F5F6FB; --fg:#141A3A; --muted:#586079; --line:#DCE0EE; --card:#FFFFFF;
+  --accent:#4527D9; --accent-soft:#E6E0FF; --star:#FFC94D; --star-ink:#7A5600;
+  --aurora:#0B7A6E; --aurora-soft:#D7F0EB; --warn:#C2401F; --warn-soft:#FBE3DC;
+  --phone-bg:#F5F6FB; --phone-surface:#FFFFFF; --phone-cont:#EDEFF7; --phone-line:#DCE0EE;
+  --phone-fg:#141A3A; --phone-muted:#586079; --phone-frame:#0B1026;
+  --nova:#0B1026; --nova-ink:#F5F6FB; --nova-ink2:#DCE0EE; --nova-ink3:#8F97B5; --nova-line:#232B55;
+  --f-display:"Space Grotesk",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#070A1A; --fg:#F5F6FB; --muted:#8F97B5; --line:#232B55; --card:#0B1026;
+  --accent:#B3A4FF; --accent-soft:#2A2363; --star:#FFC94D; --star-ink:#FFC94D;
+  --aurora:#2DD4BF; --aurora-soft:#0F3B36; --warn:#FF8A6E; --warn-soft:#3A1810;
+  --phone-bg:#0B1026; --phone-surface:#141A3A; --phone-cont:#1C2449; --phone-line:#232B55;
+  --phone-fg:#F5F6FB; --phone-muted:#8F97B5; --phone-frame:#000000; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#070A1A; --fg:#F5F6FB; --muted:#8F97B5; --line:#232B55; --card:#0B1026;
+  --accent:#B3A4FF; --accent-soft:#2A2363; --star:#FFC94D; --star-ink:#FFC94D;
+  --aurora:#2DD4BF; --aurora-soft:#0F3B36; --warn:#FF8A6E; --warn-soft:#3A1810;
+  --phone-bg:#0B1026; --phone-surface:#141A3A; --phone-cont:#1C2449; --phone-line:#232B55;
+  --phone-fg:#F5F6FB; --phone-muted:#8F97B5; --phone-frame:#000000; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.5px}
+h2{font-size:24px}
+h3{font-size:17px}
+p{margin:0;max-width:68ch}
+.kick{font:600 12px/1 var(--f-mono);letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+header{display:flex;flex-direction:column;gap:14px}
+.lede{font-size:17px;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:20px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.box h3{display:flex;gap:8px;align-items:baseline}
+.box .tag{font:500 11px var(--f-mono);color:var(--muted)}
+.finding{border-left:3px solid var(--warn);background:var(--warn-soft);border-radius:0 12px 12px 0;padding:14px 18px;display:flex;flex-direction:column;gap:6px}
+.finding b{color:var(--warn)}
+code{font:13px var(--f-mono);background:var(--accent-soft);padding:1px 5px;border-radius:5px}
+ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+
+/* Telefonreihe */
+.phones{display:flex;gap:28px;overflow-x:auto;padding:4px 4px 16px;scroll-snap-type:x mandatory}
+.ph-col{display:flex;flex-direction:column;gap:12px;flex:0 0 auto;width:340px;scroll-snap-align:start;max-width:100%}
+.ph-cap{display:flex;flex-direction:column;gap:4px}
+.ph-cap .kick.ist{color:var(--warn)}
+.ph-cap p{font-size:13.5px;color:var(--muted)}
+.phone{width:340px;max-width:100%;height:720px;border-radius:38px;background:var(--phone-frame);padding:9px;box-shadow:0 18px 40px -20px rgba(11,16,38,.45)}
+.screen{width:100%;height:100%;border-radius:30px;background:var(--phone-bg);color:var(--phone-fg);display:flex;flex-direction:column;overflow:hidden;position:relative;font-size:13px;line-height:1.4}
+.status{height:26px;display:flex;justify-content:space-between;align-items:center;padding:0 22px;font:500 11px var(--f-mono);color:var(--phone-muted);flex:none}
+.bar{display:flex;align-items:center;gap:10px;padding:6px 16px 10px;flex:none}
+.bar .t{font:700 20px var(--f-display);flex:1}
+.bar .t small{font:500 11px var(--f-mono);color:var(--phone-muted);display:block;letter-spacing:.3px}
+.ico{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--phone-muted);font-size:15px}
+.seg{font:500 10.5px var(--f-mono);border:1px solid var(--phone-line);border-radius:99px;padding:3px 8px;color:var(--phone-muted)}
+.scroll{flex:1;overflow:hidden;padding:0 14px;display:flex;flex-direction:column;gap:12px;-webkit-mask-image:linear-gradient(#000 88%,transparent)}
+.nav{flex:none;display:grid;grid-template-columns:repeat(4,1fr);background:var(--phone-cont);padding:8px 4px 12px;border-top:1px solid var(--phone-line)}
+.nav div{display:flex;flex-direction:column;align-items:center;gap:3px;font:500 10.5px var(--f-body);color:var(--phone-muted)}
+.nav i{font-style:normal;width:48px;height:26px;border-radius:99px;display:grid;place-items:center;font-size:14px}
+.nav .on{color:var(--phone-fg);font-weight:700}
+.nav .on i{background:var(--accent-soft);color:var(--accent)}
+
+/* App-Bausteine */
+.lbl{font:700 10px var(--f-mono);letter-spacing:1px;text-transform:uppercase;color:var(--phone-muted);display:flex;align-items:center;gap:6px}
+.lbl.aur{color:var(--aurora)} .lbl .dot{width:7px;height:7px;border-radius:50%;background:var(--aurora)}
+.lbl .n{margin-left:auto;font-weight:500;letter-spacing:0;text-transform:none;color:var(--accent)}
+.nova{background:var(--nova);color:var(--nova-ink);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;flex:none}
+.nova::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,rgba(255,201,77,.28),transparent 45%),radial-gradient(1px 1px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 60% 70%,#fff,transparent),radial-gradient(1px 1px at 40% 85%,#DCE0EE,transparent);pointer-events:none}
+.nova>*{position:relative}
+.burst{display:flex;align-items:center;gap:8px;font:500 10.5px var(--f-mono);color:var(--nova-ink3)}
+.burst b{color:var(--star);font:700 10px var(--f-mono);letter-spacing:1px;text-transform:uppercase}
+.nova h4{margin:0;font:700 24px/1.1 var(--f-display);letter-spacing:-.4px}
+.nova .sum{font:400 11px var(--f-mono);color:var(--nova-ink2)}
+.nova .rep{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--nova-line);padding-top:8px}
+.nova .rep div{display:flex;gap:8px;font-size:12px;color:var(--nova-ink2)}
+.nova .rep span{font:500 10px var(--f-mono);color:var(--nova-ink3);flex:none;width:66px}
+.nova .lang{align-self:flex-start;font:500 10px var(--f-mono);border:1px solid var(--nova-line);border-radius:99px;padding:2px 8px;color:var(--nova-ink2)}
+.nova .all{font:600 12px var(--f-body);color:var(--star)}
+.nova.small{padding:12px;gap:4px} .nova.small h4{font-size:20px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--phone-line);background:var(--phone-surface);border-radius:8px;padding:5px 9px;font:500 11.5px var(--f-body);white-space:nowrap}
+.chip.comet{border-color:transparent;background:#FFE9A8;color:#3D2C00}
+.chip.nova-c{border-color:transparent;background:var(--nova);color:var(--nova-ink)}
+.chip.nova-c::before{content:"✦ ";color:var(--star)}
+.chip.comet::before{content:"☄ "}
+.rail{display:flex;gap:6px;overflow:hidden}
+.card{background:var(--phone-surface);border:1px solid var(--phone-line);border-radius:14px;padding:11px 12px;display:flex;flex-direction:column;gap:5px;flex:none}
+.card .img{height:96px;border-radius:9px;background:linear-gradient(135deg,var(--accent-soft),var(--aurora-soft))}
+.card .src{font:500 10px var(--f-mono);color:var(--phone-muted);display:flex;gap:6px}
+.card .src .new{color:var(--aurora);font-weight:700}
+.card .ti{font:600 13.5px/1.3 var(--f-body)}
+.card .topic{font:500 10.5px var(--f-mono);color:var(--accent)}
+.row{display:flex;gap:10px;padding:6px 2px;border-bottom:1px solid var(--phone-line);flex:none}
+.row time{font:500 10.5px var(--f-mono);color:var(--aurora);width:34px;flex:none;padding-top:2px}
+.row div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.row b{font:600 12.5px/1.3 var(--f-body)}
+.row span{font:500 10px var(--f-mono);color:var(--phone-muted)}
+.row.old time{color:var(--phone-muted)}
+.readline{display:flex;align-items:center;gap:8px;font:500 10px var(--f-mono);color:var(--aurora);flex:none}
+.readline::before,.readline::after{content:"";flex:1;height:1px;background:var(--aurora)}
+.newbar{display:flex;align-items:center;justify-content:space-between;background:var(--aurora-soft);color:var(--phone-fg);border-radius:10px;padding:7px 10px;font:500 11.5px var(--f-body);flex:none}
+.newbar a{font-weight:700;color:var(--aurora)}
+.logteaser{background:var(--nova);color:var(--nova-ink);border-radius:14px;padding:12px;display:flex;gap:12px;align-items:center;flex:none}
+.logteaser .cal{width:42px;flex:none;text-align:center;border:1px solid var(--nova-line);border-radius:8px;padding:4px 0}
+.logteaser .cal small{display:block;font:700 9px var(--f-mono);color:var(--star);letter-spacing:1px}
+.logteaser .cal b{font:700 18px var(--f-display)}
+.logteaser .tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.logteaser .tx .k{font:700 9.5px var(--f-mono);letter-spacing:1px;color:var(--star);text-transform:uppercase}
+.logteaser .tx b{font:700 15px var(--f-display)}
+.logteaser .tx span{font:400 10.5px var(--f-mono);color:var(--nova-ink3)}
+.logmark{display:flex;gap:10px;align-items:center;padding:6px 8px;border:1px dashed var(--phone-line);border-radius:10px;font:500 11px var(--f-body);color:var(--phone-muted);flex:none}
+.logmark time{font:500 10.5px var(--f-mono);color:var(--star-ink);width:34px}
+.logmark b{color:var(--phone-fg)}
+.mast{background:var(--nova);color:var(--nova-ink);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px;flex:none}
+.mast .k{font:700 10px var(--f-mono);letter-spacing:1px;color:var(--star);text-transform:uppercase}
+.mast h4{margin:0;font:700 24px var(--f-display)}
+.mast p{font-size:12.5px;color:var(--nova-ink2)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
+.tile{background:var(--phone-surface);border:1px solid var(--phone-line);border-radius:14px;padding:11px;display:flex;flex-direction:column;gap:4px;min-height:84px}
+.tile b{font:700 14px var(--f-display)}
+.tile span{font-size:11px;color:var(--phone-muted);line-height:1.35}
+.tile.dark{background:var(--nova);color:var(--nova-ink);border-color:transparent}
+.tile.dark span{color:var(--nova-ink3)}
+.tile i{font-style:normal;color:var(--star)}
+.rub{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;border-bottom:1px solid var(--phone-line);flex:none;gap:8px}
+.rub b{font:600 13px var(--f-body)}
+.rub span{font:500 10.5px var(--f-mono);color:var(--phone-muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.search{display:flex;align-items:center;gap:8px;background:var(--phone-cont);border-radius:99px;padding:9px 14px;color:var(--phone-muted);font-size:12.5px;flex:none}
+
+/* Anmerkungen am Telefon */
+.pin{position:absolute;right:10px;width:22px;height:22px;border-radius:50%;background:var(--warn);color:#fff;font:700 11px var(--f-mono);display:grid;place-items:center;box-shadow:0 0 0 3px var(--phone-bg);z-index:3}
+.pin.ok{background:var(--aurora)}
+.notes{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);margin:0;padding:0;list-style:none}
+.notes li{display:flex;gap:8px}
+.notes li b{flex:none;width:20px;height:20px;border-radius:50%;background:var(--warn);color:#fff;font:700 10.5px var(--f-mono);display:grid;place-items:center}
+.notes.ok li b{background:var(--aurora)}
+
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+.q{display:flex;flex-direction:column;gap:14px;counter-reset:q}
+.q>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.q>div h3::before{counter-increment:q;content:"F" counter(q) "  ";font:600 13px var(--f-mono);color:var(--accent)}
+.q .rec{font-size:13.5px;color:var(--aurora);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+<header>
+  <span class="kick">PlanetFOSS Android · Konzeptentwurf 10.11.2026</span>
+  <h1>Eine Startseite, die zeigt, was gerade passiert</h1>
+  <p class="lede">Heute und Entdecken überschneiden sich: Beide zeigen Neues, keiner zeigt alles Aktuelle. Der Vorschlag trennt nach Zeit und Ordnung. Der erste Reiter wird live, Entdecken wird zum Stöbern ohne eigenen Nachrichtenstrom, und das Logbuch wird eine Ausgabe statt eines Reiters.</p>
+  <p style="font-size:13px;color:var(--muted)">Alle Inhalte in den Telefonen stammen aus der App-API vom 10.11.2026 um 15:40 Uhr.</p>
+</header>
+
+<section>
+  <span class="kick">Befund</span>
+  <h2>Warum die Plasma-Supernova fehlt</h2>
+  <div class="cols">
+    <div class="box"><h3>Heute <span class="tag">Logbuch</span></h3><p>Der Reiter zeigt das Logbuch von 6 Uhr, also die 24 Stunden davor. Die Plasma-Supernova zündete um 11:42 Uhr und kommt erst im Logbuch von morgen vor. Bis dahin sieht man Komet „Altman“ und Firefox 160 von gestern. Darüber steht nur ein kleiner Block „Seit 6 Uhr“ mit vier Beiträgen.</p></div>
+    <div class="box"><h3>Entdecken <span class="tag">Neueste</span></h3><p>Hier gehört das Supernova-Band hin. Die API liefert es aber nicht, wenn die Inhaltssprache Deutsch ist (siehe unten). Dazu kommen Rubriken-Chips, „Im Orbit“, Titelseite, Wochenrückblick und der ganze Strom. Entdecken ist damit eigentlich die Startseite, nur unter falschem Namen.</p></div>
+  </div>
+  <div class="finding"><b>Datenfehler, unabhängig vom Konzept</b><p><code>/api/app/v1/supernovas?lang=de</code> liefert die brennende Supernova „KDE Plasma 6.8“ nicht, weil heute nur englische Berichte vorliegen (KDE, Phoronix, Linuxiac, 9to5Linux). Ohne <code>lang</code> ist sie da. Wer Deutsch als Inhaltssprache gewählt hat, verpasst damit jede Supernova, über die nur englische Quellen berichten. Die App kennt schon den Hinweis „nur englische Berichte“ für Bündel. Den könnte die Supernova-Karte auch zeigen.</p></div>
+</section>
+
+<section>
+  <span class="kick">Vorschlag</span>
+  <h2>Drei Rollen statt zwei überlappender Reiter</h2>
+  <div class="cols">
+    <div class="box"><h3>Aktuell <span class="tag">Reiter 1 · Zeit</span></h3><p>Was gerade passiert, neueste oben: brennende Supernovas, Kometen, dann alle Beiträge mit Markierung „neu seit deinem letzten Besuch“. Öffnet die App, ist man hier.</p></div>
+    <div class="box"><h3>Entdecken <span class="tag">Reiter 3 · Ordnung</span></h3><p>Kein Strom mehr. Einstiege zum Stöbern: Himmel der letzten 7 Tage, Rubriken mit heißen Themen, Themen, Quellen, Videos, Logbuch- und Wochenarchiv.</p></div>
+    <div class="box"><h3>Logbuch <span class="tag">Ausgabe · kein Reiter</span></h3><p>Erscheint um 6 Uhr als Karte oben in Aktuell. Nach dem Lesen rutscht sie als Marke an ihre Stelle im Strom (6:00). Das Archiv liegt in Entdecken, das Widget bleibt.</p></div>
+  </div>
+  <p>Radar und Gespeichert bleiben, wie sie sind. Optisch kommt nichts Neues dazu: Supernova-Karte, Komet-Chips, „Seit“-Leiste, Lesemarke, Logbuch-Kopf und Kacheln gibt es schon. Sie stehen nur an anderer Stelle.</p>
+</section>
+
+<section>
+  <span class="kick">Mockups</span>
+  <h2>Ist und Vorschlag nebeneinander</h2>
+  <div class="phones">
+
+    <!-- IST: Heute -->
+    <div class="ph-col">
+      <div class="ph-cap"><span class="kick ist">Ist · Reiter Heute</span><p>Morgenzeitung von 6 Uhr. Um 15:50 Uhr ist sie zehn Stunden alt.</p></div>
+      <div class="phone"><div class="screen">
+        <div class="status"><span>15:50</span><span>▮▮▮ 82 %</span></div>
+        <div class="bar"><div class="t">Heute</div><span class="seg">DE</span><span class="ico">⌕</span><span class="ico">⋮</span></div>
+        <div class="scroll">
+          <div class="lbl aur"><span class="dot"></span>Seit 6 Uhr · 30+ neu</div>
+          <div class="card"><div class="src"><span>simon42</span><span>15:42</span></div><div class="ti">Alexa.com: Alexa+ läuft in Deutschland jetzt auch im Browser</div></div>
+          <div class="row"><time>15:15</time><div><b>Linux 7.4: Torvalds hofft auf Ende der KI-Bugflut</b><span>PC Games Hardware</span></div></div>
+          <div class="row"><time>15:00</time><div><b>Kora: Linux-Betriebssystem mit Cyanogen-Mitgründer</b><span>ComputerBase</span></div></div>
+          <div class="mast" style="position:relative"><span class="pin" style="top:-8px">1</span><span class="k">Logbuch · Dienstag, 10. November</span><h4>Firefox 160</h4><p>In den 24 Stunden bis 6 Uhr haben 34 Quellen 81 Beiträge veröffentlicht.</p></div>
+          <div class="lbl" style="position:relative">☄ Kometen<span class="pin" style="top:-6px">2</span></div>
+          <div class="card"><div class="ti">Altman</div><div class="src"><span>steigt auf · gestern</span></div></div>
+          <div class="lbl">Neue Versionen</div>
+          <div class="chips"><span class="chip">Firefox 160</span><span class="chip">Mesa 26.3</span></div>
+        </div>
+        <div class="nav"><div class="on"><i>▤</i>Heute</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>⌑</i>Gespeichert</div></div>
+      </div></div>
+      <ol class="notes"><li><b>1</b>Das Logbuch nimmt den meisten Platz ein, ist aber von gestern.</li><li><b>2</b>Kometen und Versionen von gestern, die Supernova von 11:42 fehlt.</li></ol>
+    </div>
+
+    <!-- IST: Entdecken -->
+    <div class="ph-col">
+      <div class="ph-cap"><span class="kick ist">Ist · Reiter Entdecken</span><p>Die eigentliche Startseite, aber hinter dem Namen „Entdecken“ versteckt.</p></div>
+      <div class="phone"><div class="screen">
+        <div class="status"><span>15:50</span><span>▮▮▮ 82 %</span></div>
+        <div class="bar"><div class="t">Entdecken</div><span class="seg">DE</span><span class="ico">⌕</span><span class="ico">⋮</span></div>
+        <div class="scroll">
+          <div class="chips"><span class="chip">✦ Himmel</span><span class="chip">Rubriken</span><span class="chip">Themen</span><span class="chip">Quellen</span></div>
+          <div class="newbar"><span>14 neu seit 9:12</span><a>Alle gesehen</a></div>
+          <div class="lbl" style="position:relative">Im Orbit<span class="pin" style="top:-6px">3</span></div>
+          <div class="rail"><span class="chip">KDE Plasma 6.8</span><span class="chip">Firefox 160</span><span class="chip">Mesa 26.3</span><span class="chip">Firefox</span></div>
+          <div style="position:relative;flex:none;border:2px dashed var(--warn);border-radius:14px;padding:16px;text-align:center;color:var(--warn);font:500 11.5px var(--f-mono)"><span class="pin" style="top:-10px">4</span>Supernova-Band fehlt<br>(lang=de, nur EN-Berichte)</div>
+          <div class="card"><div class="img"></div><div class="src"><span>ComputerBase</span><span>11:00</span></div><div class="ti">CachyOS × EAC: Linux-Distribution bereit für Epics Easy Anti-Cheat v2</div><div class="topic">Anti-Cheat</div></div>
+          <div class="card"><div class="src"><span>heise online</span><span>13:44</span></div><div class="ti">Asahi Linux ändert Lizenz: Mit Copyleft gegen Code-Übernahme durch Forks</div></div>
+        </div>
+        <div class="nav"><div><i>▤</i>Heute</div><div><i>◎</i>Radar</div><div class="on"><i>✧</i>Entdecken</div><div><i>⌑</i>Gespeichert</div></div>
+      </div></div>
+      <ol class="notes"><li><b>3</b>Plasma 6.8 steht nur als Orbit-Chip da.</li><li><b>4</b>Das Band bleibt leer, weil die API die Supernova bei Deutsch weglässt.</li></ol>
+    </div>
+
+    <!-- NEU: Aktuell, morgens ungelesen -->
+    <div class="ph-col">
+      <div class="ph-cap"><span class="kick">Neu · Aktuell, 15:50 Uhr</span><p>Supernova oben, Logbuch noch ungelesen als Karte, danach der Strom ab dem letzten Besuch.</p></div>
+      <div class="phone"><div class="screen">
+        <div class="status"><span>15:50</span><span>▮▮▮ 82 %</span></div>
+        <div class="bar"><div class="t">Aktuell<small>Di, 10. Nov · 15:50</small></div><span class="seg">DE</span><span class="ico">⌕</span><span class="ico">⋮</span></div>
+        <div class="scroll">
+          <div class="nova" style="position:relative"><span class="pin ok" style="top:8px">A</span>
+            <div class="burst"><b>✦ Supernova</b><span>seit 11:42</span></div>
+            <h4>KDE Plasma 6.8</h4>
+            <div class="sum">4 Beiträge · 4 Quellen</div>
+            <span class="lang">nur englische Berichte</span>
+            <div class="rep"><div><span>Phoronix</span>KDE Plasma 6.8.3 Released With Dozens Of Fixes</div><div><span>Linuxiac</span>KDE Plasma 6.8.3 Released with KWin, Multi-GPU …</div></div>
+            <span class="all">Alle 4 Berichte →</span>
+          </div>
+          <div class="lbl" style="position:relative">Im Aufwind<span class="pin ok" style="top:-6px">B</span></div>
+          <div class="rail"><span class="chip comet">Firefox 160</span><span class="chip comet">Mesa 26.3</span><span class="chip">Asahi Linux</span><span class="chip">Chrome</span></div>
+          <div class="logteaser" style="position:relative"><span class="pin ok" style="top:-8px">C</span><div class="cal"><small>DI</small><b>10</b></div><div class="tx"><span class="k">Logbuch · 6 Uhr</span><b>Firefox 160</b><span>81 Beiträge · 34 Quellen · 2 Versionen</span></div><span style="color:var(--star)">›</span></div>
+          <div class="newbar" style="position:relative"><span>14 neu seit 9:12</span><a>Alle gesehen</a><span class="pin ok" style="top:-8px;right:-6px">D</span></div>
+          <div class="row"><time>15:42</time><div><b>Alexa.com: Alexa+ läuft in Deutschland jetzt auch im Browser</b><span>simon42</span></div></div>
+          <div class="row"><time>15:15</time><div><b>Linux 7.4: Torvalds hofft auf Ende der KI-Bugflut</b><span>PC Games Hardware · Linux-Kernel 7.4</span></div></div>
+          <div class="row"><time>15:00</time><div><b>Kora: Linux-Betriebssystem mit Cyanogen-Mitgründer an der Spitze</b><span>ComputerBase</span></div></div>
+        </div>
+        <div class="nav"><div class="on"><i>◉</i>Aktuell</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>⌑</i>Gespeichert</div></div>
+      </div></div>
+      <ol class="notes ok"><li><b>A</b>Alle brennenden Supernovas, jede als große Karte, neueste oben.</li><li><b>B</b>Kometen der letzten 24 Stunden (gelb) und Orbit-Themen in einer Zeile.</li><li><b>C</b>Logbuch als kompakte Karte, solange es heute ungelesen ist.</li><li><b>D</b>Danach alle Beiträge nach Zeit, wie bisher in Entdecken.</li></ol>
+    </div>
+
+    <!-- NEU: Aktuell, weiter unten -->
+    <div class="ph-col">
+      <div class="ph-cap"><span class="kick">Neu · Aktuell, weiter unten</span><p>Gelesenes Logbuch als Marke an seiner Uhrzeit, Lesemarke und ältere Supernovas am Rand.</p></div>
+      <div class="phone"><div class="screen">
+        <div class="status"><span>15:51</span><span>▮▮▮ 82 %</span></div>
+        <div class="bar"><div class="t">Aktuell<small>Di, 10. Nov · 15:51</small></div><span class="seg">DE</span><span class="ico">⌕</span><span class="ico">⋮</span></div>
+        <div class="scroll">
+          <div class="row"><time>13:44</time><div><b>Asahi Linux ändert Lizenz: Mit Copyleft gegen Forks</b><span>heise online · Asahi Linux</span></div></div>
+          <div class="row"><time>13:42</time><div><b>Home Assistant OS 18.5: Kernel-Sicherheitsupdate</b><span>simon42 · Home Assistant</span></div></div>
+          <div class="nova small"><div class="burst"><b>✦ Supernova</b><span>11:42 gezündet</span></div><h4>KDE Plasma 6.8</h4><div class="sum">steht oben · 4 Quellen</div></div>
+          <div class="row"><time>11:00</time><div><b>CachyOS × EAC: bereit für Epics Easy Anti-Cheat v2</b><span>ComputerBase · Anti-Cheat</span></div></div>
+          <div class="readline" style="position:relative">bis hier gelesen · 9:12</div>
+          <div class="row old"><time>10:26</time><div><b>Nvidia-Krise: Affäre des CEO wird untersucht</b><span>Linux-Magazin</span></div></div>
+          <div class="row old"><time>9:43</time><div><b>Red Hat OpenShift 5 vereinfacht Administration</b><span>Linux-Magazin</span></div></div>
+          <div class="logmark" style="position:relative"><time>6:00</time><span><b>Logbuch erschienen</b> · Firefox 160</span><span class="pin ok" style="position:static;margin-left:auto;box-shadow:none">E</span></div>
+          <div class="lbl" style="position:relative">✦ Diese Woche am Himmel<span class="pin ok" style="top:-6px">F</span></div>
+          <div class="rail"><span class="chip nova-c">OpenSSH 10.6</span><span class="chip nova-c">Linux 7.4</span><span class="chip nova-c">Fedora 45</span></div>
+          <div class="row old"><time>Mo</time><div><b>…weitere Beiträge laden</b><span>endloser Strom wie bisher</span></div></div>
+        </div>
+        <div class="nav"><div class="on"><i>◉</i>Aktuell</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>⌑</i>Gespeichert</div></div>
+      </div></div>
+      <ol class="notes ok"><li><b>E</b>Nach dem Lesen wird die Logbuch-Karte zur Marke bei 6:00 im Strom.</li><li><b>F</b>Erloschene Supernovas der Woche als Chips, Tipp führt zum Himmel.</li></ol>
+    </div>
+
+    <!-- NEU: Entdecken -->
+    <div class="ph-col">
+      <div class="ph-cap"><span class="kick">Neu · Entdecken</span><p>Kein Strom, nur Einstiege. Hier stöbert man nach Thema statt nach Zeit.</p></div>
+      <div class="phone"><div class="screen">
+        <div class="status"><span>15:52</span><span>▮▮▮ 82 %</span></div>
+        <div class="bar"><div class="t">Entdecken</div><span class="seg">DE</span><span class="ico">⋮</span></div>
+        <div class="scroll">
+          <div class="search">⌕ Beiträge, Themen, Quellen suchen</div>
+          <div class="tiles">
+            <div class="tile dark"><b><i>✦</i> Himmel</b><span>5 Supernovas in 7 Tagen, 1 brennt</span></div>
+            <div class="tile dark"><b>Logbuch</b><span>Ausgaben der letzten 14 Tage</span></div>
+            <div class="tile"><b>Wochenrückblick</b><span>KW 45 · erschienen Montag</span></div>
+            <div class="tile"><b>Videos</b><span>Neue Videos aus allen Quellen</span></div>
+          </div>
+          <div class="lbl">Rubriken</div>
+          <div class="rub"><b>Desktop</b><span>✦ KDE Plasma 6.8 · Firefox 160</span></div>
+          <div class="rub"><b>Distros</b><span>Fedora 45 · CachyOS</span></div>
+          <div class="rub"><b>Kernel</b><span>Linux-Kernel 7.4</span></div>
+          <div class="rub"><b>Hardware</b><span>Asahi Linux · Mesa 26.3</span></div>
+          <div class="rub"><b>Selfhosting</b><span>Home Assistant</span></div>
+          <div class="rub"><b>Security &amp; Privacy</b><span>OpenSSH 10.6</span></div>
+          <div class="chips"><span class="chip">Alle Themen</span><span class="chip">Alle Quellen</span></div>
+        </div>
+        <div class="nav"><div><i>◉</i>Aktuell</div><div><i>◎</i>Radar</div><div class="on"><i>✧</i>Entdecken</div><div><i>⌑</i>Gespeichert</div></div>
+      </div></div>
+      <ol class="notes ok"><li><b>G</b>Suche als Feld oben, weil hier gesucht und nicht gelesen wird.</li><li><b>H</b>Rubrikenliste mit heißen Themen direkt sichtbar, statt einer Unterseite.</li></ol>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <span class="kick">Regeln</span>
+  <h2>Was wohin wandert</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Baustein</th><th>Heute (Ist)</th><th>Vorschlag</th></tr></thead>
+    <tbody>
+      <tr><td>Brennende Supernovas</td><td>Entdecken, nur die erste, als Band</td><td>Aktuell ganz oben, alle, große Karte</td></tr>
+      <tr><td>Erloschene Supernovas (7 Tage)</td><td>Unterseite Himmel</td><td>Aktuell als Chipzeile im Strom, Himmel in Entdecken</td></tr>
+      <tr><td>Kometen</td><td>Logbuch (gestern)</td><td>Aktuell „Im Aufwind“ (letzte 24 h) mit Orbit zusammen</td></tr>
+      <tr><td>Logbuch</td><td>eigener Reiter Heute</td><td>Karte oben bis gelesen, dann Marke bei 6:00; Archiv in Entdecken</td></tr>
+      <tr><td>„Seit 6 Uhr“-Block</td><td>Heute, 4 Beiträge</td><td>entfällt, der Strom selbst zeigt „neu seit letztem Besuch“</td></tr>
+      <tr><td>Titelseite (Aufmacher, Projekte, Videos)</td><td>Entdecken</td><td>Aufmacher bleibt als erste große Karte, Projekte und Videos als Schienen im Strom wie bisher</td></tr>
+      <tr><td>Wochenrückblick</td><td>Band in Entdecken und Heute</td><td>Mo–Mi als Karte in Aktuell (wie Logbuch), sonst Kachel in Entdecken</td></tr>
+      <tr><td>Rubriken, Themen, Quellen</td><td>Chips in Entdecken → Unterseiten</td><td>Entdecken selbst</td></tr>
+      <tr><td>Deep Link <code>planetfoss://today</code>, Logbuch-Widget</td><td>Reiter Heute</td><td><code>today</code> → Aktuell, Widget öffnet die Logbuch-Ausgabe</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="kick">Offene Fragen</span>
+  <h2>Was du entscheiden müsstest</h2>
+  <div class="q">
+    <div><h3>Name des ersten Reiters</h3><p>„Aktuell“ sagt, was drin ist, und passt zu „Neueste“ auf der Website. „Heute“ wäre falsch, sobald der Strom über Mitternacht reicht. „Jetzt“ wäre knapper, klingt aber nach Live-Ticker.</p><span class="rec">Vorschlag: Aktuell / Latest</span></div>
+    <div><h3>Supernovas ohne deutsche Berichte</h3><p>Bei Inhaltssprache Deutsch die Supernova trotzdem zeigen, mit dem Hinweis „nur englische Berichte“? Das ist eine Änderung am Server (<code>NovaFeed</code>), nicht in der App.</p><span class="rec">Vorschlag: immer zeigen, Hinweis dazu</span></div>
+    <div><h3>Wann wird die Logbuch-Karte zur Marke?</h3><p>Nach dem Öffnen der Ausgabe, oder spätestens um 12 Uhr? Ohne Frist steht sie abends noch oben, wenn man sie nie öffnet.</p><span class="rec">Vorschlag: nach dem Öffnen oder ab 12 Uhr</span></div>
+    <div><h3>Mehrere brennende Supernovas</h3><p>An großen Tagen brennen drei gleichzeitig. Alle groß untereinander, oder nur die neueste groß und die anderen klein daneben?</p><span class="rec">Vorschlag: neueste groß, weitere als kleine Karten</span></div>
+  </div>
+</section>
+</div>

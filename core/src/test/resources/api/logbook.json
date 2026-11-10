@@ -1,0 +1,256 @@
+{
+ "day": "2026-11-02",
+ "label": "Montag, 2. November 2026",
+ "from": "2026-11-01T05:00:00+00:00",
+ "to": "2026-11-02T05:00:00+00:00",
+ "url": "https://planetfoss.linuxandi.net/logbuch/2026-11-02/",
+ "headline": "Introducing Kwi, a new KDE terminal emulator",
+ "lede": "In den 24 Stunden bis 6 Uhr haben 31 Quellen 63 Beiträge veröffentlicht. Über die größte Geschichte berichteten 3 Quellen: „Introducing Kwi, a new KDE terminal emulator“. Neu zur Supernova wurde Kwi. Dazu kamen 3 neue Versionen.",
+ "quiet": false,
+ "numbers": {
+  "items": 63,
+  "sources": 31,
+  "de": 11,
+  "en": 52
+ },
+ "story": {
+  "id": 233,
+  "name": "Introducing Kwi, a new KDE terminal emulator",
+  "sources": 3,
+  "langs": {
+   "de": 1,
+   "en": 4
+  },
+  "url": "https://planetfoss.linuxandi.net/buendel/233/",
+  "lead": {
+   "id": 40866,
+   "url": "https://blogs.kde.org/2026/11/01/introducing-kwi/",
+   "title": "Introducing Kwi, a new KDE terminal emulator",
+   "excerpt": "I've started work on a new KDE application. It's called Kwi (pronounced kwee).",
+   "lang": "en",
+   "published_at": "2026-11-01T00:00:00Z",
+   "is_video": false,
+   "stars": 0,
+   "source": {
+    "slug": "kde-blogs",
+    "name": "KDE Blogs",
+    "kind": "projekt",
+    "color": "#1199FF",
+    "logo": "https://planetfoss.linuxandi.net/img/logos/kde-blogs-4179d859.webp",
+    "support": null,
+    "open_external": false
+   },
+   "image": {
+    "small": "https://planetfoss.linuxandi.net/img/2026/11/86369cfbf97349d8fece-480.webp",
+    "large": "https://planetfoss.linuxandi.net/img/2026/11/86369cfbf97349d8fece-960.webp",
+    "width": 960,
+    "height": 682,
+    "fit": false
+   },
+   "categories": [
+    {
+     "slug": "desktop",
+     "name": "Desktop"
+    }
+   ],
+   "topic": {
+    "key": "auto-kwi",
+    "label": "Kwi",
+    "supernova": false
+   },
+   "bundle": null
+  }
+ },
+ "supernovas": [
+  {
+   "key": "auto-kwi",
+   "label": "Kwi",
+   "url": "https://planetfoss.linuxandi.net/thema/auto-kwi/",
+   "new": true,
+   "new_reports": 3,
+   "items": 4,
+   "sources": 4,
+   "langs": {
+    "de": 0,
+    "en": 4
+   },
+   "image": null,
+   "quote": {
+    "text": "A new KDE terminal emulator is in development as a modern alternative to Konsole",
+    "by": "Phoronix"
+   },
+   "reports": [
+    {
+     "id": 40888,
+     "url": "https://www.phoronix.com/news/KDE-Kwi-Terminal-Emulator",
+     "title": "Kwi Being Developed As New KDE Terminal Emulator With 3x To 35x Performance",
+     "excerpt": "A new KDE terminal emulator is in development as a modern alternative to Konsole",
+     "lang": "en",
+     "published_at": "2026-11-01T13:41:39Z",
+     "is_video": false,
+     "stars": 0,
+     "source": {
+      "slug": "phoronix",
+      "name": "Phoronix",
+      "kind": "magazin",
+      "color": "#338855",
+      "logo": "https://planetfoss.linuxandi.net/img/logos/phoronix-0709ee85.webp",
+      "support": null,
+      "open_external": false
+     },
+     "image": null,
+     "categories": [
+      {
+       "slug": "apps",
+       "name": "Apps"
+      }
+     ],
+     "topic": {
+      "key": "auto-kwi",
+      "label": "Kwi",
+      "supernova": false
+     },
+     "bundle": null
+    }
+   ]
+  }
+ ],
+ "comets": [
+  {
+   "key": "mpv-0-42",
+   "label": "MPV 0.42",
+   "url": "https://planetfoss.net/thema/mpv-0-42/",
+   "items": 2,
+   "sources": 2,
+   "reports": [
+    {
+     "id": 40918,
+     "url": "https://noted.lol/proton-community-concerns/",
+     "title": "Privacy Enthusiasts Are Questioning Proton",
+     "excerpt": "Privacy enthusiasts in the community are questioning Proton's direction after reports raised concerns about AI and security oversight.",
+     "lang": "en",
+     "published_at": "2026-11-01T20:43:51Z",
+     "is_video": false,
+     "stars": 0,
+     "source": {
+      "slug": "noted-lol",
+      "name": "noted.lol",
+      "kind": "magazin",
+      "color": "#112244",
+      "logo": "https://planetfoss.linuxandi.net/img/logos/noted-lol-2c39a8d6.webp",
+      "support": null,
+      "open_external": false
+     },
+     "image": {
+      "small": "https://planetfoss.linuxandi.net/img/2026/11/5e9454926f1d447567a8-480.webp",
+      "large": "https://planetfoss.linuxandi.net/img/2026/11/5e9454926f1d447567a8-960.webp",
+      "width": 960,
+      "height": 540,
+      "fit": false
+     },
+     "categories": [
+      {
+       "slug": "community",
+       "name": "Community & Events"
+      },
+      {
+       "slug": "security-privacy",
+       "name": "Security & Privacy"
+      }
+     ],
+     "topic": null,
+     "bundle": null
+    }
+   ]
+  }
+ ],
+ "releases": [
+  {
+   "key": "budgie-10-10",
+   "label": "Budgie 10.10",
+   "entity": "Budgie",
+   "version": "10.10",
+   "sources": 2,
+   "supernova": false,
+   "comet": false
+  },
+  {
+   "key": "linux-kernel-7-2",
+   "label": "Linux-Kernel 7.2",
+   "entity": "Linux-Kernel",
+   "version": "7.2",
+   "sources": 2,
+   "supernova": false,
+   "comet": false
+  },
+  {
+   "key": "linux-kernel-7-4",
+   "label": "Linux-Kernel 7.4",
+   "entity": "Linux-Kernel",
+   "version": "7.4",
+   "sources": 2,
+   "supernova": false,
+   "comet": false
+  }
+ ],
+ "also": [
+  {
+   "id": 40918,
+   "url": "https://noted.lol/proton-community-concerns/",
+   "title": "Privacy Enthusiasts Are Questioning Proton",
+   "excerpt": "Privacy enthusiasts in the community are questioning Proton's direction after reports raised concerns about AI and security oversight.",
+   "lang": "en",
+   "published_at": "2026-11-01T20:43:51Z",
+   "is_video": false,
+   "stars": 0,
+   "source": {
+    "slug": "noted-lol",
+    "name": "noted.lol",
+    "kind": "magazin",
+    "color": "#112244",
+    "logo": "https://planetfoss.linuxandi.net/img/logos/noted-lol-2c39a8d6.webp",
+    "support": null,
+    "open_external": false
+   },
+   "image": {
+    "small": "https://planetfoss.linuxandi.net/img/2026/11/5e9454926f1d447567a8-480.webp",
+    "large": "https://planetfoss.linuxandi.net/img/2026/11/5e9454926f1d447567a8-960.webp",
+    "width": 960,
+    "height": 540,
+    "fit": false
+   },
+   "categories": [
+    {
+     "slug": "community",
+     "name": "Community & Events"
+    },
+    {
+     "slug": "security-privacy",
+     "name": "Security & Privacy"
+    }
+   ],
+   "topic": null,
+   "bundle": null
+  }
+ ],
+ "starred": [],
+ "archive": [
+  "2026-11-05",
+  "2026-11-02",
+  "2026-11-01",
+  "2026-10-31",
+  "2026-10-30",
+  "2026-10-29",
+  "2026-10-28",
+  "2026-10-27"
+ ],
+ "week_done": {
+  "week": "2026-44",
+  "items": 661,
+  "sources": 115,
+  "supernovas": 7,
+  "story": "Ubuntu Core Desktop ist zurück – fürs Web, Entwickler und Gamer",
+  "story_sources": 12
+ },
+ "unknown_future_field": 1
+}

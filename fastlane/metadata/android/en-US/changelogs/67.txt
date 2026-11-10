@@ -1,0 +1,8 @@
+First release for F-Droid.
+- The look of planetfoss.net: its fonts, colours and wordmark
+- Denser lists, two columns on tablets
+- Sternstunden: what readers starred this week
+- Videos open in their app; full screen in the app's browser
+- Supernovas with comets
+- Support the sources; tracker protection
+- Shorter settings with choice dialogs

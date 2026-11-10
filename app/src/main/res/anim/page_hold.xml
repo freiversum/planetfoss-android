@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Christoph Langner -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- the app stays still under the Custom Tab while it opens or closes -->
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:duration="300" />

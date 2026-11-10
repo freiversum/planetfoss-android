@@ -1,0 +1,10 @@
+.gradle/
+build/
+*/build/
+local.properties
+.kotlin/
+*.iml
+.idea/
+captures/
+CLAUDE.md
+/dist/

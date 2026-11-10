@@ -1,0 +1,1 @@
+Quellen, die selbst keine Unterstützung brauchen, können ein anderes Projekt empfehlen; die App zeigt die Empfehlung in der Quellenliste und in den Menüs.

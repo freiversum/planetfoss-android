@@ -1,0 +1,3 @@
+- Quicker, calmer page transitions, also back from the internal browser
+- The bottom bar no longer jumps when going back
+- Faster start thanks to a baseline profile (about 20 % on a Pixel 10)

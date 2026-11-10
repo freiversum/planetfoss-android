@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The font licence is never read by code but has to ship with the fonts (SIL OFL 1.1). -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@raw/fonts_ofl" />

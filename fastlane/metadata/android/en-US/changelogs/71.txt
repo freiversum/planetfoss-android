@@ -1,0 +1,1 @@
+Long source names no longer cut the time off the meta line; it wraps when needed.

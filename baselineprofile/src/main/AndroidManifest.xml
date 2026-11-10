@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Christoph Langner -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- the app under test, as the shell would see it -->
+    <queries>
+        <package android:name="net.planetfoss.app.benchmark" />
+    </queries>
+</manifest>

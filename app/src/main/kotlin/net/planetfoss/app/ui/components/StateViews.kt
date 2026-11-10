@@ -1,0 +1,88 @@
+// SPDX-FileCopyrightText: 2026 Christoph Langner
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+package net.planetfoss.app.ui.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import net.planetfoss.app.R
+import net.planetfoss.app.ui.theme.Space
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.painter.Painter
+
+@Composable
+fun errorText(error: UiError, hasData: Boolean): String = when (error) {
+    UiError.Offline -> stringResource(if (hasData) R.string.error_offline else R.string.error_offline_empty)
+    is UiError.Server -> stringResource(R.string.error_server, error.code)
+    UiError.Malformed -> stringResource(R.string.error_malformed)
+    UiError.NotFound -> stringResource(R.string.error_not_found)
+}
+
+/** Full-screen message: loading, empty, or error without cached data. */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun CenterMessage(
+    text: String?,
+    loading: Boolean = false,
+    onRetry: (() -> Unit)? = null,
+    action: Pair<String, () -> Unit>? = null,
+    /** Empty states: a large, quiet symbol of what would be here. */
+    icon: Painter? = null,
+) {
+    Box(Modifier.fillMaxSize().padding(Space.xl), contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Space.l)) {
+            if (loading) LoadingIndicator()
+            if (icon != null) Icon(icon, null, Modifier.size(48.dp), tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
+            if (text != null) {
+                Text(
+                    text,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.widthIn(max = 480.dp).semantics { liveRegion = LiveRegionMode.Polite },
+                )
+            }
+            if (onRetry != null) Button(onClick = onRetry, shapes = ButtonDefaults.shapes()) { Text(stringResource(R.string.retry)) }
+            if (action != null) Button(onClick = action.second, shapes = ButtonDefaults.shapes()) { Text(action.first) }
+        }
+    }
+}
+
+/** Error over cached data: a slim banner at the top of the list. */
+@Composable
+fun ErrorBanner(text: String, onRetry: () -> Unit) {
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerHigh, modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(start = Space.l, end = Space.s, top = Space.xs, bottom = Space.xs), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f).semantics { liveRegion = LiveRegionMode.Polite },
+            )
+            TextButton(onClick = onRetry) { Text(stringResource(R.string.retry)) }
+        }
+    }
+}

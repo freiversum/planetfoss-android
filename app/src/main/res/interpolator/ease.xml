@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Christoph Langner -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- CSS ease (Motion.Ease) -->
+<pathInterpolator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:controlX1="0.25" android:controlY1="0.1" android:controlX2="0.25" android:controlY2="1" />

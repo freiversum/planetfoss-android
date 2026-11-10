@@ -1,0 +1,10 @@
+<!-- Latest tab: the four-pointed star of the PlanetFOSS mark (something is burning) above a stream of lines
+     (own drawing, GPL-3.0-or-later like the app). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FF000000"
+        android:pathData="M6.75,1.75 Q7.45,6.05 11.75,6.75 Q7.45,7.45 6.75,11.75 Q6.05,7.45 1.75,6.75 Q6.05,6.05 6.75,1.75Z" />
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:fillColor="#00000000"
+        android:pathData="M14.5,5L21,5M14.5,9.5L21,9.5M3,14.5L21,14.5M3,19L15,19" />
+</vector>

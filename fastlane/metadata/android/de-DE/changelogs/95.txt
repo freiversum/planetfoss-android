@@ -1,0 +1,3 @@
+- Schnellere, ruhigere Seitenübergänge, auch zurück aus dem internen Browser
+- Die untere Leiste springt nicht mehr beim Zurück
+- Schnellerer Start dank Baseline-Profil (rund 20 % auf einem Pixel 10)

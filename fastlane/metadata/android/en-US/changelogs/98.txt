@@ -1,0 +1,2 @@
+- The back gesture now uses the new page transitions too
+- The bottom bar no longer jumps when swiping back either

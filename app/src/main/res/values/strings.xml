@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">PlanetFOSS</string>
+
+    <string name="wordmark_title">PlanetFOSS, %1$s</string>
+    <string name="tab_home">Latest</string>
+    <string name="tab_supernovas">Supernovas</string>
+    <string name="tab_saved">Saved</string>
+    <string name="settings">Settings</string>
+    <string name="back">Back</string>
+
+    <string name="lang_all">All</string>
+    <string name="lang_de">German</string>
+    <string name="lang_en">English</string>
+    <string name="lang_choose">Content language</string>
+    <string name="lang_chip_all">DE + EN</string>
+
+    <string name="retry">Try again</string>
+    <string name="loading">Loading</string>
+    <string name="error_offline">No connection to PlanetFOSS. Showing what was loaded last.</string>
+    <string name="error_offline_empty">No connection to PlanetFOSS.</string>
+    <string name="error_server">PlanetFOSS is not answering right now (%1$d).</string>
+    <string name="error_malformed">PlanetFOSS sent an answer the app does not understand. An app update may be needed.</string>
+    <string name="empty_home">No posts yet.</string>
+    <string name="empty_supernovas">No supernova right now. A supernova appears when many sources report on the same topic at once.</string>
+
+    <string name="supernova_badge">Supernova</string>
+    <string name="supernova_afterglow">afterglow</string>
+    <plurals name="supernova_all_n">
+        <item quantity="one">The report</item>
+        <item quantity="other">All %1$d reports</item>
+    </plurals>
+    <string name="comet_badge">Comet</string>
+    <string name="comet_first_report">first report %1$s</string>
+    <string name="comet_topic">Open topic</string>
+    <plurals name="comet_posts_24h">
+        <item quantity="one">1 post in 24 h</item>
+        <item quantity="other">%1$d posts in 24 h</item>
+    </plurals>
+    <plurals name="n_sources">
+        <item quantity="one">1 source</item>
+        <item quantity="other">%1$d sources</item>
+    </plurals>
+    <string name="supernova_all_reports">All reports</string>
+    <plurals name="bundle_more">
+        <item quantity="one">+ 1 more source</item>
+        <item quantity="other">+ %1$d more sources</item>
+    </plurals>
+    <string name="quote">“%1$s”</string>
+    <string name="video">Video</string>
+    <string name="item_by">%1$s, %2$s</string>
+
+
+    <string name="settings_language">Language</string>
+    <string name="content_lang_title">Content language</string>
+    <string name="settings_privacy">Privacy</string>
+    <string name="settings_licence_title">Licence</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_privacy_note">No tracking, no telemetry, no Google services. The app only talks to planetfoss.net and to the sites you open – and, only if you switch it on, fetches the tracker filter list (easylist.to). If you switch on Settings → Anonymous counting, opened articles are counted for the sources as a daily total – no identifier. Which lists the app loads, planetfoss.net counts as daily totals, like page views on the website.</string>
+    <string name="settings_license">Free software under the GNU GPL, version 3 or later.</string>
+    <string name="error_not_found">Not found on PlanetFOSS.</string>
+    <string name="save">Save</string>
+    <string name="unsave">Remove from saved</string>
+    <string name="more_actions">More actions</string>
+    <string name="share">Share</string>
+    <string name="copy_link">Copy link</string>
+    <string name="more_from">More from %1$s</string>
+    <string name="videos">Videos</string>
+    <string name="starred">Starred</string>
+    <string name="starred_hint">starred by readers of planetfoss.net · 7 days</string>
+    <string name="starred_empty">No stars yet. On planetfoss.net readers mark what matters to them – the most starred posts of the week show up here.</string>
+    <string name="all_link">All</string>
+    <string name="intro_text">PlanetFOSS gathers Linux and open source news from many sources. When many of them report on the same thing at once, it becomes a ✦ supernova.</string>
+    <string name="intro_link">How PlanetFOSS works</string>
+    <string name="intro_close">Close hint</string>
+    <string name="imprint">Imprint</string>
+    <string name="follow">Follow: notify me of new posts</string>
+    <string name="unfollow">Stop following</string>
+    <string name="unfollow_named">Stop following %1$s</string>
+    <string name="follow_needs_notifications">Following needs notifications – allow them in Android\'s settings for this app.</string>
+    <string name="settings_follows">Following</string>
+    <string name="follow_kind_topic">Topic</string>
+    <string name="follow_kind_source">Source</string>
+    <string name="bundle_all">All reports as cards</string>
+    <string name="mastodon">PlanetFOSS on Mastodon</string>
+    <string name="kind_verlag">Publishers</string>
+    <string name="kind_magazin">Magazines</string>
+    <string name="kind_blog">Blogs</string>
+    <string name="kind_projekt">Projects</string>
+    <string name="kind_verein">Associations</string>
+    <string name="kind_anleitung">Tutorials</string>
+    <string name="kind_video">Videos</string>
+    <string name="from_projects">From the projects</string>
+    <string name="topic_also_about">Other coverage of %1$s</string>
+    <string name="help_hint">Supernova, comet, Sternstunden, bundles – what they mean</string>
+    <string name="settings_display">Display</string>
+    <string name="theme_title">Design</string>
+    <string name="theme_system">Same as the phone</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="in_orbit">In orbit</string>
+    <string name="rising">Rising</string>
+    <string name="logbook_marker">Logbook published</string>
+    <string name="week_sky">This week in the sky</string>
+    <string name="discover_search">Search posts, topics and sources</string>
+    <string name="sky_hint">Supernovas and comets of the last seven days</string>
+    <string name="all_topics">All topics</string>
+    <string name="topics_title">Topics</string>
+    <string name="topics_hint">In orbit right now, and the topics with their own page</string>
+    <string name="evergreen_topics">Topics with their own page</string>
+    <string name="sources_title">The solar system</string>
+    <string name="sources_hint">All sources PlanetFOSS reads, by kind</string>
+    <string name="sources_support_filter">Can be supported</string>
+    <string name="sources_can_support">Can be supported</string>
+    <string name="topic_since">since %1$s</string>
+    <string name="part_of">Part of: %1$s</string>
+    <string name="related">Related</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+    <plurals name="n_posts">
+        <item quantity="one">%d post</item>
+        <item quantity="other">%d posts</item>
+    </plurals>
+    <plurals name="posts_week">
+        <item quantity="one">%d post this week</item>
+        <item quantity="other">%d posts this week</item>
+    </plurals>
+    <string name="star">Star for the Sternstunden</string>
+    <string name="unstar">Take the star back</string>
+    <string name="star_busy">Star is being set</string>
+    <string name="star_failed">The star did not reach planetfoss.net. Please try again.</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search PlanetFOSS</string>
+    <string name="search_clear">Clear search</string>
+    <string name="search_intro">Search titles and teasers of all posts on PlanetFOSS.</string>
+    <string name="search_none">Nothing found.</string>
+    <string name="search_topics">Topics</string>
+    <string name="period_any">Any time</string>
+    <string name="period_day">24 h</string>
+    <string name="period_day_spoken">24 hours</string>
+    <string name="period_week">7 days</string>
+    <string name="period_month">30 days</string>
+    <string name="filter_supernova">Supernova topics</string>
+    <string name="empty_saved">Nothing saved yet. Tap the bookmark on a post to keep it here – also offline.</string>
+    <string name="comets_switch">Show comets</string>
+    <string name="comets_explain">Rising topics that several sources picked up in the last 24 hours, between the supernovas.</string>
+    <string name="settings_sources">Anonymous counting</string>
+    <string name="count_reach_switch">Count anonymously for the sources</string>
+    <string name="count_reach_explain">When you open an article, planetfoss.net counts it as a daily total, so publishers, bloggers and content creators learn how many readers PlanetFOSS sends them, but never who read what. No identifier, only the article\'s address. Off: the app reports nothing about what you read.</string>
+    <string name="count_reach_explain_ads">When you open an article, planetfoss.net counts it as a daily total, so publishers, bloggers and content creators learn how many readers PlanetFOSS sends them, but never who read what. No identifier, only the article\'s address. Off: the app reports nothing about what you read. Sponsor cards you see are always counted for the sponsors, as on the website: card, place and language, no identifier.</string>
+    <string name="notify_switch">New supernovas</string>
+    <string name="notify_explain">The app checks PlanetFOSS regularly in the background. Android decides when exactly, so a notice can come later than the supernova – it is not a live push.</string>
+    <string name="notify_blocked">Android currently blocks notifications for this app.</string>
+    <string name="open_system_settings">Open Android settings</string>
+    <string name="notify_interval">How often to check</string>
+    <string name="notify_offer_title">Get notified about supernovas?</string>
+    <string name="notify_offer_text">A supernova appears when many sources report on the same topic at once. The app can check regularly and let you know.</string>
+    <string name="notify_offer_yes">Notify me</string>
+    <string name="notify_denied">Android did not allow notifications. You can allow them in the Android settings.</string>
+    <string name="not_now">Not now</string>
+    <string name="channel_supernovas">Supernovas</string>
+    <string name="channel_supernovas_text">New topics many sources report on at once</string>
+    <string name="channel_follows">Followed topics and sources</string>
+    <string name="channel_follows_text">New posts in the topics and sources you follow</string>
+    <plurals name="follow_new">
+        <item quantity="one">%d new post</item>
+        <item quantity="other">%d new posts</item>
+    </plurals>
+    <string name="notify_title">Supernova: %1$s</string>
+    <string name="notify_text_fallback">Many sources are reporting on it.</string>
+    <plurals name="every_minutes">
+        <item quantity="one">every minute</item>
+        <item quantity="other">every %1$d minutes</item>
+    </plurals>
+    <plurals name="every_hours">
+        <item quantity="one">every hour</item>
+        <item quantity="other">every %1$d hours</item>
+    </plurals>
+    <string name="browser_close">Close</string>
+    <string name="browser_stop">Stop loading</string>
+    <string name="browser_reload">Reload</string>
+    <string name="browser_forward">Forward</string>
+    <string name="support_named">Support %1$s</string>
+    <string name="support_box_text">Enjoy the articles? A subscription or a donation helps right where they are written – and keeps them coming.</string>
+    <string name="support_button">Support ↗</string>
+    <string name="support_fw_by">Recommended by %1$s</string>
+    <string name="support_fw_title">Support %1$s instead</string>
+    <string name="support_fw_text">%1$s doesn\'t need support itself and recommends %2$s to you instead. You support it directly on its own site.</string>
+    <string name="support_fw_button">Support %1$s ↗</string>
+    <string name="browser_open_outside">Open in browser</string>
+    <string name="browser_secure">Encrypted connection</string>
+    <string name="browser_insecure">Connection not encrypted</string>
+    <string name="page_offline">No connection to %1$s.</string>
+    <string name="page_host">%1$s cannot be found.</string>
+    <string name="page_timeout">%1$s is not answering.</string>
+    <string name="page_certificate">The certificate of %1$s is not valid. The page was not loaded – the app never accepts invalid certificates.</string>
+    <string name="page_blocked">The app does not open this kind of link.</string>
+    <string name="page_other">%1$s could not be loaded.</string>
+    <string name="outside_title">Open another app?</string>
+    <string name="outside_text">This page wants to open a link of type “%1$s” in another app.</string>
+    <string name="outside_open">Open</string>
+    <string name="cancel">Cancel</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="open_in_app">Open in the app</string>
+    <string name="settings_browser">Open articles</string>
+    <string name="open_with">Open with</string>
+    <string name="open_in_video_app">Open in video app</string>
+    <string name="mode_custom_tab">Your browser (Custom Tab)</string>
+    <string name="mode_custom_tab_text">Your default browser, with its own settings, logins and protection.</string>
+    <string name="mode_internal">Inside the app</string>
+    <string name="mode_internal_text">The app\'s own browser. The optional tracker protection works only here.</string>
+    <string name="mode_chooser">Ask every time</string>
+    <string name="mode_chooser_text">Android shows the apps that can open the link.</string>
+    <string name="browser_js">JavaScript in the app\'s browser</string>
+    <string name="browser_js_text">Most sites need it for their layout. Off makes pages leaner but some break.</string>
+    <string name="browser_clear">Delete browser data</string>
+    <string name="browser_clear_text">Cookies, site storage and cache of the app\'s browser. Saved articles stay.</string>
+    <string name="browser_cleared">Deleted.</string>
+    <string name="page_insecure">%1$s offers no encrypted connection. The app\'s browser loads only encrypted pages – your own browser decides for itself.</string>
+    <string name="settings_app_language">App language</string>
+    <string name="app_lang_system">Same as the phone</string>
+    <string name="app_lang_de" translatable="false">Deutsch</string>
+    <string name="app_lang_en" translatable="false">English</string>
+    <string name="settings_trackers">Trackers</string>
+    <string name="trackers_switch">Block trackers in the app\'s browser</string>
+    <string name="trackers_explain">Blocks third-party trackers (EasyPrivacy). The sources\' ads and their own visitor statistics stay: they pay for the articles PlanetFOSS links to and show the publishers that their readers come from here. Requests are checked on the phone; visited addresses are not sent anywhere.</string>
+    <string name="adblock_loading">Downloading the list …</string>
+    <string name="adblock_failed">Download failed: %1$s</string>
+    <string name="adblock_list_status">%1$s rules, updated %2$s</string>
+    <string name="adblock_last_error">Last update failed: %1$s</string>
+    <string name="adblock_update_now">Update the list now</string>
+    <string name="adblock_exceptions">Not blocked on these sites</string>
+    <string name="adblock_no_exceptions">No exceptions. You can switch the protection off for a site in the browser menu.</string>
+    <string name="adblock_remove_exception">Block again on %1$s</string>
+    <string name="adblock_add_exception">Add a site</string>
+    <string name="adblock_add">Add</string>
+    <string name="adblock_invalid_host">That is not a site address.</string>
+    <string name="adblock_limits">Limits: only the app\'s own browser is covered – not your browser, not other apps, not the whole phone. Only trackers of other sites are blocked; some requests from service workers and WebSockets are not seen. No blocker catches every tracker. List: EasyPrivacy by the EasyList authors (easylist.to), GPL-3.0-or-later or CC BY-SA 3.0; updated weekly while the protection is on.</string>
+    <string name="adblock_site_off">Blocking off on %1$s</string>
+    <string name="adblock_site_disable">Don\'t block on this site</string>
+    <string name="adblock_site_enable">Block again on this site</string>
+    <plurals name="adblock_blocked">
+        <item quantity="one">1 request blocked</item>
+        <item quantity="other">%1$d requests blocked</item>
+    </plurals>
+    <plurals name="stars_n">
+        <item quantity="one">%d star</item>
+        <item quantity="other">%d stars</item>
+    </plurals>
+    <string name="help_title">How PlanetFOSS works</string>
+    <string name="help_what_t">What PlanetFOSS is</string>
+    <string name="help_what">PlanetFOSS collects what blogs, magazines, projects and video channels publish about Linux and free software – in German and English. Every card shows a short preview and leads straight to the original article. You read the full story where it was written.</string>
+    <string name="help_cards_t">How a card comes about</string>
+    <string name="help_cards">Every few minutes PlanetFOSS reads the feeds of its sources and uses only what the site itself provides for link previews: title, short description, preview image. A dictionary of more than 500 terms puts every article into sections such as Desktop, Distros or Self-hosting; product names with version numbers become topics.</string>
+    <string name="help_bundle_t">Bundles</string>
+    <string name="help_bundle">When several sources report the same news, PlanetFOSS shows one card instead of several near-identical ones. You open the other sources inside the card; on the topic page every article gets its own card.</string>
+    <string name="help_nova_t">✦ Supernova</string>
+    <string name="help_nova">A topic covered by at least four sources within a day, in both languages or across different kinds of sites. Burning supernovas stand on top of Latest; if you like, the app notifies you of new ones.</string>
+    <string name="help_comet_t">☄ Comet</string>
+    <string name="help_comet">A topic picking up speed: three sources within twelve hours. Comets sit in the “In orbit” row above Latest and between the supernovas – some of them become a supernova.</string>
+    <string name="help_glow_t">✧ Afterglow</string>
+    <string name="help_glow">When a supernova cools down, the topic stays visible for a while before it moves to the archive.</string>
+    <string name="help_stars_t">★ Starred</string>
+    <string name="help_stars">Articles readers have marked with a star, collected for seven days. You star with the star on every card – no account: the phone solves a small puzzle so bots do not count, and keeps a random token that lets you take the star back. PlanetFOSS does not know who you are.</string>
+    <string name="help_sources_t">The solar system</string>
+    <string name="help_sources">The list of all sources with language, kind and how much they published this week. Where a source offers a subscription or donations, PlanetFOSS shows “Support …” – the page opens in your browser.</string>
+    <string name="help_data_t">Your data</string>
+    <string name="help_data">No account, no tracking, no Google services. The app talks to planetfoss.net and to the sites you open. Anything else that leaves the phone is listed under Privacy in the settings.</string>
+
+    <!-- hide sources and rubrics (stored on the phone only) -->
+    <string name="hide_source">Hide %1$s from the lists</string>
+    <string name="hide_rubric">Hide the rubric %1$s from the lists</string>
+    <string name="unhide_named">Show %1$s again</string>
+    <string name="hide_done_source">%1$s is hidden – its posts leave the other lists</string>
+    <string name="hide_done_rubric">Rubric %1$s is hidden – its posts leave the other lists</string>
+    <string name="hide_undone">%1$s is shown again</string>
+    <plurals name="hidden_note">
+        <item quantity="one">1 post hidden · manage in settings</item>
+        <item quantity="other">%1$d posts hidden · manage in settings</item>
+    </plurals>
+    <string name="settings_hidden">Hidden</string>
+    <string name="hidden_kind_rubric">Rubric</string>
+    <!-- bundle head -->
+    <plurals name="bundle_sources">
+        <item quantity="one">1 source reports</item>
+        <item quantity="other">%1$d sources report</item>
+    </plurals>
+    <string name="bundle_langs" translatable="false">DE %1$d · EN %2$d</string>
+    <string name="bundle_only_en">so far only English sources</string>
+    <string name="bundle_only_de">so far only German sources</string>
+    <!-- weekly review -->
+    <string name="weekly_title">Weekly review</string>
+    <string name="weekly_hint">What the last week was about: supernovas, the biggest stories, topics</string>
+    <string name="weekly_intro">What the Linux and open source world talked about this week – compiled automatically (posts: %1$d, sources: %2$d).</string>
+    <string name="weekly_novas">Supernovas of the week</string>
+    <string name="weekly_none">No supernova this week.</string>
+    <plurals name="weekly_nova_chip">
+        <item quantity="one">%1$s · 1 source</item>
+        <item quantity="other">%1$s · %2$d sources</item>
+    </plurals>
+    <string name="weekly_stories">More big stories</string>
+    <string name="weekly_topics">Topics of the week</string>
+    <string name="weekly_starred">Starred by you</string>
+    <string name="weekly_archive">Earlier weeks</string>
+    <string name="weekly_kw">Week %1$d/%2$d</string>
+    <string name="weekly_teaser_kick">Weekly review · Week %1$d</string>
+    <string name="weekly_teaser_h">What happened in week %1$d</string>
+    <string name="weekly_teaser_story">Cover story: %1$s</string>
+    <string name="weekly_kicker">Weekly review · Issue %1$d/%2$d</string>
+    <string name="weekly_k_items">Posts</string>
+    <string name="weekly_k_sources">Sources</string>
+    <string name="weekly_k_novas">Supernovas</string>
+    <string name="weekly_k_videos">Videos</string>
+    <string name="weekly_k_langs" translatable="false">DE · EN</string>
+    <string name="weekly_trend">%1$s · previous week %2$s</string>
+    <string name="weekly_cover">Cover story</string>
+    <string name="weekly_cover_reports">How others covered it</string>
+    <plurals name="weekly_cover_all">
+        <item quantity="one">The source on this story</item>
+        <item quantity="other">All %1$d sources on this story</item>
+    </plurals>
+    <string name="weekly_novas_hint">Topics many sources covered within a few hours</string>
+    <string name="weekly_more_novas">Also went supernova</string>
+    <string name="weekly_nova_cover">The only supernova of the week is the cover story above.</string>
+    <string name="weekly_stories_hint">After the cover story, the news most sources wrote about</string>
+    <string name="weekly_releases">New releases</string>
+    <string name="weekly_releases_hint">First seen this week, covered by at least two sources</string>
+    <string name="weekly_rubrics">From the sections</string>
+    <string name="weekly_rubrics_hint">For each section, the post most sources picked up</string>
+    <string name="weekly_numbers">The week in numbers</string>
+    <string name="weekly_days">Posts per day</string>
+    <string name="weekly_sections">Sections</string>
+    <string name="weekly_top">Most active sources</string>
+    <string name="weekly_videos">Videos of the week</string>
+    <string name="weekly_topics_hint">More topics with at least three posts</string>
+    <!-- PlanetFOSS's own donation link (only while switched on at planetfoss.net) -->
+    <string name="donate_title">Support PlanetFOSS</string>
+    <string name="donate_text">PlanetFOSS has no ads and no trackers. If you find it useful, you can support it directly.</string>
+    <string name="donate_text_on">PlanetFOSS has no ads and no trackers. If you find it useful, you can support it directly on %1$s.</string>
+    <!-- Logbook (website: /logbuch/): every morning at 6:00 Berlin time one entry -->
+    <string name="logbook_title">Logbook</string>
+    <string name="logbook_hint">Every morning at 6:00: what mattered in the last 24 hours</string>
+    <string name="logbook_kicker">Logbook · %1$s</string>
+    <string name="logbook_story">Biggest story</string>
+    <string name="logbook_novas">Supernovas</string>
+    <string name="logbook_new">Newly ignited</string>
+    <plurals name="logbook_still">
+        <item quantity="one">Still shining · 1 new report</item>
+        <item quantity="other">Still shining · %1$d new reports</item>
+    </plurals>
+    <string name="logbook_comets">Comets</string>
+    <plurals name="logbook_comet_n">
+        <item quantity="one">Comet · 1 source</item>
+        <item quantity="other">Comet · %1$d sources</item>
+    </plurals>
+    <string name="logbook_also">Also worth knowing</string>
+    <string name="logbook_archive">Earlier entries</string>
+    <string name="logbook_prev">Previous entry</string>
+    <string name="logbook_next">Next entry</string>
+    <string name="logbook_band">Logbook %1$s</string>
+    <string name="logbook_week">The week in the logbook</string>
+    <string name="logbook_week_hint">One entry every morning at 6:00</string>
+    <string name="logbook_notify_switch">Logbook every morning</string>
+    <string name="logbook_notify_explain">One notification when the new entry is out (from 6:00 Berlin time, not on quiet days)</string>
+    <string name="channel_logbook">Logbook</string>
+    <string name="channel_logbook_text">The new logbook entry every morning</string>
+    <plurals name="logbook_notify_text">
+        <item quantity="one">%1$s · 1 supernova</item>
+        <item quantity="other">%1$s · %2$d supernovas</item>
+    </plurals>
+    <!-- Discussed on / replies from the fediverse (planetfoss.net: Discussions, FediReplies) -->
+    <string name="disc_on">Discussed on</string>
+    <string name="disc_join">join in</string>
+    <plurals name="disc_points">
+        <item quantity="one">1 point</item>
+        <item quantity="other">%1$d points</item>
+    </plurals>
+    <plurals name="disc_comments">
+        <item quantity="one">1 comment</item>
+        <item quantity="other">%1$d comments</item>
+    </plurals>
+    <plurals name="disc_replies">
+        <item quantity="one">1 reply</item>
+        <item quantity="other">%1$d replies</item>
+    </plurals>
+    <string name="fedi_replies">Replies from the fediverse</string>
+    <string name="fedi_hint">Public replies to our post, unverified</string>
+    <string name="fedi_join">Join the conversation on</string>
+    <string name="reply_menu">More about the reply of %1$s</string>
+    <string name="reply_report">Report reply</string>
+    <string name="reply_block">Block %1$s</string>
+    <string name="reply_report_subject">Report: reply from the fediverse</string>
+    <string name="reply_report_body">I want to report this reply shown in the PlanetFOSS app.\n\nReply: %1$s\nAccount: %2$s (%3$s)\n\nReason:\n</string>
+    <string name="reply_report_no_mail">No mail app found. Please write to %1$s.</string>
+    <string name="hidden_kind_account">Blocked account (replies)</string>
+    <!-- Tabs since 6.11.2026 (STRATEGIE.md 4.2, variant A): Today, Radar, Discover, Saved -->
+    <string name="tab_latest">Latest</string>
+    <string name="tab_radar">Radar</string>
+    <string name="tab_discover">Discover</string>
+    <!-- New since the last visit -->
+    <string name="new_mark">New</string>
+    <string name="read_up_to_here">read up to here</string>
+    <string name="all_seen">All seen</string>
+    <plurals name="new_since">
+        <item quantity="one">%1$d new since %2$s</item>
+        <item quantity="other">%1$d new since %2$s</item>
+    </plurals>
+    <plurals name="new_since_more">
+        <item quantity="one">%1$d+ new since %2$s</item>
+        <item quantity="other">%1$d+ new since %2$s</item>
+    </plurals>
+    <string name="settings_mark_new">Mark new posts</string>
+    <string name="settings_mark_new_hint">Since you last opened the app. The time stays on this phone.</string>
+    <!-- Radar -->
+    <string name="radar_follows">What you follow</string>
+    <string name="radar_follows_hint">Number of new posts since your last visit</string>
+    <string name="radar_items">New for you</string>
+    <string name="radar_topic">Topic</string>
+    <string name="radar_source">Source</string>
+    <string name="radar_supernova">Supernova</string>
+    <string name="radar_comet">Comet</string>
+    <plurals name="radar_burning">
+        <item quantity="one">Supernova right now · %d source</item>
+        <item quantity="other">Supernova right now · %d sources</item>
+    </plurals>
+    <string name="radar_nothing_new">nothing new</string>
+    <string name="radar_failed">not reachable</string>
+    <string name="radar_empty_title">You don\'t follow anything yet</string>
+    <string name="radar_empty_text">Tap the bell on a topic or a source. Radar then shows what is new there. Following also notifies you of new posts.</string>
+    <string name="radar_hints">In the sky right now</string>
+    <!-- Widgets -->
+    <string name="widget_logbook_name">PlanetFOSS logbook</string>
+    <string name="widget_logbook_desc">The newest logbook entry: headline, supernova, comets</string>
+    <string name="widget_radar_name">PlanetFOSS Radar</string>
+    <string name="widget_radar_desc">What you follow, with the number of new posts</string>
+    <string name="widget_loading">Loading …</string>
+    <string name="widget_radar_empty">Nothing followed yet. Tap the bell on a topic in the app.</string>
+    <plurals name="widget_releases">
+        <item quantity="one">%d version</item>
+        <item quantity="other">%d versions</item>
+    </plurals>
+    <!-- Saved: export and import -->
+    <string name="saved_export">Export saved articles</string>
+    <string name="saved_export_hint">As a file, for a backup or another phone</string>
+    <string name="saved_import">Import saved articles</string>
+    <string name="saved_import_hint">Read such a file; articles already saved stay</string>
+    <string name="saved_export_done">Saved articles exported</string>
+    <string name="saved_export_failed">Export failed</string>
+    <string name="saved_import_failed">This is no PlanetFOSS export</string>
+    <plurals name="saved_import_done">
+        <item quantity="one">%d article added</item>
+        <item quantity="other">%d articles added</item>
+    </plurals>
+    <string name="disc_share">Pass it on</string>
+    <string name="since_today">today, %s</string>
+    <string name="since_yesterday">yesterday, %s</string>
+    <string name="radar_latest">Latest</string>
+    <string name="widget_quiet">Quiet skies – no supernova, comet or new version.</string>
+    <string name="ad_info_cd">About this ad</string>
+    <string name="ad_info_title">Why am I seeing this ad?</string>
+    <string name="ad_info_paid">Paid for by %1$s. PlanetFOSS is funded this way – without an ad network.</string>
+    <string name="ad_info_paid_anon">Paid for by a sponsor. PlanetFOSS is funded this way – without an ad network.</string>
+    <string name="ad_info_1">No profile, no advertising ID, no third-party script</string>
+    <string name="ad_info_2">The card does not depend on what you read</string>
+    <string name="ad_info_3">A tap opens the page in your browser</string>
+    <string name="ad_info_report">Report ad</string>
+
+    <string name="setup_settings_title">Setup assistant</string>
+    <string name="setup_settings_hint">Go through the first settings and a short tour of the app again</string>
+    <string name="setup_skip">Skip</string>
+    <string name="setup_start">Let\'s go</string>
+    <string name="setup_next">Next</string>
+    <string name="setup_finish">Done</string>
+    <string name="setup_welcome_text">In two minutes the app fits you and you know where everything is.</string>
+    <string name="setup_lang_title">Language and design</string>
+    <string name="setup_lang_lead">The app language is for menus and notifications, the content language for the articles you see.</string>
+    <string name="setup_open_title">Open articles</string>
+    <string name="setup_open_lead">Where do you want to read the original articles?</string>
+    <string name="setup_notify_title">Notifications</string>
+    <string name="setup_notify_lead">Both are off. There is no push server and no Google service: the app checks in the background. When you switch one on, Android asks once for permission.</string>
+    <string name="setup_count_title">Anonymous counting</string>
+    <string name="setup_tabs_title">The four tabs</string>
+    <string name="setup_tab_latest">What is happening now: supernovas and rising topics on top, then every new post. In the morning the logbook too.</string>
+    <string name="setup_tab_radar">What you follow, with everything new since your last visit.</string>
+    <string name="setup_tab_discover">Browse by subject: the sky, the logbook and weekly reviews, rubrics, topics and sources.</string>
+    <string name="setup_tab_saved">Your bookmarks, also offline.</string>
+    <string name="setup_handles_title">Good to know</string>
+    <string name="setup_handles_lead">Five handles you will use often.</string>
+    <string name="setup_search_title">Search</string>
+    <string name="setup_search_text">The magnifier at the top of the screen.</string>
+    <string name="setup_follow_title">Follow</string>
+    <string name="setup_follow_text">The bell on a topic or a source. What is new there shows up in Radar.</string>
+    <string name="setup_save_title">Save and star</string>
+    <string name="setup_save_text">The bookmark on every card saves it. The star recommends it to other readers.</string>
+    <string name="setup_nova_title">Supernova</string>
+    <string name="setup_nova_text">Many sources report on one topic at the same time.</string>
+    <string name="setup_settings_text">The gear at the top. You can start this assistant again there, under About.</string>
+    <string name="setup_step">Step %1$d of %2$d</string>
+    <string name="setup_welcome_title">Linux and open source.\nFrom many sources.</string>
+    <string name="setup_mode_custom_tab_text">Your default browser, with its own logins and protection.</string>
+    <string name="setup_recommended">Recommended</string>
+    <string name="setup_count_lead">Optional. Publishers, bloggers and content creators learn how many readers PlanetFOSS sends them.</string>
+    <string name="setup_count_yes_title">Counted</string>
+    <string name="setup_count_yes_text">One open per article, as a total per day.</string>
+    <string name="setup_count_no_title">Never included</string>
+    <string name="setup_count_no_text">Who you are, what else you read. No identifier.</string>
+    <string name="setup_ready_title">All set</string>
+    <string name="setup_ready_text">Follow a few topics with the bell and your Radar fills up.</string>
+    <string name="setup_ready_cta">Go to the app</string>
+    <string name="setup_count_switch_text">Off: the app reports nothing about what you read.</string>
+    <string name="setup_count_yes_text_ads">One open per article, as a total per day. Sponsor cards are always counted.</string>
+</resources>

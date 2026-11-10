@@ -1,0 +1,2 @@
+- Die Rückwischgeste nutzt jetzt auch die neuen Übergänge
+- Die untere Leiste springt auch beim Zurückwischen nicht mehr

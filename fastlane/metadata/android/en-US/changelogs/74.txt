@@ -1,0 +1,1 @@
+Sources that need no support themselves can recommend another project; the app shows the recommendation in the source list and the menus.

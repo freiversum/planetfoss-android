@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Christoph Langner -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Custom Tab closing: fades and slides off the short way -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="200"
+    android:interpolator="@interpolator/ease"
+    android:shareInterpolator="true">
+    <alpha android:fromAlpha="1" android:toAlpha="0" />
+    <translate android:fromXDelta="0" android:toXDelta="25%" />
+</set>

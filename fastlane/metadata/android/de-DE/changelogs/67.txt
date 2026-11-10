@@ -1,0 +1,8 @@
+Erste Version für F-Droid.
+- Das Aussehen von planetfoss.net: Schriften, Farben, Wortmarke
+- Dichtere Listen, zwei Spalten auf Tablets
+- Sternstunden: was Leser diese Woche markiert haben
+- Videos öffnen in ihrer App, Vollbild im App-Browser
+- Supernovas mit Kometen
+- Quellen unterstützen, Tracker-Schutz
+- Kürzere Einstellungen mit Auswahldialogen

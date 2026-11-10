@@ -1,0 +1,5 @@
+- Latest is the new start tab with supernovas and comets on top
+- Logbook: a daily edition at 6:00 with card, widget and notification
+- Weekly review with figures, supernovas and stories
+- Report or block fediverse replies
+- Seen sponsor cards are now counted anonymously, as on the website

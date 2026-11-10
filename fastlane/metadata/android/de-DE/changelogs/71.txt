@@ -1,0 +1,1 @@
+Lange Quellnamen schneiden die Uhrzeit in der Quellzeile nicht mehr ab, die Zeile bricht bei Bedarf um.

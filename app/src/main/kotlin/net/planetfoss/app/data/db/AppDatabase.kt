@@ -1,0 +1,230 @@
+// SPDX-FileCopyrightText: 2026 Christoph Langner
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+package net.planetfoss.app.data.db
+
+import androidx.room.AutoMigration
+import androidx.room.ColumnInfo
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.RoomDatabase
+import androidx.room.Transaction
+import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
+
+/** One cached item. [json] is the API object as received, so new API fields need no migration. */
+@Entity(tableName = "item", indices = [Index("cachedAt")])
+data class ItemEntity(
+    @PrimaryKey val id: Long,
+    val json: String,
+    val publishedAt: Long,
+    val cachedAt: Long,
+)
+
+/** Position of an item in one list (“home:de”, later “rubric:sicherheit:” …). */
+@Entity(
+    tableName = "list_entry",
+    primaryKeys = ["listKey", "position"],
+    indices = [Index(value = ["listKey", "itemId"], unique = true), Index("itemId")],
+)
+data class ListEntryEntity(val listKey: String, val position: Int, val itemId: Long)
+
+/** State of one list: when page 1 was fetched, how far it was paged, its name from the API head. */
+@Entity(tableName = "list_meta")
+data class ListMetaEntity(
+    @PrimaryKey val listKey: String,
+    val fetchedAt: Long,
+    val pages: Int,
+    val hasMore: Boolean,
+    @ColumnInfo(defaultValue = "NULL") val title: String? = null,
+)
+
+/**
+ * A saved article: the item as it was when saved, so the list works offline and
+ * survives the item leaving the cache. Only what the API sent – no page content.
+ */
+@Entity(tableName = "saved_item", indices = [Index("savedAt")])
+data class SavedItemEntity(
+    @PrimaryKey val id: Long,
+    val json: String,
+    val savedAt: Long,
+)
+
+/**
+ * An item the user starred on planetfoss.net from the app, with the token that takes the star back
+ * (like the website's localStorage). Only on the phone; the server keeps a hash of the token, nothing else.
+ */
+@Entity(tableName = "my_star")
+data class MyStarEntity(
+    @PrimaryKey val itemId: Long,
+    val token: String,
+    val starredAt: Long,
+)
+
+/**
+ * A topic or source the user follows: [kind] `topic` or `source`, [ref] its key or slug, [label] its name, [lastSeen]
+ * the newest post (epoch ms) already known – only newer ones are announced. Only on the phone.
+ */
+@Entity(tableName = "follow", primaryKeys = ["kind", "ref"])
+data class FollowEntity(
+    val kind: String,
+    val ref: String,
+    val label: String,
+    val lastSeen: Long,
+    val addedAt: Long,
+)
+
+/** The supernova list per language, stored as the API answer. */
+@Entity(tableName = "nova_list")
+data class NovaListEntity(
+    @PrimaryKey val listKey: String,
+    val json: String,
+    val fetchedAt: Long,
+)
+
+/** Every supernova id the app has seen (NovaDetector); pruned after 30 days. */
+@Entity(tableName = "seen_supernova", indices = [Index("firstSeen")])
+data class SeenSupernovaEntity(
+    @PrimaryKey val id: String,
+    val key: String,
+    val firstSeen: Long,
+    val notified: Boolean,
+)
+
+@Dao
+interface FeedDao {
+    @Query("SELECT i.json FROM list_entry e JOIN item i ON i.id = e.itemId WHERE e.listKey = :key ORDER BY e.position")
+    fun observeList(key: String): Flow<List<String>>
+
+    @Query("SELECT * FROM list_meta WHERE listKey = :key")
+    fun observeMeta(key: String): Flow<ListMetaEntity?>
+
+    @Query("SELECT * FROM list_meta WHERE listKey = :key")
+    suspend fun meta(key: String): ListMetaEntity?
+
+    @Upsert
+    suspend fun upsertItems(items: List<ItemEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertEntries(entries: List<ListEntryEntity>)
+
+    @Query("DELETE FROM list_entry WHERE listKey = :key")
+    suspend fun clearList(key: String)
+
+    @Upsert
+    suspend fun upsertMeta(meta: ListMetaEntity)
+
+    /** Page [page] of a list; page 1 replaces the list. Duplicates (an item moved to the next page) are skipped. */
+    @Transaction
+    suspend fun storePage(key: String, page: Int, items: List<ItemEntity>, hasMore: Boolean, now: Long, title: String? = null) {
+        val old = meta(key)
+        if (page == 1) clearList(key)
+        upsertItems(items)
+        insertEntries(items.mapIndexed { i, item -> ListEntryEntity(key, page * POSITIONS_PER_PAGE + i, item.id) })
+        val fetchedAt = if (page == 1) now else old?.fetchedAt ?: now
+        upsertMeta(ListMetaEntity(key, fetchedAt, page, hasMore, title ?: old?.title))
+    }
+
+    /** Cached items that no list shows any more and that are older than [before]. */
+    @Query("DELETE FROM item WHERE cachedAt < :before AND id NOT IN (SELECT itemId FROM list_entry)")
+    suspend fun pruneItems(before: Long): Int
+
+    @Query("SELECT * FROM nova_list WHERE listKey = :key")
+    fun observeNovas(key: String): Flow<NovaListEntity?>
+
+    @Upsert
+    suspend fun upsertNovas(list: NovaListEntity)
+
+    companion object {
+        const val POSITIONS_PER_PAGE = 1000
+    }
+}
+
+@Dao
+interface SavedDao {
+    @Query("SELECT json FROM saved_item ORDER BY savedAt DESC")
+    fun observeAll(): Flow<List<String>>
+
+    @Query("SELECT id FROM saved_item")
+    fun observeIds(): Flow<List<Long>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(item: SavedItemEntity)
+
+    @Query("DELETE FROM saved_item WHERE id = :id")
+    suspend fun delete(id: Long)
+
+    @Query("SELECT COUNT(*) FROM saved_item WHERE id = :id")
+    suspend fun count(id: Long): Int
+}
+
+@Dao
+interface SeenSupernovaDao {
+    @Query("SELECT id FROM seen_supernova")
+    suspend fun ids(): List<String>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(rows: List<SeenSupernovaEntity>): List<Long>
+
+    @Query("DELETE FROM seen_supernova WHERE firstSeen < :before")
+    suspend fun prune(before: Long): Int
+
+    @Query("DELETE FROM seen_supernova")
+    suspend fun clear()
+}
+
+@Dao
+interface StarDao {
+    @Query("SELECT itemId FROM my_star")
+    fun observeIds(): Flow<List<Long>>
+
+    @Query("SELECT token FROM my_star WHERE itemId = :itemId")
+    suspend fun token(itemId: Long): String?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(star: MyStarEntity)
+
+    @Query("DELETE FROM my_star WHERE itemId = :itemId")
+    suspend fun delete(itemId: Long)
+}
+
+@Dao
+interface FollowDao {
+    @Query("SELECT * FROM follow ORDER BY label COLLATE NOCASE")
+    fun observeAll(): Flow<List<FollowEntity>>
+
+    @Query("SELECT * FROM follow")
+    suspend fun all(): List<FollowEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(follow: FollowEntity)
+
+    @Query("DELETE FROM follow WHERE kind = :kind AND ref = :ref")
+    suspend fun delete(kind: String, ref: String)
+
+    @Query("UPDATE follow SET lastSeen = :at WHERE kind = :kind AND ref = :ref AND lastSeen < :at")
+    suspend fun seen(kind: String, ref: String, at: Long)
+}
+
+@Database(
+    entities = [
+        ItemEntity::class, ListEntryEntity::class, ListMetaEntity::class, NovaListEntity::class, SeenSupernovaEntity::class,
+        SavedItemEntity::class, MyStarEntity::class, FollowEntity::class,
+    ],
+    version = 4,
+    exportSchema = true,
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4)],
+)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun feedDao(): FeedDao
+    abstract fun savedDao(): SavedDao
+    abstract fun starDao(): StarDao
+    abstract fun followDao(): FollowDao
+    abstract fun seenSupernovaDao(): SeenSupernovaDao
+}

@@ -1,0 +1,7 @@
+- Titelseite: Aufmacher, Nebenmeldungen, Projekte, Rubriken und Videos wie auf planetfoss.net
+- Sternstunden selbst markieren, ohne Konto
+- Im Orbit, Themenseiten mit Status und verwandten Themen, alle Themen
+- Das Sonnensystem: alle Quellen nach Art
+- Themen und Quellen folgen, mit Benachrichtigung
+- Bündel als eigene Seite, Suchfilter nach Quellenart
+- Hell oder Dunkel wählbar, Erklärseite, Impressum und Datenschutz

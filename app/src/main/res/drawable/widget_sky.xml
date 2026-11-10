@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget background: the app's night sky (radial glow bottom right, a few stars), 24 dp corners. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <solid android:color="#FF0B1026" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <gradient android:type="radial" android:centerX="0.85" android:centerY="1.1" android:gradientRadius="260dp"
+                android:startColor="#FF4A2F7A" android:centerColor="#FF151C42" android:endColor="#000B1026" />
+        </shape>
+    </item>
+    <item android:left="28dp" android:top="40dp" android:width="2dp" android:height="2dp" android:gravity="top|left">
+        <shape android:shape="oval"><solid android:color="#80FFFFFF" /></shape>
+    </item>
+    <item android:right="90dp" android:top="22dp" android:width="2dp" android:height="2dp" android:gravity="top|right">
+        <shape android:shape="oval"><solid android:color="#8CFFFFFF" /></shape>
+    </item>
+    <item android:right="40dp" android:bottom="46dp" android:width="2dp" android:height="2dp" android:gravity="bottom|right">
+        <shape android:shape="oval"><solid android:color="#66FFFFFF" /></shape>
+    </item>
+    <item android:left="130dp" android:bottom="22dp" android:width="1.5dp" android:height="1.5dp" android:gravity="bottom|left">
+        <shape android:shape="oval"><solid android:color="#59FFFFFF" /></shape>
+    </item>
+</layer-list>

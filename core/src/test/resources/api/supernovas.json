@@ -1,0 +1,81 @@
+{
+  "supernovas": [
+    {
+      "id": "tag:planetfoss.net,2026:supernova/libreoffice-26-8/1793287928",
+      "key": "libreoffice-26-8",
+      "label": "LibreOffice 26.8",
+      "ignited_at": "2026-10-29T15:32:08Z",
+      "announced_at": "2026-10-29T16:02:08Z",
+      "url": "https://planetfoss.net/thema/libreoffice-26-8/",
+      "summary": "4 Beiträge · 4 Quellen",
+      "quote": {
+        "text": "Writer, Calc and Impress receive fixes.",
+        "source": "FOSS Force"
+      },
+      "stats": {
+        "items": 4,
+        "sources": 4
+      },
+      "burning": true,
+      "reports": [
+        {
+          "id": 1,
+          "url": "https://fossforce.com/x",
+          "title": "LibreOffice 26.8.2 Released",
+          "lang": "en",
+          "published_at": "2026-10-29T15:00:00Z",
+          "source": {
+            "slug": "fossforce",
+            "name": "FOSS Force"
+          }
+        },
+        {
+          "id": 2,
+          "url": "https://example.invalid/lo",
+          "title": "LibreOffice 26.8 ist da",
+          "excerpt": "Die Office-Suite bringt neue Funktionen.",
+          "lang": "de",
+          "published_at": "2026-10-29T14:00:00Z",
+          "source": {
+            "slug": "beispiel",
+            "name": "Beispiel",
+            "logo": "https://planetfoss.net/img/logos/b.webp"
+          },
+          "image": {
+            "small": "https://planetfoss.net/img/2026/10/lo-480.webp",
+            "large": "https://planetfoss.net/img/2026/10/lo-960.webp",
+            "width": 960,
+            "height": 540,
+            "fit": false
+          }
+        }
+      ]
+    }
+  ],
+  "comets": [
+    {
+      "key": "tor-16",
+      "label": "Tor 16",
+      "url": "https://planetfoss.net/thema/tor-16/",
+      "first_at": "2026-10-29T16:27:14Z",
+      "last_at": "2026-10-30T06:30:00Z",
+      "stats": {
+        "items": 3,
+        "sources": 3
+      },
+      "reports": [
+        {
+          "id": 901,
+          "url": "https://example.org/tor-16",
+          "title": "Tor Browser 16.0 released",
+          "lang": "en",
+          "published_at": "2026-10-30T06:30:00Z",
+          "source": {
+            "slug": "a",
+            "name": "Quelle A"
+          }
+        }
+      ]
+    }
+  ]
+}

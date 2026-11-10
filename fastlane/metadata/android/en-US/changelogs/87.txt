@@ -1,0 +1,7 @@
+- Front page: lead story, side stories, projects, rubrics and videos as on planetfoss.net
+- Star articles for the Sternstunden, no account
+- In orbit, topic pages with status and related topics, all topics
+- The solar system: every source by kind
+- Follow topics and sources, with notifications
+- Bundles as their own page, search filter by kind of source
+- Light or dark, an explanation page, imprint and privacy policy

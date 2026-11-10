@@ -1,0 +1,16 @@
+PlanetFOSS sammelt Nachrichten rund um Linux und Open Source aus vielen deutsch- und englischsprachigen Quellen. Die App bringt planetfoss.net aufs Handy – nativ, schnell und ohne Konto.
+
+- Neueste: alle Beiträge, gleiche Meldungen verschiedener Quellen gebündelt
+- Supernovas: Themen, über die gerade viele Quellen zugleich berichten, dazu aufsteigende Themen (Kometen)
+- Benachrichtigungen bei neuen Supernovas, wenn du sie einschaltest – ohne Push-Server und ohne Google-Dienste
+- Rubriken, Themen, Quellen und Videos, Suche mit Filtern
+- Artikel speichern und offline wiederfinden
+- Inhalte auf Deutsch, Englisch oder beides; die App spricht Deutsch und Englisch
+- Artikel öffnen im eigenen Browser (Custom Tab) oder im Browser der App, optional mit Schutz vor Trackern von Drittanbietern
+- Quellen unterstützen: Wo ein Verlag Abo oder Spende anbietet, führt die App direkt dorthin
+
+Fair zu den Quellen: PlanetFOSS verlinkt nur und zeigt keinen Volltext. Die App blockiert von sich aus keine Werbung und schickt PlanetFOSS als Herkunft mit, damit die Verlage sehen, woher ihre Leser kommen.
+
+Datenschutz: kein Konto, keine Werbe- oder Analysedienste, keine Google-Dienste. Die App spricht nur mit planetfoss.net und den Seiten, die du öffnest. Wer möchte, schaltet „Für die Quellen mitzählen“ ein: Dann zählt planetfoss.net geöffnete Artikel als Tagessumme für die Verlage – ohne Kennung des Geräts. Standardmäßig ist das aus. Sponsor-Karten, falls PlanetFOSS welche zeigt, sind als Anzeige gekennzeichnet und werden anonym als Tagessumme gezählt, wie auf der Website.
+
+PlanetFOSS für Android ist freie Software unter der GNU GPL 3.0 oder neuer. Benötigt Android 14 oder neuer.

@@ -1,0 +1,5 @@
+- Neueste ist der neue Start-Tab, Supernovas und Kometen oben
+- Logbuch: tägliche Ausgabe um 6:00 mit Karte, Widget und Benachrichtigung
+- Wochenrückblick mit Zahlen, Supernovas und Geschichten
+- Antworten aus dem Fediverse melden oder blockieren
+- Gesehene Sponsor-Karten werden anonym gezählt, wie auf der Website

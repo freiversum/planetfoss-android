@@ -1,0 +1,5 @@
+- Nachthimmel-Kopf und Startbildschirm wie auf planetfoss.net
+- Im Orbit mit Live-Punkt und Kometen
+- Brennende Supernova als Band oben in Neueste
+- Rubrikmodule in ihrer Farbe, Abschnittsköpfe wie auf der Website
+- Kurzer Einstiegshinweis für neue Nutzer
