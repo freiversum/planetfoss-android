@@ -137,4 +137,7 @@ so F-Droid needs the full history (default for its build server).
 - Privacy policy URL: https://planetfoss.net/datenschutz/ (has an Android app section; German only).
 - Done 2026-11-10: report and block for fediverse replies (UGC policy), decision D1 built, website deploy of `weekly`,
   `meta`, `logbook`, v0.6.0 tagged and the AAB rebuilt (versionCode 139).
+- 2026-11-16: internal test release `0.6.1 (146) – neue Marke` (new icon and colours) published from `main` (3c314f6, untagged, so the
+  version name is `0.6.1-dev+6.g3c314f6e`); bundle `dist/planetfoss-0.6.1-dev-146.aab`, SHA-256
+  `888e8a656e0e1d0b22aa502e1d10148abbf9ac4cd44e1b7b4cdc7432f7101baa`. Play warns about missing native debug symbols (not blocking).
 - Open: data safety and ads declarations, privacy page (German) names the sponsor count, upload to the internal track.
