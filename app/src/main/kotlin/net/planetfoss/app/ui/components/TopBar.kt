@@ -115,7 +115,7 @@ fun TabTopBar(
                 Image(
                     painterResource(R.drawable.wordmark_on_night),
                     contentDescription = stringResource(R.string.wordmark_title, title),
-                    modifier = Modifier.height(26.dp).semantics { heading() },
+                    modifier = Modifier.height(30.dp).semantics { heading() },
                 )
             } else {
                 Text(title)
