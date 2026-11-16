@@ -143,4 +143,9 @@ so F-Droid needs the full history (default for its build server).
 - 2026-11-16: internal test release `0.6.1 (146) – neue Marke` (new icon and colours) published from `main` (3c314f6, untagged, so the
   version name is `0.6.1-dev+6.g3c314f6e`); bundle `dist/planetfoss-0.6.1-dev-146.aab`, SHA-256
   `888e8a656e0e1d0b22aa502e1d10148abbf9ac4cd44e1b7b4cdc7432f7101baa`. Play warns about missing native debug symbols (not blocking).
-- Open: data safety and ads declarations, privacy page (German) names the sponsor count, upload to the internal track.
+- Checked 2026-11-16: all 11 app content declarations are done (10.11.), among them data safety (one data type, encrypted
+  in transit, no deletion) and ads (“contains ads”). v0.6.1 (versionCode 149) is tagged; bundle `dist/planetfoss-0.6.1.aab`,
+  SHA-256 `7ad18028c950ba8ca3d04416b3a34afee03cf5052bc8bbb52cbf7cbb67112180`, not uploaded yet.
+- Open (Christoph): upload the new phone screenshots to the store listing; closed test “Geschlossener Test - Alpha” has a
+  draft and the lists “PlanetFOSS Tester” (1) and “Tester Intern” (2) – needs 12 testers for 14 days before production;
+  declare the trader status (deadline February 2027, otherwise Google removes the apps).
