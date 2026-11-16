@@ -155,6 +155,10 @@ so F-Droid needs the full history (default for its build server).
   email list holding the group address does not let group members in. Release 0.6.1 (149) rolled out to the track and
   submitted for review. Opt-in link: https://play.google.com/apps/testing/net.planetfoss.app. The blog post on linuxundich.de
   asks for testers.
+- 2026-11-16 (22:31): v0.6.2 (versionCode 158, new mark in the refresh spinner) tagged, built from the tag in a clean
+  worktree; bundle `dist/planetfoss-0.6.2.aab`, SHA-256 `e95c22ba195701d24705f9317e95db4883cd04ff4b9b7931a981c5e3bf975859`,
+  published to the internal test only. The closed track stays on 0.6.1 (149) until Google has approved it; promote 158
+  afterwards, since every change to the closed track restarts the review.
 - Open (Christoph): closed test “Geschlossener Test - Alpha” has a
   draft and the lists “PlanetFOSS Tester” (1) and “Tester Intern” (2) – needs 12 testers for 14 days before production;
   trader status **declared 2026-11-16: trader** (account level, public: name, postal address from the Google payments profile,
