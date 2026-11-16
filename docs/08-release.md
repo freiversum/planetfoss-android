@@ -150,6 +150,11 @@ so F-Droid needs the full history (default for its build server).
   day (AI asset declaration: not labelled – screenshots are real, icon and graphics drawn by `ci/system/build.py`); the
   closed-test changes in the publishing overview (177 countries + rest of world, own country list instead of the production
   sync, tester list “PlanetFOSS Tester”, feedback address info@planetfoss.net) were submitted along with it (review restarted).
+- Closed test (2026-11-16): testers come from the Google Group planetfoss-tester@googlegroups.com (anyone can join, member
+  list visible to the owner only; https://groups.google.com/g/planetfoss-tester), set under *Testers › Google Groups* – an
+  email list holding the group address does not let group members in. Release 0.6.1 (149) rolled out to the track and
+  submitted for review. Opt-in link: https://play.google.com/apps/testing/net.planetfoss.app. The blog post on linuxundich.de
+  asks for testers.
 - Open (Christoph): closed test “Geschlossener Test - Alpha” has a
   draft and the lists “PlanetFOSS Tester” (1) and “Tester Intern” (2) – needs 12 testers for 14 days before production;
   trader status **declared 2026-11-16: trader** (account level, public: name, postal address from the Google payments profile,
