@@ -422,7 +422,7 @@ fun LogbookBand(t: LogbookTeaser, week: WeekTeaser?, onLogbook: () -> Unit, onWe
             week?.let { w ->
                 Box(Modifier.width(1.dp).fillMaxHeight().background(NovaLine))
                 Column(
-                    Modifier.clickable(role = Role.Button) { onWeekly(w.week) }.background(Color(0x2E7C5CFF)).padding(horizontal = Space.m, vertical = Space.m),
+                    Modifier.clickable(role = Role.Button) { onWeekly(w.week) }.background(Color(0x2E6E5BEB)).padding(horizontal = Space.m, vertical = Space.m),
                     verticalArrangement = Arrangement.spacedBy(Space.xxs),
                 ) {
                     Label(stringResource(R.string.weekly_teaser_kick, w.week.substringAfter('-').toInt()), planet.supernova)

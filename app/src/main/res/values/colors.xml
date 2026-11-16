@@ -3,5 +3,5 @@
     <color name="window_background">#FFF5F6FB</color>
     <color name="ic_launcher_background">#FF050A24</color>
     <!-- the website's night sky (CSS head colour): splash screen and the header of Latest -->
-    <color name="night">#FF070A1A</color>
+    <color name="night">#FF050A24</color>
 </resources>

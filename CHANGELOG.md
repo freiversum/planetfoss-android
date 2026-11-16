@@ -10,6 +10,8 @@ versions follow [Semantic Versioning](https://semver.org/).
   `android-foreground.svg`). Legacy icon, Play Store icon and feature graphics (DE/EN) follow suit; the monochrome
   (themed) icon stays the star. The ring is a full ellipse that passes behind the planet, as in the brand
   template.
+- App colours follow the refreshed website palette: accent `#5A45E6`, violet `#6E5BEB`, star `#FCC954`, teal in dark mode
+  `#5EE4DF`, header navy `#050A24` (theme, spinner, setup, cards, radar, widgets).
 
 ## [0.6.0] - 2026-11-10
 ### Changed

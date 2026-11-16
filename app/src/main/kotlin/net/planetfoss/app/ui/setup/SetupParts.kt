@@ -58,7 +58,7 @@ internal val NebulaLight = Color(0xFFB3A4FF)
 internal val OnNebula = Color(0xFF1B0C6B)
 internal val MoonText = Color(0xFFF5F6FB)
 internal val MoonMuted = Color(0xFFC9CEE3)
-internal val StarYellow = Color(0xFFFFC94D)
+internal val StarYellow = Color(0xFFFCC954)
 
 /** A few stars (x, y as fractions, radius in dp, alpha), like the header's. */
 private val Stars = listOf(

@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
  * and accent-soft (#ECE8FF / #2A2363) as in the light and dark variables there.
  * No dynamic colour by default – the app should look like PlanetFOSS.
  */
-private val Space950 = Color(0xFF070A1A)
+private val Space950 = Color(0xFF050A24)
 private val Space900 = Color(0xFF0B1026)
 private val Space800 = Color(0xFF141A3A)
 private val Space700 = Color(0xFF232B55)
@@ -29,9 +29,9 @@ private val Moon200 = Color(0xFFDCE0EE)
 private val Moon500 = Color(0xFF8F97B5)
 private val Muted = Color(0xFF586079)
 private val Nebula300 = Color(0xFFB3A4FF)
-private val Nebula500 = Color(0xFF7C5CFF)
-private val Accent = Color(0xFF4527D9)
-private val Star = Color(0xFFFFC94D)
+private val Nebula500 = Color(0xFF6E5BEB)
+private val Accent = Color(0xFF5A45E6)
+private val Star = Color(0xFFFCC954)
 private val Mars = Color(0xFFFF6B4A)
 
 private val Light = lightColorScheme(
@@ -112,13 +112,13 @@ data class PlanetColors(
     /** Comets (`.burst-komet`): the light star colour. */
     val comet: Color = Color(0xFFFFE9A8),
     /** The website's violet (`--violet`): the edge of the intro hint. */
-    val violet: Color = Color(0xFF7C5CFF),
+    val violet: Color = Color(0xFF6E5BEB),
     /** The night sky of the website's header (`--head`), in light and dark mode alike. */
     val night: Color = Space950,
 )
 
 private val AuroraLight = Color(0xFF0B7A6E)
-private val AuroraDark = Color(0xFF2DD4BF)
+private val AuroraDark = Color(0xFF5EE4DF)
 
 val LocalPlanetColors = staticCompositionLocalOf { PlanetColors(Star, Color(0xFF1A1300), Nebula500) }
 

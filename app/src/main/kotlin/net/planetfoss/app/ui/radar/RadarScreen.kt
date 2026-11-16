@@ -252,7 +252,7 @@ private fun FollowRow(label: String, kind: String, icon: String, count: Int?, bu
                 else -> ({
                     Text(
                         "+$count", style = MetaStyle, fontWeight = FontWeight.Bold,
-                        color = if (burning) Color(0xFF2DD4BF) else planet.aurora,
+                        color = if (burning) Color(0xFF5EE4DF) else planet.aurora,
                     )
                 })
             },

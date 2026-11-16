@@ -63,9 +63,9 @@ fun PlanetSpinner(progress: Float, refreshing: Boolean, modifier: Modifier = Mod
 /** Where the moon starts: in front of the planet, so it is seen from the first pixel of the pull. */
 private const val MoonStart = 0.9f
 
-private val RingColors = listOf(Color(0xFF7C5CFF), Color(0xFF2DD4BF), Color(0xFF7FE9DA))
+private val RingColors = listOf(Color(0xFF6E5BEB), Color(0xFF5EE4DF), Color(0xFF7FE9DA))
 private val PlanetColors = listOf(Color(0xFFC4B8FF), Color(0xFF5B3DF5))
-private val MoonColor = Color(0xFFFFC94D)
+private val MoonColor = Color(0xFFFCC954)
 private val Center = Offset(32f, 34f)
 private const val Tilt = -22f
 private const val StrokeW = 4.2f

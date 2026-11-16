@@ -71,7 +71,7 @@ private val Moon2 = Color(0xFFC9CEE3)
 private val Moon3 = Color(0xFF9EA6C4)
 private val Venus = Color(0xFFFFE7A8)
 private val Nova = Color(0xFFFF8A4A)
-private val Aurora = Color(0xFF2DD4BF)
+private val Aurora = Color(0xFF5EE4DF)
 private val Nebula = Color(0xFFB3A4FF)
 private val NovaLight = Color(0xFFFFB199)
 

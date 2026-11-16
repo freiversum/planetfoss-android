@@ -577,7 +577,7 @@ fun CometCard(comet: Comet, onOpen: (Item) -> Unit, onTopic: () -> Unit, modifie
 @Immutable
 private data class NovaTone(val ink: Color, val ink2: Color, val ink3: Color, val line: Color, val accent: Color) {
     companion object {
-        val Night = NovaTone(NovaInk, NovaInk2, NovaInk3, NovaLine, Color(0xFFFFC94D))
+        val Night = NovaTone(NovaInk, NovaInk2, NovaInk3, NovaLine, Color(0xFFFCC954))
     }
 }
 
@@ -590,7 +590,7 @@ internal val NovaInk2 = Color(0xFFC9CEE3)
 internal val NovaInk3 = Color(0xFF9EA6C4)
 internal val NovaLine = Color(0x1CFFFFFF)
 private val NovaOrange = Color(0xFFFF8A4A)
-private val NovaViolet = Color(0xFF7C5CFF)
+private val NovaViolet = Color(0xFF6E5BEB)
 private val NovaPhoto = Color(0xFF232A5A)
 private val NovaMono = MetaStyle
 
