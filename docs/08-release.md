@@ -154,4 +154,5 @@ so F-Droid needs the full history (default for its build server).
   draft and the lists “PlanetFOSS Tester” (1) and “Tester Intern” (2) – needs 12 testers for 14 days before production;
   trader status **declared 2026-11-16: trader** (account level, public: name, postal address from the Google payments profile,
   christoph@linuxundich.de, verified phone number; app-level declaration “applies to this app”, no terms-of-service URL), submitted
-  for review together with the store graphics and the closed-test settings.
+  for review together with the store graphics and the closed-test settings; Google approved and published all of it the same
+  day. The public developer phone number was replaced afterwards (Account details › Contact details, no new review needed).
