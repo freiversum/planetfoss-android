@@ -4,6 +4,8 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+
+## [0.6.1] - 2026-11-16
 ### Fixed
 - `versionCode` is the commit count plus 140, so builds after the history split (count starting at 1 again) install
   as updates over v0.6.0 (versionCode 139) instead of being rejected as a downgrade.
@@ -14,6 +16,10 @@ versions follow [Semantic Versioning](https://semver.org/).
   `android-foreground.svg`). Legacy icon, Play Store icon and feature graphics (DE/EN) follow suit; the monochrome
   (themed) icon stays the star. The ring is a full ellipse that passes behind the planet, as in the brand
   template.
+- The wordmark in the top bar and the setup screen is the new one from the brand refresh (rendered from the website's
+  `wortmarke-dark.svg` / `wortmarke-light.svg`), 30 dp high instead of 26 so the name keeps its size next to the planet.
+- Phone screenshots for Google Play and F-Droid redone with the new icon, wordmark and colours (DE + EN, light and dark,
+  `tools/demo-server.py` on the Pixel 10).
 - App colours follow the refreshed website palette: accent `#5A45E6`, violet `#6E5BEB`, star `#FCC954`, teal in dark mode
   `#5EE4DF`, header navy `#050A24` (theme, spinner, setup, cards, radar, widgets).
 

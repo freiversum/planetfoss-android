@@ -134,6 +134,9 @@ so F-Droid needs the full history (default for its build server).
 - Phone screenshots redone 2026-11-10 with the new tabs (Latest, Radar, Discover, Saved), DE + EN, light and dark, from
   `tools/demo-server.py` on the Pixel 10. Play rejects anything longer than 2:1, so they are 1220 x 2424 (sides extended from
   the edge pixels, status bar notification icons painted over). The ten-inch tablet screenshots are still from 2026-10-30.
+- Phone screenshots redone 2026-11-16 for the brand refresh (same eight views, DE + EN), status bar demo mode, the
+  live-update chip and notification icons painted over, sides extended to 1220 x 2424. The tablet screenshots still show the
+  old colours.
 - Privacy policy URL: https://planetfoss.net/datenschutz/ (has an Android app section; German only).
 - Done 2026-11-10: report and block for fediverse replies (UGC policy), decision D1 built, website deploy of `weekly`,
   `meta`, `logbook`, v0.6.0 tagged and the AAB rebuilt (versionCode 139).
