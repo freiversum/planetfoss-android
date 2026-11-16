@@ -37,6 +37,11 @@ fun git(vararg args: String): String? = runCatching {
 
 val baseVersion: String = providers.gradleProperty("PLANETFOSS_VERSION").orNull ?: "0.3.0"
 val gitCommitCount: Int = git("rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
+/**
+ * versionCode = commit count + offset. The history was split into main/intern on 2026-11-10 and starts again at 1,
+ * while installed releases already have versionCode 139 (v0.6.0) – the offset keeps codes rising.
+ */
+val versionCodeOffset = 140
 val gitShortSha: String = git("rev-parse", "--short=8", "HEAD") ?: "unknown"
 val gitIsDirty: Boolean = git("status", "--porcelain") != null
 val appVersionName: String = git("describe", "--tags", "--exact-match", "HEAD")?.removePrefix("v")
@@ -73,7 +78,7 @@ android {
         // Android 14+: the versions that still get security updates from Google (bulletin 2026-10)
         minSdk = 34
         targetSdk = 37
-        versionCode = gitCommitCount
+        versionCode = gitCommitCount + versionCodeOffset
         versionName = appVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

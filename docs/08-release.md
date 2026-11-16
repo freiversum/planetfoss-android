@@ -9,7 +9,8 @@ Status: 2026-10-30. Preparation; the release itself waits for the decisions belo
 - `PRIVACY.md`: everything that leaves the phone.
 - Release build: `./gradlew :app:assembleRelease` (R8, unsigned without the keys in
   `~/.gradle/gradle.properties`). Version name from the Git tag `vX.Y.Z`, `versionCode` =
-  number of commits (monotonic).
+  number of commits + 140 (monotonic; the offset bridges the history split of 2026-11-10, after which the count
+  started again at 1 while v0.6.0 had 139).
 
 ## Release key (2026-10-30)
 

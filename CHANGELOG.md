@@ -4,6 +4,10 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- `versionCode` is the commit count plus 140, so builds after the history split (count starting at 1 again) install
+  as updates over v0.6.0 (versionCode 139) instead of being rejected as a downgrade.
+
 ### Changed
 - New app icon from the PlanetFOSS brand refresh (November 2026): filled planet with a violet-to-teal ring and a golden star
   on navy (`#050A24`), generated from the website's logo system (`web/planetfoss.net/ci/system/build.py`,
