@@ -8,7 +8,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 - New app icon from the PlanetFOSS brand refresh (November 2026): filled planet with a violet-to-teal ring and a golden star
   on navy (`#050A24`), generated from the website's logo system (`web/planetfoss.net/ci/system/build.py`,
   `android-foreground.svg`). Legacy icon, Play Store icon and feature graphics (DE/EN) follow suit; the monochrome
-  (themed) icon stays the star.
+  (themed) icon stays the star. The ring is a full ellipse that passes behind the planet, as in the brand
+  template.
 
 ## [0.6.0] - 2026-11-10
 ### Changed
