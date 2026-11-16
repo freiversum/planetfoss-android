@@ -4,6 +4,9 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Changed
+- The pull-to-refresh spinner draws the new PlanetFOSS mark (filled planet, tilted ring); the golden spark orbits
+  the planet instead of the old moon.
 
 ## [0.6.1] - 2026-11-16
 ### Fixed
