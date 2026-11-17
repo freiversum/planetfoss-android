@@ -301,6 +301,8 @@
     <string name="weekly_archive">Frühere Wochen</string>
     <string name="weekly_kw">KW %1$d/%2$d</string>
     <string name="weekly_teaser_kick">Wochenrückblick · Woche %1$d</string>
+    <string name="weekly_band_kick">Rückblick</string>
+    <string name="weekly_band_title">Woche %1$d →</string>
     <string name="weekly_teaser_h">Was in Woche %1$d los war</string>
     <string name="weekly_teaser_story">Titelgeschichte: %1$s</string>
     <string name="weekly_kicker">Wochenrückblick · Ausgabe %1$d/%2$d</string>

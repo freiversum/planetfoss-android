@@ -4,6 +4,10 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Latest: the logbook band no longer squeezes the logbook into a narrow strip when last week's review sits beside it;
+  the review half now reads "Review · Week 46 →" and takes only the room it needs.
+- Latest: the "new since" bar keeps the same space above and below.
 
 ## [0.6.2] - 2026-11-16
 ### Changed

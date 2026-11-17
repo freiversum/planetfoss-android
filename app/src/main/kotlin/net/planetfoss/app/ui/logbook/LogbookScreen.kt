@@ -413,20 +413,22 @@ fun LogbookBand(t: LogbookTeaser, week: WeekTeaser?, onLogbook: () -> Unit, onWe
                 verticalArrangement = Arrangement.spacedBy(Space.xxs),
             ) {
                 val marks = listOfNotNull(
-                    t.supernovas.takeIf { it > 0 }?.let { "$it ✦" },
-                    t.comets.takeIf { it > 0 }?.let { "$it ☄" },
-                ).joinToString(" · ")
+                    t.supernovas.takeIf { it > 0 }?.let { "$it\u00A0✦" },
+                    t.comets.takeIf { it > 0 }?.let { "$it\u00A0☄" },
+                ).joinToString(" · ") // no-break spaces: a count never parts from its mark
                 Label(stringResource(R.string.logbook_band, shortDay(t.day)) + if (marks.isNotEmpty()) " · $marks" else "", planet.supernova)
                 Text(t.headline, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
             week?.let { w ->
                 Box(Modifier.width(1.dp).fillMaxHeight().background(NovaLine))
+                // short texts on purpose: sized by a long kicker this half squeezed the logbook into a narrow strip
                 Column(
-                    Modifier.clickable(role = Role.Button) { onWeekly(w.week) }.background(Color(0x2E6E5BEB)).padding(horizontal = Space.m, vertical = Space.m),
+                    Modifier.fillMaxHeight().clickable(role = Role.Button) { onWeekly(w.week) }.background(Color(0x2E6E5BEB))
+                        .padding(horizontal = Space.m, vertical = Space.m),
                     verticalArrangement = Arrangement.spacedBy(Space.xxs),
                 ) {
-                    Label(stringResource(R.string.weekly_teaser_kick, w.week.substringAfter('-').toInt()), planet.supernova)
-                    Text(stringResource(R.string.weekly_title) + " →", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Label(stringResource(R.string.weekly_band_kick), planet.supernova)
+                    Text(stringResource(R.string.weekly_band_title, w.week.substringAfter('-').toInt()), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                 }
             }
         }

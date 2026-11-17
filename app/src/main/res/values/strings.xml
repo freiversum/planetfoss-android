@@ -306,6 +306,8 @@
     <string name="weekly_archive">Earlier weeks</string>
     <string name="weekly_kw">Week %1$d/%2$d</string>
     <string name="weekly_teaser_kick">Weekly review · Week %1$d</string>
+    <string name="weekly_band_kick">Review</string>
+    <string name="weekly_band_title">Week %1$d →</string>
     <string name="weekly_teaser_h">What happened in week %1$d</string>
     <string name="weekly_teaser_story">Cover story: %1$s</string>
     <string name="weekly_kicker">Weekly review · Issue %1$d/%2$d</string>

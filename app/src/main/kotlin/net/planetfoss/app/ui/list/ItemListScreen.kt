@@ -212,10 +212,16 @@ fun ItemListScreen(
                         net.planetfoss.app.ui.logbook.LogbookBand(logbook, weekly, onLogbook = { onLogbook(logbook.day) }, onWeekly = onWeekly)
                     }
                 } else {
-                    weekly?.let { w -> item(key = "weekly", span = StaggeredGridItemSpan.FullLine) { net.planetfoss.app.ui.weekly.WeeklyTeaserCard(w) { onWeekly(w.week) } } }
+                    // the same room below as the logbook band leaves
+                    weekly?.let { w ->
+                        item(key = "weekly", span = StaggeredGridItemSpan.FullLine) {
+                            androidx.compose.foundation.layout.Box(Modifier.padding(bottom = Space.s)) { net.planetfoss.app.ui.weekly.WeeklyTeaserCard(w) { onWeekly(w.week) } }
+                        }
+                    }
                 }
                 if (fresh > 0 && newSince != null) item(key = "new-since", span = StaggeredGridItemSpan.FullLine) {
-                    NewSinceBar(fresh, more = fresh == state.items.size && state.hasMore, since = newSince, onAllSeen = allSeen)
+                    // same room below as the band above leaves, otherwise the bar sits on the first post
+                    NewSinceBar(fresh, more = fresh == state.items.size && state.hasMore, since = newSince, onAllSeen = allSeen, modifier = Modifier.padding(bottom = Space.s))
                 }
                 head?.let { h -> item(key = "head", span = StaggeredGridItemSpan.FullLine) { TopicHeader(h, actions.topic, actions.rubric) } }
                 if (source != null && support != null) item(key = "support", span = StaggeredGridItemSpan.FullLine) { SupportBox(source.name, support) }
