@@ -17,6 +17,8 @@
   &nbsp;·&nbsp;
   <a href="#install">Google Play: closed test</a>
   &nbsp;·&nbsp; F-Droid: planned &nbsp;·&nbsp;
+  <a href="https://linuxundich.de/en/projects/planetfoss-android/">Project page</a>
+  &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
@@ -202,8 +204,19 @@ licence. Please rename a fork.
 
 </details>
 
+## On the blog
+
+PlanetFOSS for Android has its own page on my blog
+[Linux und Ich](https://linuxundich.de/en/projects/planetfoss-android/), with more
+details on the app and news about upcoming versions. The
+[project overview](https://linuxundich.de/en/projects/) lists everything else
+I build for Linux and Android. Questions, ideas or feedback that don't fit
+into an issue? [Get in touch](https://linuxundich.de/en/contact/), I read
+every message.
+
 ## More
 
+- [Project page on linuxundich.de](https://linuxundich.de/en/projects/planetfoss-android/): details, background and news
 - [Technical notes](docs/TECHNICAL.md): building, testing and the design documents
 - [Privacy notes](PRIVACY.md): everything that leaves the phone
 - [Changelog](CHANGELOG.md) and [licences of all libraries and assets](LICENSES.md)
