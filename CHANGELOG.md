@@ -4,6 +4,8 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Changed
+- README is a product page for users now (what the app does, install, questions); building, testing and the design documents moved to `docs/TECHNICAL.md`.
 
 ## [0.6.3] - 2026-11-17
 First version on GitHub: the repository is public and every release comes with a signed APK.
