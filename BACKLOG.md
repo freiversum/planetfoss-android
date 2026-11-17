@@ -6,7 +6,7 @@
 - [ ] Decide: offer the app for https://planetfoss.net/ links
 - [x] Website parity, priority 4 (2026-11-01): weekly review (API `weekly`), hide sources/rubrics (on the phone), bundle
       languages (`bundle.langs`), donation link from the backend (API `meta`, off for now)
-- [ ] Release with the weekly review once planetfoss.net serves `weekly` and `meta` (website deploy first)
+- [x] Release with the weekly review once planetfoss.net serves `weekly` and `meta` (website deploy first) – released with v0.6.0
 - [x] Website parity, priority 1 (2026-10-31): imprint/privacy links, topic head, source directory, in orbit + topics
 - [x] Website parity, priority 2 (2026-10-31): front page on top of Latest (API `front`), light/dark choice, “How it works”
 - [x] Website parity, priority 3 (2026-10-31): bundle page (API `bundle/<id>`), search filter by kind of source, Mastodon
@@ -40,7 +40,8 @@
   - [x] Screenshots with own content (tools/demo-server.py: only linuxundich.de posts), DE + EN, phone + tablet
   - [x] v0.2.0 tagged (versionCode 67), changelogs in fastlane and CHANGELOG.md
   - [x] Release key created, v0.2.0 signed (`dist/planetfoss-0.2.0.apk`, docs/08-release.md) – back up the key file
-  - [ ] Public repository, then the F-Droid submission (Christoph)
+  - [x] Public repository github.com/linuxundich/planetfoss-android with a signed APK on the releases page (2026-11-17)
+  - [ ] F-Droid submission (Christoph)
   - [ ] F-Droid metadata: AntiFeature `Ads` (own sponsor cards and affiliate tiles once ads are on at planetfoss.net);
         submission by Christoph only
 - [x] Fair to the sources, phases 1–3 (2026-10-30): tracker protection for third-party trackers only,
@@ -48,14 +49,14 @@
 - [x] Fair to the sources, phase 4: publishers section on planetfoss.net/ueber/#betreiber covers the app, support links, reach on request
 - [x] Count article opens from the app per source (daily totals), combined and as their own value (2026-10-30)
 - [x] Logbook: screen, entries on Latest/Rubrics/weekly review, morning notification (2026-11-05)
-- [ ] Release with the logbook once planetfoss.net serves `logbook` and `home.logbook` (website deploy first)
+- [x] Release with the logbook once planetfoss.net serves `logbook` and `home.logbook` (website deploy first) – released with v0.6.0
 - [x] Logbook home screen widget (newest entry; followed topics as a second, small widget) (2026-11-06)
 - [x] Decide: bottom bar Today / Radar / Discover (STRATEGIE.md on planetfoss.net) – mockup first: variant A, built 2026-11-06
 - [x] “New since the last visit” markers and Radar tab (2026-11-06)
 - [x] Today: block "Since 6:00" above the logbook entry (2026-11-07; built, on the Pixel)
 - [ ] Logbook notification over a real morning (Doze) on the phone
 - [x] “Discussed on” and replies from the fediverse (bundle and topic head, below the supernova, 2026-11-05)
-- [ ] Release once planetfoss.net serves `discussions` and `replies` (live since the deploy of 2026-11-05)
+- [x] Release once planetfoss.net serves `discussions` and `replies` (live since the deploy of 2026-11-05) – released with v0.6.0
 - [ ] Widgets on the phone over a few days (redraw every 3 h, data older than 2 h fetched by the widget, launcher previews)
 - [ ] Widget preview images for the launcher's picker (now the app icon)
 - [x] Cold start from planetfoss://radar opened Today once (2026-11-06) – not reproducible: emulator cold start, restored task, widget flags and a cold start on the Pixel all open Radar; most likely the test ran while Android redrew the widgets after the update

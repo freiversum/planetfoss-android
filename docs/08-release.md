@@ -41,6 +41,14 @@ Status: 2026-10-30. Preparation; the release itself waits for the decisions belo
 - v0.5.1 (back gesture with the page motion instead of Navigation's 70 % scale, tab bar shows with the page below):
   `dist/planetfoss-0.5.1.apk`, versionCode 98, SHA-256 `7cb4ef92d137b88abaea007ea31cc5df7809deda6b955c1d9760cfc0f3e9328a`.
 
+## GitHub (2026-11-17)
+
+- The repository is public: https://github.com/linuxundich/planetfoss-android (branch `main`, tags `vX.Y.Z`).
+- Every release gets `planetfoss-<version>.apk` (built from the tag in a clean worktree, signed with the release key
+  above) and its `.sha256` on the releases page; first one is v0.6.3 (versionCode 163).
+- Release notes: first line one sentence for users, then the changes, the install note, and the hidden lines
+  `<!-- lui:de … -->` / `<!-- lui:en … -->` for the project page on linuxundich.de.
+
 ## Baseline profile (2026-10-31)
 
 `app/src/main/baseline-prof.txt` lists the classes and methods the start and the first minutes need (scrolling

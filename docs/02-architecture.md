@@ -197,7 +197,7 @@ NovaCheckWorker (periodic, 30 min default, user can choose 15 min / 30 min / 1 h
 **Internal browser** (own screen, not a separate activity):
 
 - Top bar: close, domain (+ lock icon for https), overflow: reload, forward,
-  share, copy URL, open externally, “Werbeblocker für diese Seite aus”.
+  share, copy URL, open externally, tracker protection off for this site.
 - Progress bar, error page (offline, DNS, timeout, HTTP error) with retry.
 - Back gesture: WebView history first, then close.
 - WebView state saved via `saveState`/`restoreState` in the screen's saved state.

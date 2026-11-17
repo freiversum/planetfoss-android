@@ -38,7 +38,7 @@ fun git(vararg args: String): String? = runCatching {
 val baseVersion: String = providers.gradleProperty("PLANETFOSS_VERSION").orNull ?: "0.3.0"
 val gitCommitCount: Int = git("rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
 /**
- * versionCode = commit count + offset. The history was split into main/intern on 2026-11-10 and starts again at 1,
+ * versionCode = commit count + offset. The public history starts again at 1 with v0.6.0 (2026-11-10),
  * while installed releases already have versionCode 139 (v0.6.0) – the offset keeps codes rising.
  */
 val versionCodeOffset = 140

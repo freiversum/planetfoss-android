@@ -143,22 +143,12 @@ class FilterSetTest {
         assertTrue("took ${(System.nanoTime() - t) / 1_000_000} ms", System.nanoTime() - t < 2_000_000_000L)
     }
 
-    /** Real EasyList + EasyPrivacy, when present (-Dplanetfoss.lists=<dir>): parse time, rule counts, known hits and misses. */
-    @Test
-    fun realGermany() {
-        val file = System.getProperty("planetfoss.lists")?.let { File(it, "easylistgermany.txt") }
-        assumeTrue("set -Dplanetfoss.lists to a folder with easylistgermany.txt", file?.exists() == true)
-        // the app validates every download like this before it replaces the old file
-        val s = FilterSet.parse(listOf(file!!.readText()), validate = true)
-        println("EasyList Germany: ${s.stats}")
-        assertTrue(s.stats.network >= FilterSet.MIN_RULES)
-    }
-
+    /** The real EasyPrivacy list, when present (-Dplanetfoss.lists=<dir>): parse time, rule counts, known hits and misses. */
     @Test
     fun realLists() {
-        val dir = System.getProperty("planetfoss.lists")?.let(::File)
-        assumeTrue("set -Dplanetfoss.lists to a folder with easylist.txt and easyprivacy.txt", dir != null && File(dir, "easylist.txt").exists())
-        val texts = listOf(File(dir, "easylist.txt").readText(), File(dir, "easyprivacy.txt").readText())
+        val file = System.getProperty("planetfoss.lists")?.let { File(it, "easyprivacy.txt") }
+        assumeTrue("set -Dplanetfoss.lists to a folder with easyprivacy.txt", file?.exists() == true)
+        val texts = listOf(file!!.readText())
         val rt = Runtime.getRuntime()
         repeat(3) { System.gc() }
         val before = rt.totalMemory() - rt.freeMemory()
@@ -168,9 +158,8 @@ class FilterSetTest {
         repeat(3) { System.gc() }
         val heapMb = (rt.totalMemory() - rt.freeMemory() - before) / 1024 / 1024
         println("parse: $parseMs ms, heap: $heapMb MB, ${s.stats}")
-        assertTrue(s.stats.network > 50_000)
+        assertTrue(s.stats.network >= FilterSet.MIN_RULES)
         val page = "www.heise.de"
-        assertNotNull(s.match(req("https://securepubads.g.doubleclick.net/tag/js/gpt.js", page)))
         assertNotNull(s.match(req("https://www.googletagmanager.com/gtag/js?id=G-1", page)))
         assertNotNull(s.match(req("https://www.google-analytics.com/analytics.js", page)))
         assertNull(s.match(req("https://www.heise.de/assets/heise/css/main.css", page, ResourceType.STYLESHEET)))

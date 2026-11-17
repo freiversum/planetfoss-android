@@ -1,0 +1,3 @@
+- Erste Version auf GitHub mit signierter APK
+- Aktuell: Das Logbuch-Band behält seinen Platz neben dem Rückblick der letzten Woche
+- Aktuell: gleiche Abstände um die Leiste „Neu seit“

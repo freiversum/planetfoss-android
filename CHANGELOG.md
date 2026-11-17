@@ -4,6 +4,15 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+
+## [0.6.3] - 2026-11-17
+First version on GitHub: the repository is public and every release comes with a signed APK.
+
+### Changed
+- README rewritten as a product page with the ways to install (APK from GitHub, closed test on Google Play).
+- The optional test against a real filter list (`-Pplanetfoss.lists=<dir>`) reads EasyPrivacy only, the one list the
+  tracker protection uses.
+
 ### Fixed
 - Latest: the logbook band no longer squeezes the logbook into a narrow strip when last week's review sits beside it;
   the review half now reads "Review · Week 46 →" and takes only the room it needs.
