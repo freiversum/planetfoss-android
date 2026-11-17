@@ -86,6 +86,9 @@ Google service involved. Notifications are off until you turn them on.
 <img src="docs/screenshots/weekly-review.webp" alt="The weekly review with the week's numbers" width="250">
 </td>
 </tr>
+</table>
+
+<table>
 <tr>
 <td width="270" align="center">
 <img src="docs/screenshots/settings.webp" alt="Settings for comets, notifications and the logbook" width="250">
