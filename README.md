@@ -29,80 +29,128 @@
 
 ## What it does
 
+<table>
+<tr>
+<td width="33%" valign="top">
+
 ### The big stories on top
 
-PlanetFOSS collects posts from around 200 German and English blogs, magazines
-and projects. When many of them cover the same topic at once, it becomes a
-supernova. The *Latest* tab shows every burning supernova first, then the
-comets, which are topics on the rise, and then the stream of the newest posts.
-Every card leads to the original article.
+When many sites cover the same topic at once, it becomes a **supernova**.
+*Latest* shows every burning supernova first, then the comets, which are
+topics on the rise, then the newest posts.
+
+</td>
+<td width="33%" valign="top">
 
 ### One story, one card
 
 The same release news from five sites shows up once, bundled, with all the
-reports listed. You see right away who writes what, and you don't scroll past
-the same headline again and again.
+reports listed. You see who writes what, and every card leads to the
+original article.
 
-### Follow instead of scrolling
+</td>
+<td width="33%" valign="top">
 
-Tap the bell on a topic or a source, and the *Radar* tab shows what is new
-there since your last visit. What you follow and when you last looked in stays
-on your phone.
+### Follow, don't scroll
 
-### A logbook every morning, a review every week
+Tap the bell on a topic or a source, and *Radar* shows what is new there
+since your last visit. What you follow stays on your phone.
 
-<img src="docs/screenshots/weekly-review.webp" alt="The weekly review with the week's numbers" width="240" align="right">
+</td>
+</tr>
+</table>
 
-Every day from 6 a.m. the logbook sums up the last 24 hours: the biggest story,
-the comets and the new releases. On quiet days there is no entry. The weekly
-review does the same for the last full week, with numbers, supernovas and the
-most noticed releases. Both live under *Discover*, next to search, rubrics,
-videos and the posts readers have starred.
+<table>
+<tr>
+<td valign="middle">
 
-<br clear="right"/>
+### A logbook every morning
+
+Every day from 6 a.m. the logbook sums up the last 24 hours: the biggest
+story, the comets and the new releases. On quiet days there is no entry.
+
+### A review every week
+
+The last full week in numbers, with its supernovas, the most noticed releases
+and the topics of the week. Both live under *Discover*, next to search,
+rubrics, videos and the posts readers have starred.
 
 ### Notifications without a push server
 
 If you like, the app tells you about new supernovas, the morning logbook and
-what you follow. Android checks PlanetFOSS in the background for that, so there
-is no push server and no Google service involved. Notifications are off until
-you turn them on.
+what you follow. Android checks PlanetFOSS in the background for that, with no
+Google service involved. Notifications are off until you turn them on.
+
+</td>
+<td width="270" align="center">
+<img src="docs/screenshots/weekly-review.webp" alt="The weekly review with the week's numbers" width="250">
+</td>
+</tr>
+<tr>
+<td width="270" align="center">
+<img src="docs/screenshots/settings.webp" alt="Settings for comets, notifications and the logbook" width="250">
+</td>
+<td valign="middle">
 
 ### Read now or later
 
 Articles open in your phone's browser, or in the app's own browser with
 optional protection from third-party trackers. The bookmark keeps posts under
-*Saved*, also offline, and the collection can be exported to a file and
-imported again. Two home screen widgets show the newest logbook and the topics
-you follow.
+*Saved*, also offline, and the collection can be exported and imported.
+
+### On your home screen
+
+Two widgets show the newest logbook and the topics you follow.
 
 ### Private by design
 
-No account, no analytics, no ads service. The app only talks to planetfoss.net
-and to the sites you open. Counting opened articles for the sources is off
-unless you switch it on. Everything that leaves the phone is listed in the
-[privacy notes](PRIVACY.md).
+No account, no analytics, no ads service. The app only talks to
+planetfoss.net and to the sites you open. Counting opened articles for the
+sources is off unless you switch it on. Everything that leaves the phone is
+listed in the [privacy notes](PRIVACY.md).
+
+</td>
+</tr>
+</table>
+
+## At a glance
+
+| | |
+|---|---|
+| **Runs on** | Android 14 or newer, no Google services needed |
+| **Languages** | Interface in English and German, content in English, German or both |
+| **News from** | around 200 blogs, magazines and projects, collected by [PlanetFOSS](https://planetfoss.net/en/) |
+| **Costs** | nothing, no ads service, no account |
+| **Licence** | GPL-3.0-or-later |
 
 ## Install
 
-PlanetFOSS needs Android 14 or newer. The interface comes in English and
-German, the content in English, German or both.
-
-**APK from GitHub**
+<table>
+<tr>
+<th width="50%">APK from GitHub</th>
+<th width="50%">Google Play, closed test</th>
+</tr>
+<tr>
+<td valign="top">
 
 1. Download `planetfoss-<version>.apk` from the [latest release](https://github.com/linuxundich/planetfoss-android/releases/latest).
 2. Open it on your phone. Android asks once whether your browser may install apps.
 3. Later versions install over the old one and keep your settings.
 
-**Google Play, closed test**
-
-The app is in closed testing on Google Play. New developer accounts need twelve
-testers who stay for 14 days before an app may go public, so every tester
-helps.
+</td>
+<td valign="top">
 
 1. With the Google account on your phone, join the group [PlanetFOSS Tester](https://groups.google.com/g/planetfoss-tester).
 2. On the [testing page](https://play.google.com/apps/testing/net.planetfoss.app), tap *Become a tester*.
 3. Install the app from the link on that page and keep it for two weeks.
+
+</td>
+</tr>
+</table>
+
+> [!TIP]
+> Testers wanted: new developer accounts on Google Play need twelve testers who
+> stay for 14 days before an app may go public. Every tester helps.
 
 > [!NOTE]
 > Google Play signs its builds with its own key. The APK from GitHub and the
@@ -111,25 +159,45 @@ helps.
 
 ## Questions
 
-**Where does the news come from?**
+<details>
+<summary><strong>Where does the news come from?</strong></summary>
+
 From [PlanetFOSS](https://planetfoss.net/en/). The app fetches its public
 lists and sends you to the original article for reading.
 
-**Why do notifications sometimes arrive late?**
+</details>
+
+<details>
+<summary><strong>Why do notifications sometimes arrive late?</strong></summary>
+
 Android decides when the app may check in the background, between 15 minutes
 and three hours depending on battery and usage. This is no live ticker.
 
-**Does the app block ads?**
+</details>
+
+<details>
+<summary><strong>Does the app block ads?</strong></summary>
+
 No. The app's browser can block third-party trackers if you switch that on.
 The sites' ads stay, and the app passes PlanetFOSS on as the referrer, so the
 sites see where their readers come from.
 
-**Does it work without Google services?**
+</details>
+
+<details>
+<summary><strong>Does it work without Google services?</strong></summary>
+
 Yes. The app uses none of them, and it is built to be published on F-Droid.
 
-**Can I use the PlanetFOSS name for my fork?**
+</details>
+
+<details>
+<summary><strong>Can I use the PlanetFOSS name for my fork?</strong></summary>
+
 The code is free software, the PlanetFOSS name and logo are not covered by its
 licence. Please rename a fork.
+
+</details>
 
 ## More
 
