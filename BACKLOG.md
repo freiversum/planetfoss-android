@@ -95,3 +95,4 @@
       whole page of new posts or a pull to refresh still replaces the list
 - [ ] Flaky unit test: `ItemListViewModelTest.theSponsorCardComesFromTheCandidates` failed once with "Dispatchers.Main is
       used concurrently with setting it" (2026-11-19), green on the next two runs
+- [ ] Upload the new store icon (`fastlane/metadata/android/*/images/icon.png`, 2026-11-19) in the Play Console (Christoph)

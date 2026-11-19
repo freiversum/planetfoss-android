@@ -14,6 +14,8 @@ versions follow [Semantic Versioning](https://semver.org/).
   them on.
 ### Changed
 - README is a product page for users now (what the app does, install, questions); building, testing and the design documents moved to `docs/TECHNICAL.md`.
+- Store icon: the planet fills more of the tile (78 % instead of 62 % of its width). In Play's list of updates it looked
+  smaller than the icons of other apps. The icon on the phone is unchanged.
 - The line with source, time and stars on a card never wraps: a long source name is cut ("PC Games H…"), the time and
   the stars always stay whole.
 

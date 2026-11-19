@@ -137,8 +137,8 @@ so F-Droid needs the full history (default for its build server).
 - `./gradlew :app:bundleRelease` builds `app/build/outputs/bundle/release/app-release.aab` (8 MB, includes the baseline
   profile and the R8 mapping, all languages in one split). Upload with the existing key as the *upload key*, let Play
   create the app signing key; Play installs and the APKs in `dist/` therefore cannot update each other.
-- Store graphics are in `fastlane/metadata/android/*/images/`: `icon.png` (512 x 512, from `icon-randlos.svg` of the
-  website CI) and `featureGraphic.png` (1024 x 500).
+- Store graphics are in `fastlane/metadata/android/*/images/`: `icon.png` (512 x 512, `icon-store-512.png` of the
+  website CI: the motif fills 78 % of the tile, Play only cuts the corners) and `featureGraphic.png` (1024 x 500).
 - Phone screenshots redone 2026-11-10 with the new tabs (Latest, Radar, Discover, Saved), DE + EN, light and dark, from
   `tools/demo-server.py` on the Pixel 10. Play rejects anything longer than 2:1, so they are 1220 x 2424 (sides extended from
   the edge pixels, status bar notification icons painted over). The ten-inch tablet screenshots are still from 2026-10-30.
