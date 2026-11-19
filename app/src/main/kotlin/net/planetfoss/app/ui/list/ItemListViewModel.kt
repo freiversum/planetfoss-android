@@ -112,8 +112,16 @@ class ItemListViewModel @Inject constructor(
         val (kind, ref) = followable ?: return
         val t = target ?: return
         viewModelScope.launch {
-            if (followed.value) follows.unfollow(kind, ref)
-            else state.value.list.items.let { shown -> follows.follow(t, label, shown.maxOfOrNull { it.publishedAt.toEpochMilli() }, shown.map { it.id }) }
+            if (followed.value) {
+                follows.unfollow(kind, ref)
+            } else {
+                // the bell asked for Android's permission: it means "tell me", also when the notifications were switched off before
+                if (!settings.settings.first().followNotify) {
+                    follows.restartMarks()
+                    settings.setFollowNotify(true)
+                }
+                state.value.list.items.let { shown -> follows.follow(t, label, shown.maxOfOrNull { it.publishedAt.toEpochMilli() }, shown.map { it.id }) }
+            }
         }
     }
 

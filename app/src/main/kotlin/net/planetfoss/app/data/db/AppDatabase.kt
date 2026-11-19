@@ -213,6 +213,10 @@ interface FollowDao {
     @Query("DELETE FROM follow WHERE kind = :kind AND ref = :ref")
     suspend fun delete(kind: String, ref: String)
 
+    /** Notifications are switched on (again): everything up to [now] counts as known, nothing old is announced. */
+    @Query("UPDATE follow SET lastSeen = :now, known = ''")
+    suspend fun restart(now: Long)
+
     /** After a check: [at] moves the mark forward only, [known] replaces the ids of the first page. */
     @Query("UPDATE follow SET lastSeen = MAX(lastSeen, :at), known = :known WHERE kind = :kind AND ref = :ref")
     suspend fun seen(kind: String, ref: String, at: Long, known: String)

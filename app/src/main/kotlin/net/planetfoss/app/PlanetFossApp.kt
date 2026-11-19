@@ -53,9 +53,9 @@ class PlanetFossApp : Application(), Configuration.Provider, SingletonImageLoade
             settings.settings.map { it.novaNotify to it.novaIntervalMinutes }.distinctUntilChanged()
                 .collect { (on, minutes) -> scheduler.apply(on, minutes) }
         }
-        // the follow check runs while anything is followed, in the supernova interval
+        // the follow check runs while anything is followed and its notifications are on, in the supernova interval
         scope.launch {
-            combine(follows.all.map { it.isNotEmpty() }, settings.settings.map { it.novaIntervalMinutes }, ::Pair).distinctUntilChanged()
+            combine(follows.all.map { it.isNotEmpty() }, settings.settings.map { it.followNotify to it.novaIntervalMinutes }) { any, (on, minutes) -> (any && on) to minutes }.distinctUntilChanged()
                 .collect { (any, minutes) -> followScheduler.apply(any, minutes) }
         }
         // the morning logbook check runs while its switch is on

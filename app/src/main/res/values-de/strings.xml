@@ -475,7 +475,7 @@
     <string name="setup_open_title">Artikel öffnen</string>
     <string name="setup_open_lead">Wo willst du die Originalartikel lesen?</string>
     <string name="setup_notify_title">Benachrichtigungen</string>
-    <string name="setup_notify_lead">Beides ist aus. Es gibt keinen Push-Server und keine Google-Dienste: Die App schaut im Hintergrund nach. Beim Einschalten fragt Android einmal nach der Erlaubnis.</string>
+    <string name="setup_notify_lead">Alles ist aus. Es gibt keinen Push-Server und keine Google-Dienste: Die App schaut im Hintergrund nach. Beim Einschalten fragt Android einmal nach der Erlaubnis.</string>
     <string name="setup_count_title">Anonym mitzählen</string>
     <string name="setup_tabs_title">Die vier Tabs</string>
     <string name="setup_tab_latest">Was gerade passiert: Supernovas und aufsteigende Themen oben, dann alle neuen Beiträge. Morgens auch das Logbuch.</string>
@@ -507,4 +507,25 @@
     <string name="setup_ready_cta">Zur App</string>
     <string name="setup_count_switch_text">Aus: Die App meldet nichts darüber, was du liest.</string>
     <string name="setup_count_yes_text_ads">Ein Aufruf pro Artikel, als Summe pro Tag. Sponsor-Karten werden immer gezählt.</string>
+    <string name="setup_topics_title">Themen folgen</string>
+    <string name="setup_topics_lead">Tippe an, was dich interessiert. Dein Radar sammelt dann alles Neue dazu.</string>
+    <string name="setup_topics_rising">Gerade im Aufwind</string>
+    <string name="setup_topics_evergreen">Dauerthemen</string>
+    <string name="setup_topics_more">Mehr Themen und alle Quellen findest du später unter Entdecken.</string>
+    <string name="setup_topics_none">Noch nichts gewählt</string>
+    <string name="setup_topics_failed">Die Themen ließen sich nicht laden. Du kannst Themen später mit der Glocke folgen.</string>
+    <plurals name="setup_topics_chosen">
+        <item quantity="one">%d Thema gewählt</item>
+        <item quantity="other">%d Themen gewählt</item>
+    </plurals>
+    <plurals name="setup_ready_follows">
+        <item quantity="one">Du folgst %d Thema. Was dort neu ist, steht im Radar.</item>
+        <item quantity="other">Du folgst %d Themen. Was dort neu ist, steht im Radar.</item>
+    </plurals>
+    <string name="follow_notify_switch">Neues aus deinen Themen</string>
+    <string name="follow_notify_explain">Eine Meldung, wenn ein Thema oder eine Quelle, der du folgst, einen neuen Beitrag hat. Aus: Sie füllen nur den Radar.</string>
+    <plurals name="setup_follow_notify_text">
+        <item quantity="one">Wenn zu deinem Thema ein Beitrag erscheint.</item>
+        <item quantity="other">Wenn zu einem deiner %d Themen ein Beitrag erscheint.</item>
+    </plurals>
 </resources>

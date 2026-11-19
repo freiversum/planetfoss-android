@@ -58,8 +58,10 @@ class FollowChecker @Inject constructor(
     /** Returns how many follows had news. Throws only when every request failed (the worker then retries). */
     suspend fun check(): Int {
         val follows = dao.all()
-        if (follows.isEmpty()) return 0
-        val lang = settings.settings.first().contentLang
+        val s = settings.settings.first()
+        // switched off: follows only fill Radar, which asks the API itself
+        if (follows.isEmpty() || !s.followNotify) return 0
+        val lang = s.contentLang
         var failed = 0
         var news = 0
         for (f in follows) {
@@ -115,7 +117,7 @@ class FollowCheckWorker @AssistedInject constructor(
 }
 
 /**
- * Runs the follow check periodically while anything is followed, in the supernova interval – and, like the
+ * Runs the follow check periodically while anything is followed and its notifications are on, in the supernova interval – and, like the
  * supernova check, once right away whenever this is applied (app start, first follow): periodic work only starts
  * after a full interval.
  */

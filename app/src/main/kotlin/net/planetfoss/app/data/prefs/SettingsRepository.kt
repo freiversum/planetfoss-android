@@ -22,6 +22,12 @@ data class Settings(
     val contentLang: ContentLang = ContentLang.ALL,
     /** Supernova notifications: off until the user turns them on. */
     val novaNotify: Boolean = false,
+    /**
+     * Notifications for followed topics and sources. On unless the user turns it off: the bell on a list asks for
+     * Android's permission, so following there means "tell me". Off: follows only fill Radar (the setup assistant's
+     * topic step follows without asking for the permission).
+     */
+    val followNotify: Boolean = true,
     /** Morning notification for the new logbook entry: off until the user turns it on. */
     val logbookNotify: Boolean = false,
     /** Check interval in minutes; WorkManager's minimum is 15, Android may still delay it. */
@@ -103,6 +109,7 @@ class SettingsRepository @Inject constructor(private val store: DataStore<Prefer
                 contentLang = ContentLang.fromParam(it[CONTENT_LANG]),
                 novaNotify = it[NOVA_NOTIFY] ?: false,
                 logbookNotify = it[LOGBOOK_NOTIFY] ?: false,
+                followNotify = it[FOLLOW_NOTIFY] ?: true,
                 novaIntervalMinutes = (it[NOVA_INTERVAL] ?: Settings.DEFAULT_INTERVAL).takeIf { m -> m in Settings.INTERVALS } ?: Settings.DEFAULT_INTERVAL,
                 browserMode = BrowserMode.entries.firstOrNull { m -> m.name == it[BROWSER_MODE] } ?: BrowserMode.CUSTOM_TAB,
                 browserJavaScript = it[BROWSER_JS] ?: true,
@@ -189,6 +196,10 @@ class SettingsRepository @Inject constructor(private val store: DataStore<Prefer
         }
     }
 
+    suspend fun setFollowNotify(on: Boolean) {
+        store.edit { it[FOLLOW_NOTIFY] = on }
+    }
+
     /** Day of the last logbook entry the morning check knows (YYYY-MM-DD); null = none yet (baseline). */
     suspend fun logbookSeen(): String? = store.data.first()[LOGBOOK_SEEN]
 
@@ -214,6 +225,7 @@ class SettingsRepository @Inject constructor(private val store: DataStore<Prefer
         val NOVA_BASELINE = booleanPreferencesKey("nova_baseline")
         val LOGBOOK_NOTIFY = booleanPreferencesKey("logbook_notify")
         val LOGBOOK_SEEN = stringPreferencesKey("logbook_seen")
+        val FOLLOW_NOTIFY = booleanPreferencesKey("follow_notify")
         val LOGBOOK_READ = stringPreferencesKey("logbook_read")
         val BROWSER_MODE = stringPreferencesKey("browser_mode")
         val BROWSER_JS = booleanPreferencesKey("browser_js")

@@ -39,4 +39,14 @@ class SettingsRepositoryTest {
         assertTrue(done.setupDone)
         assertTrue(done.introClosed)
     }
+
+    @Test
+    fun followNotificationsAreOnUntilSwitchedOff() = runTest {
+        val scope = TestScope(UnconfinedTestDispatcher())
+        val repo = SettingsRepository(PreferenceDataStoreFactory.create(scope = scope) { tmp.newFile("f.preferences_pb") })
+        // the bell on a list means "tell me" (it asks for Android's permission); the setup assistant stores "off" itself
+        assertTrue(repo.settings.first().followNotify)
+        repo.setFollowNotify(false)
+        assertFalse(repo.settings.first().followNotify)
+    }
 }

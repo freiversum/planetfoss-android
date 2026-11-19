@@ -84,8 +84,11 @@
 - [x] Follow notification for the English sister of a linuxundich.de post instead of the German original (2026-11-18): not
       the app – the German feed was served stale, so planetfoss.net never had the original. The content language
       (All / German / English) already applies to every notification
-- [ ] First session (feedback 2026-11-19: who sets nothing up on day one rarely comes back). Fresh install on the Pixel 10:
-      welcome, six steps, "All set", then Latest with content – but nothing can be followed on the way and Radar starts
-      empty. Decide: a step "Follow a few topics" in the setup assistant (rising and evergreen topics as chips), mockup first
+- [x] First session (feedback 2026-11-19: who sets nothing up on day one rarely comes back). Fresh install on the Pixel 10:
+      welcome, six steps, "All set", then Latest with content – but nothing could be followed on the way and Radar started
+      empty. Built 2026-11-19 after `docs/setup-follow-mockup.html`: step 3 "Follow topics" (chips), own switch for the
+      follow notifications; checked on the Pixel 10 with a fresh install (three topics chosen, no permission dialog, Radar
+      lists them)
+- [ ] Follow topics step: not looked at in the light design, in English, at 130 % font and without network (the retry text)
 - [ ] Decide: a list scrolled past its first page drops back to page 1 when it is refreshed after five minutes away
       (page 1 replaces the list) – keep the loaded pages on an automatic refresh?

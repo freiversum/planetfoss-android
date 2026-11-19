@@ -104,6 +104,14 @@ class SettingsViewModel @Inject constructor(
     /** Followed topics and sources, for the list with which they are removed again. */
     val follows = followRepo.all.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    /** Notifications for follows; switching them on starts from now, nothing published meanwhile is announced. */
+    fun setFollowNotify(on: Boolean) {
+        viewModelScope.launch {
+            if (on) followRepo.restartMarks()
+            repo.setFollowNotify(on)
+        }
+    }
+
     fun unfollow(kind: String, ref: String) {
         viewModelScope.launch { followRepo.unfollow(kind, ref) }
     }
@@ -203,6 +211,10 @@ fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> U
     }
 
     // the same Android permission for the logbook switch: granted = switch on, denied = the hint below the switch
+    val requestFollow = rememberNotifyRequest { granted ->
+        systemAllows = vm.systemAllows()
+        if (granted) vm.setFollowNotify(true)
+    }
     var logbookDenied by rememberSaveable { mutableStateOf(false) }
     val requestLogbook = rememberNotifyRequest { granted ->
         systemAllows = vm.systemAllows()
@@ -271,6 +283,9 @@ fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> U
                 }
                 if (follows.isNotEmpty()) {
                     Section(stringResource(R.string.settings_follows))
+                    SwitchItem(stringResource(R.string.follow_notify_switch), stringResource(R.string.follow_notify_explain), settings.followNotify && systemAllows) { on ->
+                        if (on) requestFollow() else vm.setFollowNotify(false)
+                    }
                     follows.forEach { f ->
                         ListItem(
                             headlineContent = { Text(f.label) },

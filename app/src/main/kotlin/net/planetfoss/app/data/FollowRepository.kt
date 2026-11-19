@@ -29,6 +29,9 @@ class FollowRepository @Inject constructor(private val dao: FollowDao, private v
         widgets.radarChanged()
     }
 
+    /** Before notifications for follows are switched on: what was published while they were off is not announced. */
+    suspend fun restartMarks() = dao.restart(clock.millis())
+
     suspend fun unfollow(kind: String, ref: String) {
         dao.delete(kind, ref)
         widgets.radarChanged()

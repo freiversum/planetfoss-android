@@ -481,7 +481,7 @@
     <string name="setup_open_title">Open articles</string>
     <string name="setup_open_lead">Where do you want to read the original articles?</string>
     <string name="setup_notify_title">Notifications</string>
-    <string name="setup_notify_lead">Both are off. There is no push server and no Google service: the app checks in the background. When you switch one on, Android asks once for permission.</string>
+    <string name="setup_notify_lead">Everything is off. There is no push server and no Google service: the app checks in the background. When you switch one on, Android asks once for permission.</string>
     <string name="setup_count_title">Anonymous counting</string>
     <string name="setup_tabs_title">The four tabs</string>
     <string name="setup_tab_latest">What is happening now: supernovas and rising topics on top, then every new post. In the morning the logbook too.</string>
@@ -513,4 +513,25 @@
     <string name="setup_ready_cta">Go to the app</string>
     <string name="setup_count_switch_text">Off: the app reports nothing about what you read.</string>
     <string name="setup_count_yes_text_ads">One open per article, as a total per day. Sponsor cards are always counted.</string>
+    <string name="setup_topics_title">Follow topics</string>
+    <string name="setup_topics_lead">Tap what interests you. Your Radar then collects everything new about it.</string>
+    <string name="setup_topics_rising">Rising right now</string>
+    <string name="setup_topics_evergreen">Evergreen topics</string>
+    <string name="setup_topics_more">You find more topics and all sources later under Discover.</string>
+    <string name="setup_topics_none">Nothing chosen yet</string>
+    <string name="setup_topics_failed">The topics could not be loaded. You can follow topics later with the bell.</string>
+    <plurals name="setup_topics_chosen">
+        <item quantity="one">%d topic chosen</item>
+        <item quantity="other">%d topics chosen</item>
+    </plurals>
+    <plurals name="setup_ready_follows">
+        <item quantity="one">You follow %d topic. What is new there shows in Radar.</item>
+        <item quantity="other">You follow %d topics. What is new there shows in Radar.</item>
+    </plurals>
+    <string name="follow_notify_switch">News from your topics</string>
+    <string name="follow_notify_explain">A notification when a topic or source you follow has a new post. Off: they only fill Radar.</string>
+    <plurals name="setup_follow_notify_text">
+        <item quantity="one">When a post appears on your topic.</item>
+        <item quantity="other">When a post appears on one of your %d topics.</item>
+    </plurals>
 </resources>

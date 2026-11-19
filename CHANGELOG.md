@@ -4,6 +4,14 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Added
+- Setup assistant: a new step "Follow topics" (step 3 of 7). The topics that rise right now and the twenty evergreen topics
+  with the most posts are chips; a tap follows, another one unfollows. The chosen topics fill Radar from the first
+  minute, and the closing page says how many are followed. Nothing asks for a permission on this page.
+- Notifications for followed topics and sources have their own switch "News from your topics": in the assistant (next to
+  logbook and supernovas, once topics are chosen) and in Settings → Following. Switched off, follows only fill Radar and
+  the background check does not run. The bell on a topic or source still asks for Android's permission and switches
+  them on.
 ### Changed
 - README is a product page for users now (what the app does, install, questions); building, testing and the design documents moved to `docs/TECHNICAL.md`.
 - The line with source, time and stars on a card never wraps: a long source name is cut ("PC Games H…"), the time and

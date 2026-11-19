@@ -12,6 +12,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.pluralStringResource
+import net.planetfoss.app.ui.components.hasNotifyPermission
+import net.planetfoss.app.ui.theme.MetaStyle
+import net.planetfoss.core.api.TopicRef
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -83,13 +92,16 @@ import net.planetfoss.app.ui.theme.Space
 import net.planetfoss.core.api.ContentLang
 
 /** Pages: 0 welcome, 1..[Steps] the setup and tour pages, [Ready] the end. */
-private const val Steps = 6
+private const val Steps = 7
+
+/** The page on which topics are followed (mockup v3, 2026-11-19). */
+private const val TopicsPage = 3
 private const val Ready = Steps + 1
 
 /**
  * The setup assistant (mockup v2, 2026-11-07). The welcome and the closing page are the night sky of the website with the
- * wordmark; the six pages in between have a night sky head with the step, the title and a symbol, and their choices in cards:
- * language and design, how articles open, notifications, anonymous counting, then a tour of the four tabs and of the handles
+ * wordmark; the seven pages in between have a night sky head with the step, the title and a symbol, and their choices in cards:
+ * language and design, how articles open, topics to follow (they fill Radar), notifications, anonymous counting, then a tour of the four tabs and of the handles
  * people look for. Everything is optional and preset to the safe value; each choice is saved at once, so leaving on any page
  * keeps it. First start: opens by itself; later: Settings → Setup assistant.
  */
@@ -97,6 +109,8 @@ private const val Ready = Steps + 1
 fun SetupScreen(onDone: () -> Unit, vm: SetupViewModel = hiltViewModel()) {
     val settings by vm.settings.collectAsStateWithLifecycle()
     val adsShown by vm.adsShown.collectAsStateWithLifecycle()
+    val topics by vm.topics.collectAsStateWithLifecycle()
+    val followed by vm.followed.collectAsStateWithLifecycle()
     // survives the recreation Android does after a language or design change
     var page by rememberSaveable { mutableIntStateOf(0) }
     val leave = { vm.finish(); onDone() }
@@ -109,7 +123,7 @@ fun SetupScreen(onDone: () -> Unit, vm: SetupViewModel = hiltViewModel()) {
             AnimatedContent(page, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "setup page") { p ->
                 when (p) {
                     0 -> Welcome(onStart = { page = 1 }, onSkip = leave)
-                    Ready -> Closing(onDone = leave, onBack = { page-- })
+                    Ready -> Closing(followed.size, onDone = leave, onBack = { page-- })
                     else -> Column(Modifier.fillMaxSize()) {
                         SetupBand(p, Steps, stringResource(titleOf(p)), painterOf(p))
                         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
@@ -120,9 +134,10 @@ fun SetupScreen(onDone: () -> Unit, vm: SetupViewModel = hiltViewModel()) {
                                 when (p) {
                                     1 -> LanguageAndDesign(settings, vm)
                                     2 -> OpenArticles(settings.browserMode, vm::setBrowserMode)
-                                    3 -> Notifications(settings, vm)
-                                    4 -> CountForSources(settings.countReach, adsShown, vm::setCountReach)
-                                    5 -> TourTabs()
+                                    TopicsPage -> FollowTopics(topics, followed, vm::toggleTopic, vm::loadTopics)
+                                    4 -> Notifications(settings, followed.size, vm)
+                                    5 -> CountForSources(settings.countReach, adsShown, vm::setCountReach)
+                                    6 -> TourTabs()
                                     else -> TourHandles()
                                 }
                             }
@@ -132,6 +147,13 @@ fun SetupScreen(onDone: () -> Unit, vm: SetupViewModel = hiltViewModel()) {
             }
         }
         if (!night) {
+            if (page == TopicsPage) {
+                Text(
+                    if (followed.isEmpty()) stringResource(R.string.setup_topics_none) else pluralStringResource(R.plurals.setup_topics_chosen, followed.size, followed.size),
+                    style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = Space.xl, end = Space.xl, top = Space.s),
+                )
+            }
             Row(
                 Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = Space.m, vertical = Space.s),
                 verticalAlignment = Alignment.CenterVertically,
@@ -152,9 +174,10 @@ fun SetupScreen(onDone: () -> Unit, vm: SetupViewModel = hiltViewModel()) {
 private fun titleOf(page: Int) = when (page) {
     1 -> R.string.setup_lang_title
     2 -> R.string.setup_open_title
-    3 -> R.string.setup_notify_title
-    4 -> R.string.setup_count_title
-    5 -> R.string.setup_tabs_title
+    TopicsPage -> R.string.setup_topics_title
+    4 -> R.string.setup_notify_title
+    5 -> R.string.setup_count_title
+    6 -> R.string.setup_tabs_title
     else -> R.string.setup_handles_title
 }
 
@@ -162,9 +185,10 @@ private fun titleOf(page: Int) = when (page) {
 private fun painterOf(page: Int) = when (page) {
     1 -> painterResource(R.drawable.ic_language)
     2 -> painterResource(R.drawable.ic_open_in_new)
-    3 -> rememberVectorPainter(Icons.Filled.Notifications)
-    4 -> painterResource(R.drawable.ic_chart)
-    5 -> painterResource(R.drawable.ic_explore)
+    TopicsPage -> painterResource(R.drawable.ic_radar)
+    4 -> rememberVectorPainter(Icons.Filled.Notifications)
+    5 -> painterResource(R.drawable.ic_chart)
+    6 -> painterResource(R.drawable.ic_explore)
     else -> painterResource(R.drawable.ic_lightbulb)
 }
 
@@ -214,7 +238,7 @@ private fun Welcome(onStart: () -> Unit, onSkip: () -> Unit) {
 }
 
 @Composable
-private fun Closing(onDone: () -> Unit, onBack: () -> Unit) {
+private fun Closing(followed: Int, onDone: () -> Unit, onBack: () -> Unit) {
     Column(Modifier.fillMaxSize().nightSky().statusBarsPadding()) {
         Column(Modifier.weight(1f).fillMaxWidth().padding(horizontal = 32.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             // the supernova of the logo: a star with a soft glow
@@ -227,7 +251,7 @@ private fun Closing(onDone: () -> Unit, onBack: () -> Unit) {
                 modifier = Modifier.semantics { heading() },
             )
             Spacer(Modifier.height(Space.m))
-            Text(stringResource(R.string.setup_ready_text), style = MaterialTheme.typography.bodyMedium, color = MoonMuted, textAlign = TextAlign.Center)
+            Text(if (followed > 0) pluralStringResource(R.plurals.setup_ready_follows, followed, followed) else stringResource(R.string.setup_ready_text), style = MaterialTheme.typography.bodyMedium, color = MoonMuted, textAlign = TextAlign.Center)
         }
         NightButtons(stringResource(R.string.setup_ready_cta), onDone, stringResource(R.string.back), onBack)
     }
@@ -276,15 +300,60 @@ private fun OpenArticles(selected: BrowserMode, onSelect: (BrowserMode) -> Unit)
     }
 }
 
+/**
+ * Topics to follow, as chips: what rises right now (Latest's "Rising") and the evergreen topics with the most posts.
+ * A tap follows, another one unfollows; nothing asks for a permission here. The page can be passed without a choice.
+ */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Notifications(settings: Settings, vm: SetupViewModel) {
+private fun FollowTopics(topics: SetupTopics, followed: Set<String>, onToggle: (TopicRef) -> Unit, onLoad: () -> Unit) {
+    LaunchedEffect(Unit) { onLoad() }
+    Lead(stringResource(R.string.setup_topics_lead))
+    when {
+        !topics.loaded -> Text(stringResource(R.string.loading), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        topics.failed -> {
+            Text(stringResource(R.string.setup_topics_failed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            TextButton(onClick = onLoad) { Text(stringResource(R.string.retry)) }
+        }
+        else -> {
+            @Composable
+            fun Group(title: String, list: List<TopicRef>) {
+                if (list.isEmpty()) return
+                Text(title.uppercase(), style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = Space.xs).semantics { heading() })
+                FlowRow(Modifier.fillMaxWidth().padding(bottom = Space.m), horizontalArrangement = Arrangement.spacedBy(Space.s)) {
+                    list.forEach { t ->
+                        val on = t.key in followed
+                        FilterChip(
+                            selected = on,
+                            onClick = { onToggle(t) },
+                            label = { Text(if (t.key in topics.comets && !on) "☄ " + t.label else t.label, maxLines = 1) },
+                            leadingIcon = if (on) ({ Icon(Icons.Filled.Check, null, Modifier.size(FilterChipDefaults.IconSize)) }) else null,
+                        )
+                    }
+                }
+            }
+            Group(stringResource(R.string.setup_topics_rising), topics.rising)
+            Group(stringResource(R.string.setup_topics_evergreen), topics.evergreen)
+        }
+    }
+    Text(stringResource(R.string.setup_topics_more), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+@Composable
+private fun Notifications(settings: Settings, followed: Int, vm: SetupViewModel) {
     val context = LocalContext.current
     // the same Android permission as in Settings: granted = switch on, denied = a hint instead of a silent "off"
     var denied by rememberSaveable { mutableStateOf(false) }
     var wanted by rememberSaveable { mutableStateOf("") }
     val request = rememberNotifyRequest { granted ->
         denied = !granted
-        if (granted) { if (wanted == "logbook") vm.setLogbookNotify(true) else vm.setNotify(true) }
+        if (granted) {
+            when (wanted) {
+                "logbook" -> vm.setLogbookNotify(true)
+                "follow" -> vm.setFollowNotify(true)
+                else -> vm.setNotify(true)
+            }
+        }
     }
     Lead(stringResource(R.string.setup_notify_lead))
     SetupCard {
@@ -294,6 +363,13 @@ private fun Notifications(settings: Settings, vm: SetupViewModel) {
         CardDivider()
         SwitchRow(stringResource(R.string.notify_switch), stringResource(R.string.notify_explain), settings.novaNotify) { on ->
             if (on) { wanted = "nova"; request() } else vm.setNotify(false)
+        }
+        // only with topics chosen on the page before: their notifications are a choice of their own, off like the others
+        if (followed > 0) {
+            CardDivider()
+            SwitchRow(stringResource(R.string.follow_notify_switch), pluralStringResource(R.plurals.setup_follow_notify_text, followed, followed), settings.followNotify && hasNotifyPermission(context)) { on ->
+                if (on) { wanted = "follow"; request() } else vm.setFollowNotify(false)
+            }
         }
     }
     if (denied && !settings.logbookNotify && !settings.novaNotify) {
