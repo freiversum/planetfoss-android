@@ -101,6 +101,37 @@ class FeedRepositoryTest {
         assertEquals(listOf(6L, 5L), repo.observe(ListTarget.Home, ContentLang.EN).first().items.map { it.id })
     }
 
+    /** 19.11.: a list that refreshed itself after five minutes away dropped back to its first page. */
+    @Test
+    fun refreshByItselfKeepsTheLoadedPagesAndPutsNewPostsOnTop() = runTest {
+        page(listOf(5, 4, 3), more = true)
+        repo.refresh(ListTarget.Home, ContentLang.EN)
+        page(listOf(2, 1), more = false)
+        repo.loadMore(ListTarget.Home, ContentLang.EN)
+        // two new posts pushed 4 and 3 off page 1
+        page(listOf(7, 6, 5), more = true)
+        repo.refresh(ListTarget.Home, ContentLang.EN, keepPages = true)
+        val list = repo.observe(ListTarget.Home, ContentLang.EN).first()
+        assertEquals(listOf(7L, 6L, 5L, 4L, 3L, 2L, 1L), list.items.map { it.id })
+        assertEquals(2, list.pages)
+        // pulled by the user: the list starts again with page 1
+        page(listOf(7, 6, 5), more = true)
+        repo.refresh(ListTarget.Home, ContentLang.EN)
+        assertEquals(listOf(7L, 6L, 5L), repo.observe(ListTarget.Home, ContentLang.EN).first().items.map { it.id })
+    }
+
+    @Test
+    fun refreshByItselfReplacesTheListWhenTheWholePageIsNew() = runTest {
+        page(listOf(5, 4, 3), more = true)
+        repo.refresh(ListTarget.Home, ContentLang.EN)
+        page(listOf(2, 1), more = false)
+        repo.loadMore(ListTarget.Home, ContentLang.EN)
+        // posts may be missing between 8 and 5: no merge
+        page(listOf(10, 9, 8), more = true)
+        repo.refresh(ListTarget.Home, ContentLang.EN, keepPages = true)
+        assertEquals(listOf(10L, 9L, 8L), repo.observe(ListTarget.Home, ContentLang.EN).first().items.map { it.id })
+    }
+
     @Test
     fun languagesHaveSeparateLists() = runTest {
         page(listOf(1, 2), more = false, lang = "de")

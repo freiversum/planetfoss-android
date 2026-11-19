@@ -19,6 +19,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 - Latest stays where it was after reading an article in the app's own browser; it jumped back to the top.
+- A list that was scrolled past its first page keeps the loaded pages when it refreshes by itself after a while away; new
+  posts go on top. Before, it dropped back to its first page and the place was lost. Pull to refresh still starts the
+  list again.
 - Followed topics and sources: a post that planetfoss.net picks up late – with an older time than the newest post already
   announced – was never announced. The check now remembers the posts of the list's first page instead of only the newest
   time (database version 5).

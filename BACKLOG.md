@@ -90,5 +90,8 @@
       follow notifications; checked on the Pixel 10 with a fresh install (three topics chosen, no permission dialog, Radar
       lists them)
 - [ ] Follow topics step: not looked at in the light design, in English, at 130 % font and without network (the retry text)
-- [ ] Decide: a list scrolled past its first page drops back to page 1 when it is refreshed after five minutes away
-      (page 1 replaces the list) – keep the loaded pages on an automatic refresh?
+- [x] A list scrolled past its first page dropped back to page 1 when it refreshed itself after five minutes away (page 1
+      replaced the list). Built 2026-11-19: an automatic refresh merges page 1 (new posts on top, loaded pages stay); a
+      whole page of new posts or a pull to refresh still replaces the list
+- [ ] Flaky unit test: `ItemListViewModelTest.theSponsorCardComesFromTheCandidates` failed once with "Dispatchers.Main is
+      used concurrently with setting it" (2026-11-19), green on the next two runs

@@ -136,6 +136,32 @@ interface FeedDao {
         upsertMeta(ListMetaEntity(key, fetchedAt, page, hasMore, title ?: old?.title))
     }
 
+    @Query("SELECT itemId FROM list_entry WHERE listKey = :key")
+    suspend fun listIds(key: String): List<Long>
+
+    @Query("SELECT MIN(position) FROM list_entry WHERE listKey = :key")
+    suspend fun firstPosition(key: String): Int?
+
+    /**
+     * Page 1 fetched again for a list that is paged further: the posts that are new go on top, everything loaded stays.
+     * Replacing the list (as [storePage] does) cut it back to its first page – a reader far down lost the place when the
+     * list refreshed itself after a while away (19.11.). False when this cannot be done safely: nothing paged yet, or the
+     * whole page is new, so more posts may be missing between it and the loaded ones – then the list is replaced.
+     */
+    @Transaction
+    suspend fun mergeFirstPage(key: String, items: List<ItemEntity>, now: Long, title: String? = null): Boolean {
+        val old = meta(key) ?: return false
+        if (old.pages < 2) return false
+        val have = listIds(key).toSet()
+        val fresh = items.filter { it.id !in have }
+        if (fresh.size == items.size) return false
+        val first = firstPosition(key) ?: return false
+        upsertItems(items)
+        insertEntries(fresh.mapIndexed { i, item -> ListEntryEntity(key, first - fresh.size + i, item.id) })
+        upsertMeta(old.copy(fetchedAt = now, title = title ?: old.title))
+        return true
+    }
+
     /** Cached items that no list shows any more and that are older than [before]. */
     @Query("DELETE FROM item WHERE cachedAt < :before AND id NOT IN (SELECT itemId FROM list_entry)")
     suspend fun pruneItems(before: Long): Int

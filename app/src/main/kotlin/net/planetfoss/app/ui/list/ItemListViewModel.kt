@@ -178,7 +178,8 @@ class ItemListViewModel @Inject constructor(
                 // Latest's hints (logbook, weekly review) are not cached either: its page 1 loads once per session
                 val headMissing = ((t is ListTarget.Topic || t is ListTarget.Bundle) && !repo.hasHead(t, lang)) ||
                     (t == ListTarget.Home && !repo.loadedThisSession(t, lang))
-                if (target != null && (headMissing || repo.isStale(t, lang))) run(lang, more = false)
+                // by itself, not pulled: pages loaded further down stay (the reader keeps the place)
+                if (target != null && (headMissing || repo.isStale(t, lang))) run(lang, more = false, keepPages = true)
             }
             // the sponsor card's candidates (own request, a part of the screen); no ad slot, no request
             if (target?.adSlot != null) viewModelScope.launch { repo.ensureAds() }
@@ -284,12 +285,12 @@ class ItemListViewModel @Inject constructor(
         viewModelScope.launch { settings.setContentLang(lang) }
     }
 
-    private suspend fun run(lang: ContentLang, more: Boolean) {
+    private suspend fun run(lang: ContentLang, more: Boolean, keepPages: Boolean = false) {
         val t = target ?: return
         if (job?.isActive == true) return
         job = viewModelScope.launch {
             activity.update { it.copy(refreshing = !more, loadingMore = more, error = null) }
-            val error = runCatching { if (more) repo.loadMore(t, lang) else repo.refresh(t, lang) }
+            val error = runCatching { if (more) repo.loadMore(t, lang) else repo.refresh(t, lang, keepPages = keepPages) }
                 .exceptionOrNull()?.let(UiError::from)
             activity.update { Activity(error = error) }
         }

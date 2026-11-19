@@ -56,8 +56,11 @@ class FeedRepository @Inject constructor(
         }
     }
 
-    /** [use]: a view of this list, or only a part of another screen (Latest's Sternstunden), see [Use]. */
-    suspend fun refresh(target: ListTarget, lang: ContentLang, use: Use = Use.VIEW) = loadPage(target, lang, 1, use)
+    /**
+     * [use]: a view of this list, or only a part of another screen (Latest's Sternstunden), see [Use]. [keepPages]: the
+     * list refreshes by itself (not pulled by the user) – further pages that are loaded stay, new posts go on top.
+     */
+    suspend fun refresh(target: ListTarget, lang: ContentLang, use: Use = Use.VIEW, keepPages: Boolean = false) = loadPage(target, lang, 1, use, keepPages)
 
     /** Sponsor cards of the lists' first pages, in memory only: no ad is stored, none shows offline. */
     private val ads = MutableStateFlow<Map<String, Ad>>(emptyMap())
@@ -178,11 +181,12 @@ class FeedRepository @Inject constructor(
         return clock.millis() - fetched > maxAge.toMillis()
     }
 
-    private suspend fun loadPage(target: ListTarget, lang: ContentLang, page: Int, use: Use = Use.VIEW) {
+    private suspend fun loadPage(target: ListTarget, lang: ContentLang, page: Int, use: Use = Use.VIEW, keepPages: Boolean = false) {
         val answer = api.list(target, lang, uiLanguage(), page, use)
         val now = clock.millis()
         val rows = answer.items.map { ItemEntity(it.id, json.encodeToString(Item.serializer(), it), it.publishedAt.toEpochMilli(), now) }
-        dao.storePage(listKey(target, lang), page, rows, answer.hasMore, now, answer.title)
+        val merged = page == 1 && keepPages && dao.mergeFirstPage(listKey(target, lang), rows, now, answer.title)
+        if (!merged) dao.storePage(listKey(target, lang), page, rows, answer.hasMore, now, answer.title)
         if (page == 1) ads.update { m -> answer.ad?.let { m + (listKey(target, lang) to it) } ?: (m - listKey(target, lang)) }
         if (page == 1) answer.topic?.let { h -> heads.update { it + (listKey(target, lang) to h) } }
         if (page == 1) weeklyTeasers.update { m -> answer.weekly?.let { m + (listKey(target, lang) to it) } ?: (m - listKey(target, lang)) }
