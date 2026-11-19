@@ -40,10 +40,12 @@ class RadarCounter @Inject constructor(
         if (list.isEmpty()) return@coroutineScope RadarCount(emptyList(), emptyList()).also { widgets.saveRadar(it, redraw) }
         val lang = settings.settings.first().contentLang
         val since = seen.mark.first()
+        // one opening of Radar is one view: the first followed list carries it
+        val first = list.firstOrNull { FollowRepository.targetOf(it.kind, it.ref) != null }
         val answers = list.map { f ->
             async {
                 val target = FollowRepository.targetOf(f.kind, f.ref) ?: return@async f to null
-                f to runCatching { if (use == Use.VIEW) feed.radarPage(target, lang) else feed.firstPage(target, lang) }
+                f to runCatching { if (use == Use.VIEW) feed.radarPage(target, lang, first = f === first) else feed.firstPage(target, lang) }
             }
         }.awaitAll()
         val rows = answers.map { (f, r) ->

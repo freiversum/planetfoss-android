@@ -142,8 +142,11 @@ class FeedRepository @Inject constructor(
     /** “In orbit” and the evergreen topics. */
     suspend fun topics(lang: ContentLang, use: Use = Use.VIEW): TopicsAnswer = api.topics(lang, uiLanguage(), use)
 
-    /** Page 1 of a followed list for Radar: a view, but not stored (Radar only counts and lists the newest). */
-    suspend fun radarPage(target: ListTarget, lang: ContentLang) = api.list(target, lang, uiLanguage(), use = Use.VIEW)
+    /**
+     * Page 1 of a followed list for Radar, not stored (Radar only counts and lists the newest). One opening of Radar is
+     * one view: the request marked [first] stands for the screen, the other followed lists are parts of it.
+     */
+    suspend fun radarPage(target: ListTarget, lang: ContentLang, first: Boolean) = api.list(target, lang, uiLanguage(), use = if (first) Use.RADAR else Use.PART)
 
     /** Page 1 of a list straight from the API, without touching the cache (the follow check: never a view). */
     suspend fun firstPage(target: ListTarget, lang: ContentLang) = api.list(target, lang, uiLanguage(), use = Use.BACKGROUND)
@@ -212,8 +215,11 @@ class FeedRepository @Inject constructor(
     /** Rubrics are small and change rarely: no Room cache, OkHttp's HTTP cache (10 min) is enough. */
     suspend fun rubrics(): List<Rubric> = api.rubrics(uiLanguage()).rubrics
 
-    /** Search goes to the server every time (no local index); OkHttp caches identical queries. */
-    suspend fun search(query: String, lang: ContentLang): SearchResult = api.search(query.trim(), lang, uiLanguage())
+    /**
+     * Search goes to the server every time (no local index); OkHttp caches identical queries. [use] PART for the further
+     * queries of one visit to the search screen: it searches while typing, and every pause counted as a view before.
+     */
+    suspend fun search(query: String, lang: ContentLang, use: Use = Use.VIEW): SearchResult = api.search(query.trim(), lang, uiLanguage(), use)
 
     private fun decodeItem(raw: String): Item? = runCatching { json.decodeFromString(Item.serializer(), raw) }.getOrNull()
 

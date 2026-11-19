@@ -11,8 +11,15 @@ service and no Google services. This is everything that leaves the phone.
   website's access log – no IP address is stored. Requests made in the background (supernova and follow checks) carry
   `X-PlanetFOSS-Background: 1` and are not counted; the first list request after the app comes to the front (at start or
   after 30 minutes away) carries `X-PlanetFOSS-Start: 1`, an approximation of visits; requests that only fill part of
-  a screen carry `X-PlanetFOSS-Part: 1`. Nothing is stored on the phone
-  for this, and nothing ties two requests together.
+  a screen carry `X-PlanetFOSS-Part: 1`, and one request per opening of Radar carries `X-PlanetFOSS-Screen: radar`, so
+  Radar counts as one view. Nothing is stored on the phone for this, and nothing in these numbers ties two requests
+  together.
+- **The web server's log.** Like every web server, the one behind planetfoss.net writes an access log at the hosting
+  provider: the IP address, the time, the requested address (for a search this includes the search words, for Radar
+  and the follow check the topics and sources asked for) and the app's identifier. PlanetFOSS reads this log only for
+  the website's visitor numbers and skips the app's requests there; it stores no IP address in its own database and
+  builds no profile from the log. The provider keeps the log for a limited time (at the time of writing about three
+  weeks of it existed). If you do not want your address in it, a VPN or Tor hides it like for any website.
 - **Counting for the sources – opt-in, off by default** (Settings → *Sources* →
   *Count for the sources*). Only if you switch it on: when you open an article, the app sends its address, the area of
   the app (list, supernova, bundle) and the content language to `/api/app-open`; planetfoss.net adds it
@@ -27,7 +34,7 @@ service and no Google services. This is everything that leaves the phone.
   choice by what you read. A tap opens
   `planetfoss.net/a/<id>` in your browser, which counts that click and forwards – as on the
   website.
-- Images come from planetfoss.net. Its web server sees your IP address like any server.
+- Images come from planetfoss.net; these requests are in the same access log.
 
 ## Sites you open
 

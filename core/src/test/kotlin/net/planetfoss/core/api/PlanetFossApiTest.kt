@@ -261,6 +261,20 @@ class PlanetFossApiTest {
         assertEquals("C#", result.topics.single().label)
     }
 
+    /** One view per opening of Radar and per visit to the search: the rest is marked as a part (19.11.2026). */
+    @Test
+    fun radarAndFurtherSearchesAreMarked() = runTest {
+        repeat(3) { answer(200, """{"items":[],"has_more":false}""") }
+        api().list(ListTarget.Topic("gnome"), ContentLang.ALL, "de", use = Use.RADAR)
+        val radar = server.takeRequest()
+        assertEquals("radar", radar.headers["X-PlanetFOSS-Screen"])
+        assertEquals(null, radar.headers["X-PlanetFOSS-Part"])
+        api().search("kernel", ContentLang.ALL, "de")
+        assertEquals(null, server.takeRequest().headers["X-PlanetFOSS-Part"])
+        api().search("kernel 7", ContentLang.ALL, "de", Use.PART)
+        assertEquals("1", server.takeRequest().headers["X-PlanetFOSS-Part"])
+    }
+
     @Test
     fun keysWithOtherCharactersNeverReachThePath() {
         for (bad in listOf("../admin", "a/b", "", "A", "x?y=1", "a".repeat(81))) {

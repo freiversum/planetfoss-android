@@ -24,12 +24,15 @@ import kotlin.coroutines.resumeWithException
 /**
  * What a list request is for, so planetfoss.net counts only views (like page views on the web): [VIEW] a screen the
  * user opened, [PART] only a part of a screen (Latest's Sternstunden, orbit and supernova band – like a page's images),
- * [BACKGROUND] a check of its own (supernova notifications, followed topics), even while the app is open.
+ * [BACKGROUND] a check of its own (supernova notifications, followed topics), even while the app is open. [RADAR]: the
+ * one request per opening of Radar that stands for the screen – Radar asks for every followed list, and each of them
+ * counted as a view of its own before; the others are [PART].
  */
-enum class Use(val header: String?) {
+enum class Use(val header: String?, val value: String = "1") {
     VIEW(null),
     PART("X-PlanetFOSS-Part"),
     BACKGROUND("X-PlanetFOSS-Background"),
+    RADAR("X-PlanetFOSS-Screen", "radar"),
 }
 
 /** Why a request failed, in the terms the UI shows. */
@@ -97,8 +100,8 @@ class PlanetFossApi(
     /** Backend settings the app follows (PlanetFOSS's donation link). */
     suspend fun meta(): Meta = get("meta", emptyMap(), Meta.serializer())
 
-    suspend fun search(query: String, lang: ContentLang, ui: String): SearchResult =
-        get("search", mapOf("q" to query, "lang" to lang.param, "ui" to ui), SearchResult.serializer())
+    suspend fun search(query: String, lang: ContentLang, ui: String, use: Use = Use.VIEW): SearchResult =
+        get("search", mapOf("q" to query, "lang" to lang.param, "ui" to ui), SearchResult.serializer(), use)
 
     /**
      * The sponsor card candidates of both app slots. A part of a screen like Latest's Sternstunden, so planetfoss.net counts
@@ -165,7 +168,7 @@ class PlanetFossApi(
         val url = baseUrl.newBuilder().addPathSegments("api/app/v1").addPathSegments(endpoint).apply {
             params.forEach { (k, v) -> addQueryParameter(k, v) }
         }.build()
-        return call(Request.Builder().url(url).apply { use.header?.let { header(it, "1") } }.build(), strategy)
+        return call(Request.Builder().url(url).apply { use.header?.let { header(it, use.value) } }.build(), strategy)
     }
 }
 

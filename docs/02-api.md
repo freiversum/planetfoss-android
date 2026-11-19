@@ -190,8 +190,15 @@ stored on the phone, no opt-in needed. Two request headers (only on `/api/app/v1
   counted as a start, an approximation of visits like the website's entries.
 - `X-PlanetFOSS-Part: 1` on requests that only fill part of a screen – Latest's Sternstunden, orbit (`topics`) and
   supernova band – like a web page's images: not a view. Latest itself is counted through `front`, which it requests
-  every time it opens; `home` (only fetched when the cache is stale) and further pages are not counted.
+  every time it opens; `home` (only fetched when the cache is stale) and further pages are not counted. Also on the
+  second and further followed lists when Radar opens, and on the second and further queries of one visit to the search
+  (it searches while typing).
+- `X-PlanetFOSS-Screen: radar` on one request per opening of Radar (`Use.RADAR`): planetfoss.net counts it as one view
+  "Radar" instead of a view of that topic or source. Before 0.6.4 every followed list counted as a view of its own.
 
-Requests the HTTP cache answers without the network are not seen, so the numbers are minimums. Opened articles and
-seen sponsor cards still need *Count for the sources* (extra reports from the phone).
+The start is counted on whichever request carries it, also the one for the sponsor card candidates (`ads`). Builds
+whose user agent has a suffix after the version (`-dev+…`, `-debug`, `-qa`) are not counted at all: they are not users.
+
+Requests the HTTP cache answers without the network are not seen, so the numbers are minimums. Opened articles
+still need *Count for the sources*; seen sponsor cards are always reported (extra reports from the phone).
 

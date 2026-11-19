@@ -79,6 +79,7 @@ import net.planetfoss.app.ui.components.ChipTag
 import net.planetfoss.app.ui.components.ListState
 import net.planetfoss.app.ui.components.UiError
 import net.planetfoss.app.ui.list.ItemListContent
+import net.planetfoss.core.api.Use
 import net.planetfoss.core.api.Item
 import net.planetfoss.core.api.TopicRef
 import java.time.Clock
@@ -132,11 +133,16 @@ class SearchViewModel @Inject constructor(
     private val filters = MutableStateFlow(SearchFilters())
     private val retry = MutableStateFlow(0)
 
+    /** The first query of this visit to the search screen is its view; the queries that follow while typing are parts of it. */
+    private var counted = false
+
     private val answer = combine(query.map { it.trim() }.debounce(350).distinctUntilChanged(), retry) { q, _ -> q }
         .mapLatest { q ->
             if (q.length < 2) return@mapLatest Answer()
             val lang = settings.settings.first().contentLang
-            runCatching { repo.search(q, lang) }.fold(
+            val use = if (counted) Use.PART else Use.VIEW
+            counted = true
+            runCatching { repo.search(q, lang, use) }.fold(
                 onSuccess = { Answer(it.items, it.topics, done = true) },
                 onFailure = { Answer(error = UiError.from(it), done = true) },
             )

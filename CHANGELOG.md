@@ -19,6 +19,11 @@ versions follow [Semantic Versioning](https://semver.org/).
 ### Changed
 - README is a product page for users now (what the app does, install, questions); building, testing and the design documents moved to `docs/TECHNICAL.md`.
 - Settings → Privacy also says that seen sponsor cards are always counted, once planetfoss.net delivers sponsor cards.
+- Counting on planetfoss.net: opening Radar is one view (it counted one per followed topic or source), and a visit to
+  the search is one view (it counted every pause while typing). The further requests are marked as parts of the screen.
+- PRIVACY.md names the web server's access log at the hosting provider: it holds the IP address, the time and the
+  requested address of every request, also the app's. The numbers PlanetFOSS keeps were and are daily totals without
+  an address; the sentence "no IP address is stored" was only true for those.
 - Store icon: the planet fills more of the tile (78 % instead of 62 % of its width). In Play's list of updates it looked
   smaller than the icons of other apps. The icon on the phone is unchanged.
 - The line with source, time and stars on a card never wraps: a long source name is cut ("PC Games H…"), the time and
