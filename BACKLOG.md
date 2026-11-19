@@ -105,7 +105,9 @@
       whole page of new posts or a pull to refresh still replaces the list
 - [x] Flaky unit test: `ItemListViewModelTest.theSponsorCardComesFromTheCandidates` failed once with "Dispatchers.Main is
       used concurrently with setting it" (2026-11-19): Main is now set once for the class; four runs in a row green
-- [ ] Upload the new store icon (`fastlane/metadata/android/*/images/icon.png`, 2026-11-19) in the Play Console (Christoph)
+- [x] New store icon uploaded in the Play Console and sent for review (2026-11-19): default listing de-DE, en-US inherits
+      it; AI assets declaration "do not label". Managed publishing is off, so it goes live once Google approved it
+- [ ] Check in the Play Store that the new icon is live (review usually takes up to 7 days)
 - [x] "What is new" in Settings (2026-11-19, mockup `docs/whats-new-mockup.html`): the last five releases, checked on the
       Pixel 10 in the dark design, German
 - [x] "What is new" in the light design, in English and at 130 % font: checked on the Pixel 10, 2026-11-19 (found and
