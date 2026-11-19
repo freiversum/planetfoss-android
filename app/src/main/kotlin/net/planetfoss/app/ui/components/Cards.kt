@@ -325,15 +325,16 @@ private fun SourceLine(item: Item, time: String, stars: Int = item.stars) {
         val by = stringResource(R.string.item_by, item.source.name, time)
         val said = if (stars > 0) by + ", " + pluralStringResource(R.plurals.stars_n, stars, stars) else by
         val spoken = if (fresh) stringResource(R.string.new_mark) + ", " + said else said
-        Text(
-            if (stars > 0) "$by · ★ $stars" else by,
-            modifier = Modifier.semantics { contentDescription = spoken },
-            style = MetaStyle,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            // a long source name may wrap: the time must stay visible (“Digitale Gesellschaft Schweiz, vor 31…”)
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
+        // one line, always: a long source name is cut (“Digitale Gesellschaft Sch…”), the time and the stars stay whole
+        val name = item.source.name
+        val tail = (if (by.startsWith(name)) by.removePrefix(name) else ", $time") + if (stars > 0) " · ★ $stars" else ""
+        Row(Modifier.weight(1f).clearAndSetSemantics { contentDescription = spoken }) {
+            Text(
+                name, modifier = Modifier.weight(1f, fill = false), style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+            )
+            Text(tail, style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, softWrap = false)
+        }
     }
 }
 

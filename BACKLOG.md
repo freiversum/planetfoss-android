@@ -79,3 +79,13 @@
 - [x] Server: supernovas in the app API also with fewer than two reports in the content language (planetfoss.net
       29163bc, live since 2026-11-10) (Plasma 6.8.3 on
       2026-11-10 was missing with `lang=de`), see `docs/09-latest-tab.md`
+- [x] Feedback round 2026-11-19, checked on the Pixel 10: Latest keeps its place after the app's browser; the source line of a
+      card stays on one line; the follow check announces posts that arrive late (ids of the first page, database version 5)
+- [x] Follow notification for the English sister of a linuxundich.de post instead of the German original (2026-11-18): not
+      the app – the German feed was served stale, so planetfoss.net never had the original. The content language
+      (All / German / English) already applies to every notification
+- [ ] First session (feedback 2026-11-19: who sets nothing up on day one rarely comes back). Fresh install on the Pixel 10:
+      welcome, six steps, "All set", then Latest with content – but nothing can be followed on the way and Radar starts
+      empty. Decide: a step "Follow a few topics" in the setup assistant (rising and evergreen topics as chips), mockup first
+- [ ] Decide: a list scrolled past its first page drops back to page 1 when it is refreshed after five minutes away
+      (page 1 replaces the list) – keep the loaded pages on an automatic refresh?

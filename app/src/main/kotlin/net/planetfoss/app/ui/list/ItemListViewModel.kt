@@ -113,7 +113,7 @@ class ItemListViewModel @Inject constructor(
         val t = target ?: return
         viewModelScope.launch {
             if (followed.value) follows.unfollow(kind, ref)
-            else follows.follow(t, label, state.value.list.items.maxOfOrNull { it.publishedAt.toEpochMilli() })
+            else state.value.list.items.let { shown -> follows.follow(t, label, shown.maxOfOrNull { it.publishedAt.toEpochMilli() }, shown.map { it.id }) }
         }
     }
 

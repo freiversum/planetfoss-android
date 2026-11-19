@@ -6,6 +6,14 @@ versions follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 ### Changed
 - README is a product page for users now (what the app does, install, questions); building, testing and the design documents moved to `docs/TECHNICAL.md`.
+- The line with source, time and stars on a card never wraps: a long source name is cut ("PC Games H…"), the time and
+  the stars always stay whole.
+
+### Fixed
+- Latest stays where it was after reading an article in the app's own browser; it jumped back to the top.
+- Followed topics and sources: a post that planetfoss.net picks up late – with an older time than the newest post already
+  announced – was never announced. The check now remembers the posts of the list's first page instead of only the newest
+  time (database version 5).
 
 ## [0.6.3] - 2026-11-17
 First version on GitHub: the repository is public and every release comes with a signed APK.

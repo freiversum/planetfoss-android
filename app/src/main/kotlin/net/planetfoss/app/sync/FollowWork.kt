@@ -38,13 +38,14 @@ import net.planetfoss.app.data.db.FollowEntity
 import net.planetfoss.app.data.prefs.SettingsRepository
 import net.planetfoss.core.api.ApiException
 import net.planetfoss.core.api.Item
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * One check of everything the user follows: page 1 of each topic or source (in the content language), posts newer
- * than the last known one are announced – one notification per topic or source – and become the new mark.
+ * One check of everything the user follows: page 1 of each topic or source (in the content language), posts that were
+ * not on that page at the last check are announced – one notification per topic or source – and become known.
  * A list that fails is skipped this time; the others still get checked.
  */
 @Singleton
@@ -69,9 +70,11 @@ class FollowChecker @Inject constructor(
                 failed++
                 continue
             }
-            val fresh = newer(items, f.lastSeen)
+            val fresh = newer(items, f.lastSeen, f.knownIds())
+            val known = items.joinToString(",") { it.id.toString() }
+            if (fresh.isEmpty() && known == f.known) continue
+            dao.seen(f.kind, f.ref, items.maxOfOrNull { it.publishedAt.toEpochMilli() } ?: f.lastSeen, known)
             if (fresh.isEmpty()) continue
-            dao.seen(f.kind, f.ref, fresh.maxOf { it.publishedAt.toEpochMilli() })
             notifier.notify(f, fresh)
             news++
         }
@@ -80,9 +83,20 @@ class FollowChecker @Inject constructor(
     }
 
     companion object {
-        /** Posts after [lastSeen] (epoch ms), newest first. */
-        fun newer(items: List<Item>, lastSeen: Long): List<Item> =
-            items.filter { it.publishedAt.toEpochMilli() > lastSeen }.sortedByDescending { it.publishedAt }
+        /** A post picked up late still counts as new when it is at most this much older than the newest known one. */
+        val LATE: Duration = Duration.ofHours(48)
+
+        /**
+         * The posts to announce, newest first. With the ids of the last check ([known]): every post that was not among
+         * them, unless it is far older than the mark [lastSeen] (epoch ms; a source added with its archive). Planetfoss.net
+         * often picks a post up after a newer one of another source – or, with translations, after its sister in the
+         * other language (19.11.: the German original came later and was never announced). Without ids (a follow from
+         * before they were stored): posts after [lastSeen].
+         */
+        fun newer(items: List<Item>, lastSeen: Long, known: Set<Long> = emptySet()): List<Item> = items.filter {
+            val at = it.publishedAt.toEpochMilli()
+            if (known.isEmpty()) at > lastSeen else it.id !in known && at > lastSeen - LATE.toMillis()
+        }.sortedByDescending { it.publishedAt }
     }
 }
 

@@ -69,7 +69,9 @@ data class MyStarEntity(
 
 /**
  * A topic or source the user follows: [kind] `topic` or `source`, [ref] its key or slug, [label] its name, [lastSeen]
- * the newest post (epoch ms) already known – only newer ones are announced. Only on the phone.
+ * the newest post (epoch ms) already known, [known] the ids of the list's first page at the last check (comma separated) –
+ * a post is announced when it is not among them: one that planetfoss.net picks up late carries an older time than the
+ * newest known post and would be missed by the time alone. Only on the phone.
  */
 @Entity(tableName = "follow", primaryKeys = ["kind", "ref"])
 data class FollowEntity(
@@ -78,7 +80,10 @@ data class FollowEntity(
     val label: String,
     val lastSeen: Long,
     val addedAt: Long,
-)
+    @androidx.room.ColumnInfo(defaultValue = "") val known: String = "",
+) {
+    fun knownIds(): Set<Long> = known.split(',').mapNotNull { it.toLongOrNull() }.toSet()
+}
 
 /** The supernova list per language, stored as the API answer. */
 @Entity(tableName = "nova_list")
@@ -208,8 +213,9 @@ interface FollowDao {
     @Query("DELETE FROM follow WHERE kind = :kind AND ref = :ref")
     suspend fun delete(kind: String, ref: String)
 
-    @Query("UPDATE follow SET lastSeen = :at WHERE kind = :kind AND ref = :ref AND lastSeen < :at")
-    suspend fun seen(kind: String, ref: String, at: Long)
+    /** After a check: [at] moves the mark forward only, [known] replaces the ids of the first page. */
+    @Query("UPDATE follow SET lastSeen = MAX(lastSeen, :at), known = :known WHERE kind = :kind AND ref = :ref")
+    suspend fun seen(kind: String, ref: String, at: Long, known: String)
 }
 
 @Database(
@@ -217,9 +223,9 @@ interface FollowDao {
         ItemEntity::class, ListEntryEntity::class, ListMetaEntity::class, NovaListEntity::class, SeenSupernovaEntity::class,
         SavedItemEntity::class, MyStarEntity::class, FollowEntity::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4)],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4), AutoMigration(from = 4, to = 5)],
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun feedDao(): FeedDao

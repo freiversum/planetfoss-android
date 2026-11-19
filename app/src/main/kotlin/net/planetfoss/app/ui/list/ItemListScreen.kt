@@ -42,6 +42,7 @@ import net.planetfoss.app.ui.components.RefreshBox
 import net.planetfoss.app.ui.components.ScrollToTopOnTabTap
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -171,7 +172,8 @@ fun ItemListScreen(
             // the parts on top arrive after the cached posts: until the user scrolls, Latest stays at its top, otherwise the
             // grid keeps the first post in view and the supernova lands above it, out of sight
             if (home) {
-                var touched by remember { mutableStateOf(false) }
+                // saved with the page: back from an article in the app's browser the list must stay where it was (19.11.)
+                var touched by rememberSaveable { mutableStateOf(false) }
                 LaunchedEffect(listState.isScrollInProgress) { if (listState.isScrollInProgress) touched = true }
                 LaunchedEffect(burning.map { it.key }, rising?.size, logbookCard, ui.weekly != null) { if (!touched) listState.scrollToItem(0) }
             }

@@ -19,10 +19,13 @@ import javax.inject.Singleton
 class FollowRepository @Inject constructor(private val dao: FollowDao, private val clock: Clock, private val widgets: WidgetStore) {
     val all: Flow<List<FollowEntity>> = dao.observeAll()
 
-    /** Follow [target] (a topic or source list). Posts up to [newest] (epoch ms) count as known, so only later ones are announced. */
-    suspend fun follow(target: ListTarget, label: String, newest: Long?) {
+    /**
+     * Follow [target] (a topic or source list). The posts on screen ([known], their ids) and everything up to [newest]
+     * (epoch ms) count as known, so only later ones are announced.
+     */
+    suspend fun follow(target: ListTarget, label: String, newest: Long?, known: Collection<Long> = emptyList()) {
         val (kind, ref) = kindRef(target) ?: return
-        dao.insert(FollowEntity(kind, ref, label.ifBlank { ref }, newest ?: clock.millis(), clock.millis()))
+        dao.insert(FollowEntity(kind, ref, label.ifBlank { ref }, newest ?: clock.millis(), clock.millis(), known.joinToString(",")))
         widgets.radarChanged()
     }
 

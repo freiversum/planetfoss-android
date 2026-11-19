@@ -73,6 +73,34 @@ class SavedAndMigrationTest {
     }
 
     @Test
+    fun migrationToVersion5KeepsFollowsAndAddsKnownIds() {
+        helper.createDatabase("m5.db", 4).apply {
+            execSQL("INSERT INTO follow (kind, ref, label, lastSeen, addedAt) VALUES ('topic', 'gnome', 'GNOME', 1, 1)")
+            close()
+        }
+        helper.runMigrationsAndValidate("m5.db", 5, true).apply {
+            query("SELECT known FROM follow WHERE ref = 'gnome'").use { c -> assertTrue(c.moveToFirst() && c.getString(0) == "") }
+            close()
+        }
+    }
+
+    /** 19.11.: the English sister of a post was announced; the German original reached planetfoss.net later, with an older time. */
+    @Test
+    fun followCheckAnnouncesAPostThatArrivesLateWithAnOlderTime() {
+        val newer = net.planetfoss.app.sync.FollowChecker::newer
+        val english = item(10).copy(publishedAt = Instant.parse("2026-11-18T16:38:48Z"))
+        val german = item(11).copy(publishedAt = Instant.parse("2026-11-18T16:37:03Z"))
+        val archive = item(12).copy(publishedAt = Instant.parse("2026-10-01T08:00:00Z"))
+        val mark = english.publishedAt.toEpochMilli()
+        // by time alone the late post is missed – by the ids of the last check it is new
+        assertEquals(emptyList<Long>(), newer(listOf(english, german), mark, emptySet()).map { it.id })
+        assertEquals(listOf(11L), newer(listOf(english, german), mark, setOf(10L)).map { it.id })
+        // nothing twice, and no post from a source's archive
+        assertEquals(emptyList<Long>(), newer(listOf(english, german), mark, setOf(10L, 11L)).map { it.id })
+        assertEquals(emptyList<Long>(), newer(listOf(english, archive), mark, setOf(10L)).map { it.id })
+    }
+
+    @Test
     fun followCheckAnnouncesOnlyNewerPosts() {
         val old = item(1).copy(publishedAt = Instant.parse("2026-10-29T10:00:00Z"))
         val new = item(2).copy(publishedAt = Instant.parse("2026-10-29T12:00:00Z"))
