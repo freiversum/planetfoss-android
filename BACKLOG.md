@@ -112,7 +112,7 @@
       Pixel 10 in the dark design, German
 - [x] "What is new" in the light design, in English and at 130 % font: checked on the Pixel 10, 2026-11-19 (found and
       fixed: dark status bar icons on the night sky head in the light design)
-- [ ] The date of 0.6.4 in `RELEASE_NOTES` (2026-11-19) must be the day of the release
+- [x] v0.6.4 released 2026-11-19 (versionCode 182): GitHub release with APK, closed test on Google Play sent for review together with the new store icon
 - [x] Check of the counting and of the privacy promises with real users (2026-11-19): the numbers arrive, the database
       holds daily totals only. Fixed: Radar and search inflated the views (app 0.6.4), development builds were counted and
       a start could get lost (server, planetfoss.net 6817ef4). PRIVACY.md now names the hosting provider's access log

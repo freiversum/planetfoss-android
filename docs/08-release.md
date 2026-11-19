@@ -177,3 +177,8 @@ so F-Droid needs the full history (default for its build server).
   christoph@linuxundich.de, verified phone number; app-level declaration “applies to this app”, no terms-of-service URL), submitted
   for review together with the store graphics and the closed-test settings; Google approved and published all of it the same
   day. The public developer phone number was replaced afterwards (Account details › Contact details, no new review needed).
+- 2026-11-19: v0.6.4 (versionCode 182) tagged, built from the tag in a clean worktree; APK `dist/planetfoss-0.6.4.apk`
+  (SHA-256 `f3c11748cd253e2b50a2b476e7e5d5c3ef5676113286d07fd2084bf3ea9ddfe4`) on the GitHub releases page, bundle
+  `dist/planetfoss-0.6.4.aab` (SHA-256 `0da8bcf1ce85350af61e44dfa5a7385e68933c09c9b3c4a2a731ff7e27c1e43f`) as release
+  "0.6.4 (182)" in the closed test (Alpha), sent for review together with the new store icon. Play's only warning: no
+  native debug symbols. The release APK itself was not installed on a device (the QA builds of the same day were).
