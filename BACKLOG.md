@@ -67,7 +67,10 @@
 - [x] Google Play internal test, v0.6.0 from the Play Store on the Pixel 10 (2026-11-10): setup assistant, Latest, Radar, Discover, Saved, logbook, weekly review, supernovas, search, article in the Custom Tab, save, follow (asks for the notification permission), settings; no crash in logcat
 - [x] (2026-11-19, `settings_privacy_note_ads`, shown once sponsor cards arrive) Settings → Privacy text (`settings_privacy_note`) did not yet say that seen sponsor cards are counted without opt-in; add it for when ads are switched on (the explain text under *Count for the sources* already does)
 - [ ] F-Droid text: AntiFeature `Ads` on, mention the always-on sponsor count (may be read as `Tracking`); Play: Data safety "app interactions", ads "yes"
-- [ ] Ads in the app: own placements and `/api/app/v1/ads` (plan in planetfoss.net `ANZEIGEN-APP.md`; D1–D7 decided 2026-11-06, nothing built)
+- [x] Ads in the app: own placements `app_feed`/`app_list` and `/api/app/v1/ads` are built and live (server, lui-ads, app; plan in
+      planetfoss.net `ANZEIGEN-APP.md`); no ad is booked for the app yet
+- [ ] Ads in the app: see a real card on a device (both card forms, info sheet, click, DE/EN) against the test environment
+      with a demo ad – never seen outside unit tests; first real ad after the customers agreed (Christoph)
 - [x] Setup assistant: seven pages at first start, repeatable from Settings (2026-11-07)
 - [x] Setup assistant checked on the Android 14 emulator (2026-11-07): all seven pages in German, language switch keeps the page, finish/restart, repeat from Settings; notification permission dialog and the dark theme not looked at
 - [x] Latest as the start tab (built 2026-11-10; concept `docs/09-latest-tab.md`, mockups `docs/start-concept-mockup.html`, 2026-11-10):
@@ -105,6 +108,6 @@
 - [x] Check of the counting and of the privacy promises with real users (2026-11-19): the numbers arrive, the database
       holds daily totals only. Fixed: Radar and search inflated the views (app 0.6.4), development builds were counted and
       a start could get lost (server, planetfoss.net 6817ef4). PRIVACY.md now names the hosting provider's access log
-- [ ] planetfoss.net: roll out the counting changes (commit 6817ef4) – until then an opening of Radar counts as one view of the first followed topic instead of "Radar"
+- [x] planetfoss.net: counting changes rolled out (commit 6817ef4, live 2026-11-19); a development build is no longer counted
 - [ ] Hosting provider: "store no IP addresses" is set for planetfoss.net but has no effect since the move of 2026-10-27;
       Christoph decided on 2026-11-19 to leave it (the website's bot filter and country numbers need the address)
