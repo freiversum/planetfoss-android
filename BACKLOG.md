@@ -73,8 +73,9 @@
       Latest after the fourth post, compact card in a rubric after the eighth, info sheet, tap opens `/a/<id>` in the
       browser and is counted for `app_list`, pull to refresh picks another card, English version ("Sponsored"), views are
       reported to `/api/ad-view`
-- [ ] Compact sponsor card: the title wraps badly beside the button ("Linux-Notebooks" / ", vorinstalliert") and the text
-      gets one cut line; "Anzeige melden" on the info sheet wraps to two lines
+- [x] Compact sponsor card: the title wrapped badly beside the button ("Linux-Notebooks" / ", vorinstalliert") and the text
+      got one cut line; "Anzeige melden" on the info sheet wrapped inside its button. Fixed 2026-11-19: button below the
+      text, two lines each for title and text, whole buttons wrap on the sheet; seen on the Pixel 10
 - [ ] First real ad in the app after the customers agreed (Christoph)
 - [x] Setup assistant: seven pages at first start, repeatable from Settings (2026-11-07)
 - [x] Setup assistant checked on the Android 14 emulator (2026-11-07): all seven pages in German, language switch keeps the page, finish/restart, repeat from Settings; notification permission dialog and the dark theme not looked at

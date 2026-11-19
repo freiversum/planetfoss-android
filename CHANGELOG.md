@@ -34,6 +34,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 - A list that was scrolled past its first page keeps the loaded pages when it refreshes by itself after a while away; new
   posts go on top. Before, it dropped back to its first page and the place was lost. Pull to refresh still starts the
   list again.
+- Compact sponsor card (lists): the button sits below the text, so title and text keep the card's width; before, the
+  title broke badly beside it. The two buttons of "Why am I seeing this ad?" wrap as whole buttons.
 - Followed topics and sources: a post that planetfoss.net picks up late – with an older time than the newest post already
   announced – was never announced. The check now remembers the posts of the list's first page instead of only the newest
   time (database version 5).

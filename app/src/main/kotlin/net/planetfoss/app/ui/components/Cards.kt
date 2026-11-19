@@ -953,8 +953,8 @@ fun SupportMenuItem(sourceName: String, support: Support, onClick: () -> Unit) {
 
 /**
  * PlanetFOSS's own sponsor card, like the website's K6 card: labelled, the sponsor's colour as a line on top, logo and name,
- * image, title, text, call to action. Two formats: `standard` in Latest (image, text) and `compact` in lists (logo, title, one
- * line, button). The whole card opens [Ad.clickUrl] in the user's browser (planetfoss.net counts the click and forwards); the
+ * image, title, text, call to action. Two formats: `standard` in Latest (image, text) and `compact` in lists (logo, title, two
+ * lines, button below the text). The whole card opens [Ad.clickUrl] in the user's browser (planetfoss.net counts the click and forwards); the
  * (i) next to the label says who pays and what does not happen. [onSeen] once per card when at least half of it was on screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -1003,24 +1003,25 @@ fun AdCard(ad: Ad, onSeen: (Ad) -> Unit, modifier: Modifier = Modifier) {
             }
         }
         if (compact) {
-            Row(Modifier.padding(Space.l), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.m)) {
+            // the button sits below the text, not beside it: beside it the title was squeezed into a sliver and broke badly
+            // ("Linux-Notebooks" / ", vorinstalliert", seen on the Pixel 10, 19.11.2026)
+            Row(Modifier.padding(Space.l), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(Space.m)) {
                 Box(Modifier.size(44.dp).clip(Radius.m).background(color), contentAlignment = Alignment.Center) {
                     if (ad.logo != null) AsyncImage(model = ad.logo, contentDescription = null, modifier = Modifier.fillMaxSize())
                     else Text(ad.by.ifEmpty { ad.title }.take(1).uppercase(), color = Color.White, fontWeight = FontWeight.Bold)
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     label()
-                    Text(ad.title, style = MaterialTheme.typography.titleSmall, maxLines = 3, overflow = TextOverflow.Ellipsis)
-                    ad.body?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                    Text(ad.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    ad.body?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                     ad.note?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-                }
-                ad.cta?.let {
-                    Text(
-                        it, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, maxLines = 2,
-                        overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        // a long button text must not push the title into a sliver, also at large font sizes
-                        modifier = Modifier.widthIn(max = 156.dp).border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(50)).padding(horizontal = 12.dp, vertical = 6.dp),
-                    )
+                    ad.cta?.let {
+                        Text(
+                            it, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(top = Space.s).border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(50)).padding(horizontal = 12.dp, vertical = 6.dp),
+                        )
+                    }
                 }
             }
         } else {
@@ -1045,7 +1046,7 @@ fun AdCard(ad: Ad, onSeen: (Ad) -> Unit, modifier: Modifier = Modifier) {
 }
 
 /** “Why am I seeing this ad?”: who pays, what does not happen, and where to read more or report it. */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun AdInfoSheet(ad: Ad, onDismiss: () -> Unit) {
     val context = LocalContext.current
@@ -1056,9 +1057,10 @@ private fun AdInfoSheet(ad: Ad, onDismiss: () -> Unit) {
             listOf(R.string.ad_info_1, R.string.ad_info_2, R.string.ad_info_3).forEach {
                 Text("• " + stringResource(it), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-                OutlinedButton(onClick = { openOutsideApp(context, "https://planetfoss.net/datenschutz/") }) { Text(stringResource(R.string.privacy_policy)) }
-                OutlinedButton(onClick = { openOutsideApp(context, "https://planetfoss.net/impressum/") }) { Text(stringResource(R.string.ad_info_report)) }
+            // whole buttons wrap to the next line; before, "Anzeige melden" broke inside its button
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(Space.s)) {
+                OutlinedButton(onClick = { openOutsideApp(context, "https://planetfoss.net/datenschutz/") }) { Text(stringResource(R.string.privacy_policy), maxLines = 1) }
+                OutlinedButton(onClick = { openOutsideApp(context, "https://planetfoss.net/impressum/") }) { Text(stringResource(R.string.ad_info_report), maxLines = 1) }
             }
         }
     }
