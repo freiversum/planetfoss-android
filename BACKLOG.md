@@ -69,8 +69,13 @@
 - [ ] F-Droid text: AntiFeature `Ads` on, mention the always-on sponsor count (may be read as `Tracking`); Play: Data safety "app interactions", ads "yes"
 - [x] Ads in the app: own placements `app_feed`/`app_list` and `/api/app/v1/ads` are built and live (server, lui-ads, app; plan in
       planetfoss.net `ANZEIGEN-APP.md`); no ad is booked for the app yet
-- [ ] Ads in the app: see a real card on a device (both card forms, info sheet, click, DE/EN) against the test environment
-      with a demo ad – never seen outside unit tests; first real ad after the customers agreed (Christoph)
+- [x] Ads in the app seen on the Pixel 10 against the test environment with two demo ads (2026-11-19): standard card on
+      Latest after the fourth post, compact card in a rubric after the eighth, info sheet, tap opens `/a/<id>` in the
+      browser and is counted for `app_list`, pull to refresh picks another card, English version ("Sponsored"), views are
+      reported to `/api/ad-view`
+- [ ] Compact sponsor card: the title wraps badly beside the button ("Linux-Notebooks" / ", vorinstalliert") and the text
+      gets one cut line; "Anzeige melden" on the info sheet wraps to two lines
+- [ ] First real ad in the app after the customers agreed (Christoph)
 - [x] Setup assistant: seven pages at first start, repeatable from Settings (2026-11-07)
 - [x] Setup assistant checked on the Android 14 emulator (2026-11-07): all seven pages in German, language switch keeps the page, finish/restart, repeat from Settings; notification permission dialog and the dark theme not looked at
 - [x] Latest as the start tab (built 2026-11-10; concept `docs/09-latest-tab.md`, mockups `docs/start-concept-mockup.html`, 2026-11-10):
