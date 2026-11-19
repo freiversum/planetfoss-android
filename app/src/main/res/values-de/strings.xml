@@ -528,4 +528,30 @@
         <item quantity="one">Wenn zu deinem Thema ein Beitrag erscheint.</item>
         <item quantity="other">Wenn zu einem deiner %d Themen ein Beitrag erscheint.</item>
     </plurals>
+    <string name="whatsnew_title">Was ist neu</string>
+    <string name="whatsnew_hint">Die letzten fünf Versionen auf einen Blick</string>
+    <string name="whatsnew_installed">Diese Version</string>
+    <string name="whatsnew_older">Ältere Versionen im Changelog auf GitHub</string>
+    <string name="whatsnew_new">Neu</string>
+    <string name="whatsnew_better">Besser</string>
+    <string name="whatsnew_fixed">Behoben</string>
+    <string name="whatsnew_064_title">Dein Radar ab der ersten Minute</string>
+    <string name="whatsnew_064_1">Beim Einrichten folgst du Themen per Fingertipp. Der Radar ist sofort gefüllt.</string>
+    <string name="whatsnew_064_2">Meldungen zu deinen Themen haben einen eigenen Schalter.</string>
+    <string name="whatsnew_064_3">Diese Seite: was sich in den letzten Versionen geändert hat.</string>
+    <string name="whatsnew_064_4">Listen merken sich deine Stelle, auch nach einem Artikel oder einer Pause.</string>
+    <string name="whatsnew_064_5">Meldungen verpassen keine Beiträge mehr, die später eintreffen.</string>
+    <string name="whatsnew_063_title">Jetzt auch auf GitHub</string>
+    <string name="whatsnew_063_1">Die App gibt es als signierte Datei auf GitHub.</string>
+    <string name="whatsnew_063_2">Aktuell: Das Logbuch-Band behält seinen Platz neben dem Wochenrückblick.</string>
+    <string name="whatsnew_062_title">Der Planet dreht sich</string>
+    <string name="whatsnew_062_1">Beim Aktualisieren kreist der goldene Funke um den PlanetFOSS-Planeten.</string>
+    <string name="whatsnew_061_title">Neues Gesicht</string>
+    <string name="whatsnew_061_1">Neues App-Symbol und neue Wortmarke.</string>
+    <string name="whatsnew_061_2">Updates lassen sich wieder über die Vorversion installieren.</string>
+    <string name="whatsnew_060_title">Aktuell, Logbuch und Wochenrückblick</string>
+    <string name="whatsnew_060_1">Aktuell ist der neue Start: Supernovas und Kometen oben, dann alles Neue.</string>
+    <string name="whatsnew_060_2">Das Logbuch fasst jeden Morgen um 6 Uhr den Tag zusammen.</string>
+    <string name="whatsnew_060_3">Der Wochenrückblick zeigt Zahlen, Supernovas und die größten Geschichten.</string>
+    <string name="whatsnew_060_4">Antworten aus dem Fediverse lassen sich melden oder ausblenden.</string>
 </resources>

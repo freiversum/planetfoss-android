@@ -96,3 +96,7 @@
 - [ ] Flaky unit test: `ItemListViewModelTest.theSponsorCardComesFromTheCandidates` failed once with "Dispatchers.Main is
       used concurrently with setting it" (2026-11-19), green on the next two runs
 - [ ] Upload the new store icon (`fastlane/metadata/android/*/images/icon.png`, 2026-11-19) in the Play Console (Christoph)
+- [x] "What is new" in Settings (2026-11-19, mockup `docs/whats-new-mockup.html`): the last five releases, checked on the
+      Pixel 10 in the dark design, German
+- [ ] "What is new": not looked at in the light design, in English and at 130 % font; the date of 0.6.4 in
+      `RELEASE_NOTES` (2026-11-19) must be the day of the release

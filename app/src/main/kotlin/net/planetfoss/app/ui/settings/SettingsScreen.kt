@@ -197,7 +197,7 @@ internal fun applyThemeMode(context: android.content.Context, mode: ThemeMode) {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> Unit = {}, vm: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> Unit = {}, onWhatsNew: () -> Unit = {}, vm: SettingsViewModel = hiltViewModel()) {
     val settings by vm.settings.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var systemAllows by remember { mutableStateOf(vm.systemAllows()) }
@@ -423,6 +423,11 @@ fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> U
                     modifier = Modifier.clickable(role = Role.Button, onClick = onHelp),
                 )
                 ListItem(headlineContent = { Text(stringResource(R.string.settings_version, BuildConfig.VERSION_NAME)) })
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.whatsnew_title)) },
+                    supportingContent = { Text(stringResource(R.string.whatsnew_hint)) },
+                    modifier = Modifier.clickable(role = Role.Button, onClick = onWhatsNew),
+                )
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_privacy)) },
                     supportingContent = { Text(stringResource(R.string.settings_privacy_note)) },

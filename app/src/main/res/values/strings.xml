@@ -534,4 +534,30 @@
         <item quantity="one">When a post appears on your topic.</item>
         <item quantity="other">When a post appears on one of your %d topics.</item>
     </plurals>
+    <string name="whatsnew_title">What is new</string>
+    <string name="whatsnew_hint">The last five versions at a glance</string>
+    <string name="whatsnew_installed">This version</string>
+    <string name="whatsnew_older">Older versions in the changelog on GitHub</string>
+    <string name="whatsnew_new">New</string>
+    <string name="whatsnew_better">Better</string>
+    <string name="whatsnew_fixed">Fixed</string>
+    <string name="whatsnew_064_title">Your Radar from the first minute</string>
+    <string name="whatsnew_064_1">During setup you follow topics with a tap. Radar is filled right away.</string>
+    <string name="whatsnew_064_2">Notifications about your topics have a switch of their own.</string>
+    <string name="whatsnew_064_3">This page: what changed in the last versions.</string>
+    <string name="whatsnew_064_4">Lists remember your place, also after an article or a break.</string>
+    <string name="whatsnew_064_5">Notifications no longer miss posts that arrive late.</string>
+    <string name="whatsnew_063_title">Now on GitHub too</string>
+    <string name="whatsnew_063_1">The app is available as a signed file on GitHub.</string>
+    <string name="whatsnew_063_2">Latest: the logbook band keeps its room beside the weekly review.</string>
+    <string name="whatsnew_062_title">The planet turns</string>
+    <string name="whatsnew_062_1">While refreshing, the golden spark orbits the PlanetFOSS planet.</string>
+    <string name="whatsnew_061_title">A new face</string>
+    <string name="whatsnew_061_1">New app icon and new wordmark.</string>
+    <string name="whatsnew_061_2">Updates install over the previous version again.</string>
+    <string name="whatsnew_060_title">Latest, logbook and weekly review</string>
+    <string name="whatsnew_060_1">Latest is the new start: supernovas and comets on top, then everything new.</string>
+    <string name="whatsnew_060_2">The logbook sums up the day every morning at 6.</string>
+    <string name="whatsnew_060_3">The weekly review shows numbers, supernovas and the biggest stories.</string>
+    <string name="whatsnew_060_4">Replies from the fediverse can be reported or hidden.</string>
 </resources>

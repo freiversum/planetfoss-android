@@ -5,6 +5,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 ### Added
+- "What is new" in Settings, below the version: the last five releases as a timeline, each with a headline and a few
+  short lines marked New, Better or Fixed, written for readers. The installed version is the card in the night sky.
+  The texts ship with the app in German and English.
 - Setup assistant: a new step "Follow topics" (step 3 of 7). The topics that rise right now and the twenty evergreen topics
   with the most posts are chips; a tap follows, another one unfollows. The chosen topics fill Radar from the first
   minute, and the closing page says how many are followed. Nothing asks for a permission on this page.

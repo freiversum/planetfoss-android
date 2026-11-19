@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.IconButton
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -83,13 +87,23 @@ internal fun Modifier.nightSky(): Modifier = drawBehind {
 
 /** The head of a setup page: night sky with rounded lower corners, the step, the title and a symbol tile. */
 @Composable
-internal fun SetupBand(step: Int, steps: Int, title: String, icon: Painter) {
+internal fun SetupBand(step: Int, steps: Int, title: String, icon: Painter) = NightBand(stringResource(R.string.setup_step, step, steps), title, icon)
+
+/** The night sky head of a page: a small line in mono, the title and a symbol tile; [onBack] puts a back arrow on top. */
+@Composable
+internal fun NightBand(kicker: String, title: String, icon: Painter, onBack: (() -> Unit)? = null) {
     Box(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)).nightSky()
-            .statusBarsPadding().padding(start = 20.dp, end = 20.dp, top = Space.m, bottom = 24.dp),
+            .statusBarsPadding().padding(start = 20.dp, end = 20.dp, top = if (onBack != null) 0.dp else Space.m, bottom = 24.dp),
     ) {
         Column(Modifier.padding(end = 84.dp), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
-            Text(stringResource(R.string.setup_step, step, steps), style = MetaStyle, color = NebulaLight)
+            if (onBack != null) {
+                // the arrow's 48 dp target starts at the screen edge like a top app bar's
+                IconButton(onClick = onBack, modifier = Modifier.offset(x = (-12).dp)) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), tint = MoonText)
+                }
+            }
+            Text(kicker, style = MetaStyle, color = NebulaLight)
             Text(title, style = MaterialTheme.typography.headlineMedium, color = MoonText, modifier = Modifier.semantics { heading() })
         }
         Box(

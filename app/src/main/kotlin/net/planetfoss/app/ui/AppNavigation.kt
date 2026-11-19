@@ -95,6 +95,9 @@ import kotlin.reflect.KClass
 @Serializable data object SourcesRoute
 @Serializable data object HelpRoute
 
+/** The release notes of the last versions, opened from Settings. */
+@Serializable data object WhatsNewRoute
+
 /** The setup assistant: opens itself at the first start, later from Settings. */
 @Serializable data object SetupRoute
 
@@ -313,9 +316,10 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
                 composable<LogbookRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://logbook/{day}" })) {
                     net.planetfoss.app.ui.logbook.LogbookScreen(onBack = back, onWeekly = { nav.navigate(WeeklyRoute(it)) })
                 }
-                composable<SettingsRoute> { SettingsScreen(onBack = back, onHelp = { nav.navigate(HelpRoute) }, onSetup = { nav.navigate(SetupRoute) }) }
+                composable<SettingsRoute> { SettingsScreen(onBack = back, onHelp = { nav.navigate(HelpRoute) }, onSetup = { nav.navigate(SetupRoute) }, onWhatsNew = { nav.navigate(WhatsNewRoute) }) }
                 composable<SetupRoute> { SetupScreen(onDone = back) }
                 composable<HelpRoute> { HelpScreen(onBack = back) }
+                composable<WhatsNewRoute> { net.planetfoss.app.ui.settings.WhatsNewScreen(onBack = back) }
                 composable<SearchRoute> { SearchScreen(onBack = back, onTopic = actions.topic) }
                 composable<ListRoute> { e ->
                     ItemListScreen(onSettings, onSearch, onBack = back, fallbackTitle = e.toRoute<ListRoute>().title)
@@ -338,7 +342,7 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
     }
 }
 
-private fun NavDestination.fillsScreen() = hasRoute(SettingsRoute::class) || hasRoute(BrowserRoute::class) || hasRoute(HelpRoute::class) || hasRoute(SetupRoute::class)
+private fun NavDestination.fillsScreen() = hasRoute(SettingsRoute::class) || hasRoute(BrowserRoute::class) || hasRoute(HelpRoute::class) || hasRoute(WhatsNewRoute::class) || hasRoute(SetupRoute::class)
 
 private fun NavHostController.openTab(route: Any) = navigate(route) {
     popUpTo(graph.findStartDestination().id) { saveState = true }
