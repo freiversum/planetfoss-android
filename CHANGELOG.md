@@ -4,6 +4,11 @@ All notable changes to PlanetFOSS for Android. Format: [Keep a Changelog](https:
 versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+
+## [0.6.4] - 2026-11-19
+New users follow topics during setup, so Radar is filled from the first minute; lists keep their place, and Settings
+show what changed in the last versions.
+
 ### Added
 - The launcher's widget picker shows a preview of the logbook and the Radar widget instead of the app icon.
 - "What is new" in Settings, below the version: the last five releases as a timeline, each with a headline and a few

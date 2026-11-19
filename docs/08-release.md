@@ -139,7 +139,8 @@ so F-Droid needs the full history (default for its build server).
   create the app signing key; Play installs and the APKs in `dist/` therefore cannot update each other.
 - Every release adds its entry on top of `RELEASE_NOTES` in `ui/settings/WhatsNewScreen.kt` (version, date of the
   release, a headline and at most five lines, strings in `values/` and `values-de/`): the page "What is new" in Settings.
-  `WhatsNewTest` fails while the version being built has no entry. Written for readers, not copied from CHANGELOG.md.
+  `WhatsNewTest` fails on a release build (version from the tag) while that version has no entry – run
+  `./gradlew :app:testDebugUnitTest --tests '*WhatsNewTest*'` in the worktree of the tag before building. Written for readers, not copied from CHANGELOG.md.
 - Store graphics are in `fastlane/metadata/android/*/images/`: `icon.png` (512 x 512, `icon-store-512.png` of the
   website CI: the motif fills 78 % of the tile, Play only cuts the corners) and `featureGraphic.png` (1024 x 500).
 - Phone screenshots redone 2026-11-10 with the new tabs (Latest, Radar, Discover, Saved), DE + EN, light and dark, from

@@ -1,0 +1,6 @@
+- Beim Einrichten folgst du Themen per Fingertipp, der Radar ist sofort gefüllt
+- Meldungen zu deinen Themen haben einen eigenen Schalter
+- Neu in den Einstellungen: „Was ist neu“ mit den letzten fünf Versionen
+- Listen merken sich deine Stelle, auch nach einem Artikel oder einer Pause
+- Meldungen verpassen keine Beiträge mehr, die später eintreffen
+- Quelle, Zeit und Sterne stehen auf den Karten immer in einer Zeile

@@ -1,0 +1,6 @@
+- During setup you follow topics with a tap, so Radar is filled right away
+- Notifications about your topics have a switch of their own
+- New in Settings: "What is new" with the last five versions
+- Lists remember your place, also after an article or a break
+- Notifications no longer miss posts that arrive late
+- Source, time and stars always stay on one line on the cards

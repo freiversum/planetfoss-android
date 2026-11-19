@@ -11,11 +11,20 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class WhatsNewTest {
-    /** A release without notes would show an older version as the newest: the build's version must be the first entry. */
+    /**
+     * A release without notes would show an older version as the newest: on a release build (version from the tag) the
+     * build's version must be the first entry. Development builds carry the next version already ("0.6.5-dev+…"), their
+     * newest entry may be the last release – but never a version beyond the build's.
+     */
     @Test
     fun theVersionBeingBuiltHasNotes() {
-        assertEquals(baseVersion(BuildConfig.VERSION_NAME), RELEASE_NOTES.first().version)
+        val build = baseVersion(BuildConfig.VERSION_NAME)
+        val newest = RELEASE_NOTES.first().version
+        if ("-dev" in BuildConfig.VERSION_NAME) assertTrue("$newest is beyond $build", number(newest) <= number(build))
+        else assertEquals(build, newest)
     }
+
+    private fun number(v: String): Int = v.split('.').fold(0) { n, p -> n * 1000 + (p.toIntOrNull() ?: 0) }
 
     @Test
     fun notesAreShortAndNewestFirst() {
