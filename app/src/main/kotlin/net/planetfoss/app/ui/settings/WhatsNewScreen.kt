@@ -60,6 +60,7 @@ import net.planetfoss.app.ui.setup.MoonMuted
 import net.planetfoss.app.ui.setup.MoonText
 import net.planetfoss.app.ui.setup.NightBand
 import net.planetfoss.app.ui.setup.StarYellow
+import net.planetfoss.app.ui.setup.SystemBarIcons
 import net.planetfoss.app.ui.setup.nightSky
 import net.planetfoss.app.ui.theme.ContentMaxWidth
 import net.planetfoss.app.ui.theme.LocalPlanetColors
@@ -115,6 +116,8 @@ fun WhatsNewScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val installed = baseVersion(BuildConfig.VERSION_NAME)
     val releases = RELEASE_NOTES.take(SHOWN)
+    // the head is night in the light design too: light status bar icons, as in the setup assistant
+    SystemBarIcons(navigationLight = false)
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         NightBand(stringResource(R.string.settings_version, installed), stringResource(R.string.whatsnew_title), painterResource(R.drawable.ic_supernova), onBack)
         Box(Modifier.weight(1f).fillMaxWidth().navigationBarsPadding(), contentAlignment = Alignment.TopCenter) {

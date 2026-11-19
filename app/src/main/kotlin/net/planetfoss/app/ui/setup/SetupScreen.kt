@@ -194,7 +194,7 @@ private fun painterOf(page: Int) = when (page) {
 
 /** The head is always night, so the status bar icons are light on every page; the bar below follows the page. */
 @Composable
-private fun SystemBarIcons(navigationLight: Boolean) {
+internal fun SystemBarIcons(navigationLight: Boolean) {
     val view = LocalView.current
     val dark = isSystemInDarkTheme()
     DisposableEffect(view, dark, navigationLight) {

@@ -71,7 +71,6 @@ class ItemListViewModelTest {
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
                 val body = when (request.url.encodedPath.removePrefix("/api/app/v1/")) {
@@ -99,7 +98,21 @@ class ItemListViewModelTest {
     fun tearDown() {
         db.close()
         server.close()
-        Dispatchers.resetMain()
+    }
+
+    companion object {
+        /**
+         * Main is set once for the whole class, not per test: a view model of the test before may still dispatch to Main
+         * (its scope outlives the test) while the next test sets it – "Dispatchers.Main is used concurrently with setting
+         * it" (19.11.2026, theSponsorCardComesFromTheCandidates).
+         */
+        @JvmStatic
+        @org.junit.BeforeClass
+        fun setMain() = Dispatchers.setMain(UnconfinedTestDispatcher())
+
+        @JvmStatic
+        @org.junit.AfterClass
+        fun resetMain() = Dispatchers.resetMain()
     }
 
     private fun latest() = ItemListViewModel(repo, settings, follows, SavedStateHandle())

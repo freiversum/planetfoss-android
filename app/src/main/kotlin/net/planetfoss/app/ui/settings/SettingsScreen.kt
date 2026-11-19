@@ -430,7 +430,8 @@ fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> U
                 )
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_privacy)) },
-                    supportingContent = { Text(stringResource(R.string.settings_privacy_note)) },
+                    // sponsor cards are only mentioned once planetfoss.net delivers some (as under "Count for the sources")
+                    supportingContent = { Text(stringResource(if (adsShown) R.string.settings_privacy_note_ads else R.string.settings_privacy_note)) },
                 )
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_licence_title)) },

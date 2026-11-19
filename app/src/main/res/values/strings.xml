@@ -58,6 +58,7 @@
     <string name="settings_about">About</string>
     <string name="settings_version">Version %1$s</string>
     <string name="settings_privacy_note">No tracking, no telemetry, no Google services. The app only talks to planetfoss.net and to the sites you open – and, only if you switch it on, fetches the tracker filter list (easylist.to). If you switch on Settings → Anonymous counting, opened articles are counted for the sources as a daily total – no identifier. Which lists the app loads, planetfoss.net counts as daily totals, like page views on the website.</string>
+    <string name="settings_privacy_note_ads">No tracking, no telemetry, no Google services. The app only talks to planetfoss.net and to the sites you open – and, only if you switch it on, fetches the tracker filter list (easylist.to). If you switch on Settings → Anonymous counting, opened articles are counted for the sources as a daily total – no identifier. Which lists the app loads, planetfoss.net counts as daily totals, like page views on the website. Sponsor cards you see are always counted for the sponsors, as on the website: which card, where and in which language – no identifier.</string>
     <string name="settings_license">Free software under the GNU GPL, version 3 or later.</string>
     <string name="error_not_found">Not found on PlanetFOSS.</string>
     <string name="save">Save</string>
@@ -560,4 +561,15 @@
     <string name="whatsnew_060_2">The logbook sums up the day every morning at 6.</string>
     <string name="whatsnew_060_3">The weekly review shows numbers, supernovas and the biggest stories.</string>
     <string name="whatsnew_060_4">Replies from the fediverse can be reported or hidden.</string>
+    <string name="widget_preview_kicker">Logbook · today</string>
+    <string name="widget_preview_headline">The headline of the day</string>
+    <string name="widget_preview_nova">✦  Supernova · 12 sources</string>
+    <string name="widget_preview_comet">☄  Comet · 5 sources</string>
+    <string name="widget_preview_releases">⬆  3 new versions</string>
+    <string name="widget_preview_radar_1" translatable="false">Linux-Kernel ✦</string>
+    <string name="widget_preview_radar_2" translatable="false">Firefox</string>
+    <string name="widget_preview_radar_3" translatable="false">KDE Plasma</string>
+    <string name="widget_preview_plus_4" translatable="false">+4</string>
+    <string name="widget_preview_plus_2" translatable="false">+2</string>
+    <string name="widget_preview_none" translatable="false">–</string>
 </resources>

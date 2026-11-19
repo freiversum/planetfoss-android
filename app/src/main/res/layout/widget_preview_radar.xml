@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What the launcher's widget picker shows for the Radar widget: sample topics with their counts (the real one is drawn by Glance). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/widget_sky" android:orientation="vertical"
+    android:paddingHorizontal="16dp" android:paddingVertical="14dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp"
+        android:text="@string/tab_radar" android:textAllCaps="true" android:textColor="#FF5EE4DF"
+        android:textSize="10sp" android:textStyle="bold" android:maxLines="1" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="5dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="@string/widget_preview_radar_1" android:textColor="#FFFFB199" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/widget_preview_plus_4" android:textColor="#FF5EE4DF" android:textSize="12sp" android:textStyle="bold" />
+    </LinearLayout>
+    <ImageView android:layout_width="match_parent" android:layout_height="1dp" android:src="@drawable/widget_divider" android:scaleType="fitXY" android:importantForAccessibility="no" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="5dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="@string/widget_preview_radar_2" android:textColor="#FFF5F6FB" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/widget_preview_plus_2" android:textColor="#FF5EE4DF" android:textSize="12sp" android:textStyle="bold" />
+    </LinearLayout>
+    <ImageView android:layout_width="match_parent" android:layout_height="1dp" android:src="@drawable/widget_divider" android:scaleType="fitXY" android:importantForAccessibility="no" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="5dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="@string/widget_preview_radar_3" android:textColor="#FF9EA6C4" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/widget_preview_none" android:textColor="#FF9EA6C4" android:textSize="12sp" android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

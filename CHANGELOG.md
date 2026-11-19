@@ -5,6 +5,7 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 ### Added
+- The launcher's widget picker shows a preview of the logbook and the Radar widget instead of the app icon.
 - "What is new" in Settings, below the version: the last five releases as a timeline, each with a headline and a few
   short lines marked New, Better or Fixed, written for readers. The installed version is the card in the night sky.
   The texts ship with the app in German and English.
@@ -17,6 +18,7 @@ versions follow [Semantic Versioning](https://semver.org/).
   them on.
 ### Changed
 - README is a product page for users now (what the app does, install, questions); building, testing and the design documents moved to `docs/TECHNICAL.md`.
+- Settings → Privacy also says that seen sponsor cards are always counted, once planetfoss.net delivers sponsor cards.
 - Store icon: the planet fills more of the tile (78 % instead of 62 % of its width). In Play's list of updates it looked
   smaller than the icons of other apps. The icon on the phone is unchanged.
 - The line with source, time and stars on a card never wraps: a long source name is cut ("PC Games H…"), the time and

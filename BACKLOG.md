@@ -58,13 +58,14 @@
 - [x] “Discussed on” and replies from the fediverse (bundle and topic head, below the supernova, 2026-11-05)
 - [x] Release once planetfoss.net serves `discussions` and `replies` (live since the deploy of 2026-11-05) – released with v0.6.0
 - [ ] Widgets on the phone over a few days (redraw every 3 h, data older than 2 h fetched by the widget, launcher previews)
-- [ ] Widget preview images for the launcher's picker (now the app icon)
+- [x] Widget preview images for the launcher's picker: `android:previewLayout` with sample lines for both widgets
+      (2026-11-19) – not looked at in the launcher's picker yet
 - [x] Cold start from planetfoss://radar opened Today once (2026-11-06) – not reproducible: emulator cold start, restored task, widget flags and a cold start on the Pixel all open Radar; most likely the test ran while Android redrew the widgets after the update
 
 - [x] Ads in the app, phase 4 (app side, 2026-11-06): candidates, rotation, compact card, info sheet. Phases 1–3 are on the server side.
 - [x] Decision D1 built (2026-11-10): seen sponsor cards are reported without the opt-in; PRIVACY.md, settings and setup texts, docs/08-release.md updated
 - [x] Google Play internal test, v0.6.0 from the Play Store on the Pixel 10 (2026-11-10): setup assistant, Latest, Radar, Discover, Saved, logbook, weekly review, supernovas, search, article in the Custom Tab, save, follow (asks for the notification permission), settings; no crash in logcat
-- [ ] Settings → Privacy text (`settings_privacy_note`) does not yet say that seen sponsor cards are counted without opt-in; add it for when ads are switched on (the explain text under *Count for the sources* already does)
+- [x] (2026-11-19, `settings_privacy_note_ads`, shown once sponsor cards arrive) Settings → Privacy text (`settings_privacy_note`) did not yet say that seen sponsor cards are counted without opt-in; add it for when ads are switched on (the explain text under *Count for the sources* already does)
 - [ ] F-Droid text: AntiFeature `Ads` on, mention the always-on sponsor count (may be read as `Tracking`); Play: Data safety "app interactions", ads "yes"
 - [ ] Ads in the app: own placements and `/api/app/v1/ads` (plan in planetfoss.net `ANZEIGEN-APP.md`; D1–D7 decided 2026-11-06, nothing built)
 - [x] Setup assistant: seven pages at first start, repeatable from Settings (2026-11-07)
@@ -89,14 +90,15 @@
       empty. Built 2026-11-19 after `docs/setup-follow-mockup.html`: step 3 "Follow topics" (chips), own switch for the
       follow notifications; checked on the Pixel 10 with a fresh install (three topics chosen, no permission dialog, Radar
       lists them)
-- [ ] Follow topics step: not looked at in the light design, in English, at 130 % font and without network (the retry text)
+- [x] Follow topics step in the light design, in English, at 130 % font and without a reachable server (the retry text): checked on the Pixel 10, 2026-11-19
 - [x] A list scrolled past its first page dropped back to page 1 when it refreshed itself after five minutes away (page 1
       replaced the list). Built 2026-11-19: an automatic refresh merges page 1 (new posts on top, loaded pages stay); a
       whole page of new posts or a pull to refresh still replaces the list
-- [ ] Flaky unit test: `ItemListViewModelTest.theSponsorCardComesFromTheCandidates` failed once with "Dispatchers.Main is
-      used concurrently with setting it" (2026-11-19), green on the next two runs
+- [x] Flaky unit test: `ItemListViewModelTest.theSponsorCardComesFromTheCandidates` failed once with "Dispatchers.Main is
+      used concurrently with setting it" (2026-11-19): Main is now set once for the class; four runs in a row green
 - [ ] Upload the new store icon (`fastlane/metadata/android/*/images/icon.png`, 2026-11-19) in the Play Console (Christoph)
 - [x] "What is new" in Settings (2026-11-19, mockup `docs/whats-new-mockup.html`): the last five releases, checked on the
       Pixel 10 in the dark design, German
-- [ ] "What is new": not looked at in the light design, in English and at 130 % font; the date of 0.6.4 in
-      `RELEASE_NOTES` (2026-11-19) must be the day of the release
+- [x] "What is new" in the light design, in English and at 130 % font: checked on the Pixel 10, 2026-11-19 (found and
+      fixed: dark status bar icons on the night sky head in the light design)
+- [ ] The date of 0.6.4 in `RELEASE_NOTES` (2026-11-19) must be the day of the release

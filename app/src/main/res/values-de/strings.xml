@@ -56,6 +56,7 @@
     <string name="settings_about">Über die App</string>
     <string name="settings_version">Version %1$s</string>
     <string name="settings_privacy_note">Kein Tracking, keine Telemetrie, keine Google-Dienste. Die App spricht nur mit planetfoss.net und mit den Seiten, die du öffnest – und lädt, nur wenn du ihn einschaltest, die Filterliste für den Tracker-Schutz (easylist.to). Schaltest du unter Einstellungen → Anonym mitzählen das Mitzählen ein, zählen geöffnete Artikel als Tagessumme für die Quelle – ohne Kennung. Welche Listen die App lädt, zählt planetfoss.net als Tagessumme, wie Seitenaufrufe auf der Website.</string>
+    <string name="settings_privacy_note_ads">Kein Tracking, keine Telemetrie, keine Google-Dienste. Die App spricht nur mit planetfoss.net und mit den Seiten, die du öffnest – und lädt, nur wenn du ihn einschaltest, die Filterliste für den Tracker-Schutz (easylist.to). Schaltest du unter Einstellungen → Anonym mitzählen das Mitzählen ein, zählen geöffnete Artikel als Tagessumme für die Quelle – ohne Kennung. Welche Listen die App lädt, zählt planetfoss.net als Tagessumme, wie Seitenaufrufe auf der Website. Gesehene Sponsor-Karten zählt die App immer für die Sponsoren, wie auf der Website: welche Karte, wo und in welcher Sprache – ohne Kennung.</string>
     <string name="settings_license">Freie Software unter der GNU GPL, Version 3 oder neuer.</string>
     <string name="error_not_found">Auf PlanetFOSS nicht gefunden.</string>
     <string name="save">Speichern</string>
@@ -554,4 +555,9 @@
     <string name="whatsnew_060_2">Das Logbuch fasst jeden Morgen um 6 Uhr den Tag zusammen.</string>
     <string name="whatsnew_060_3">Der Wochenrückblick zeigt Zahlen, Supernovas und die größten Geschichten.</string>
     <string name="whatsnew_060_4">Antworten aus dem Fediverse lassen sich melden oder ausblenden.</string>
+    <string name="widget_preview_kicker">Logbuch · heute</string>
+    <string name="widget_preview_headline">Die Schlagzeile des Tages</string>
+    <string name="widget_preview_nova">✦  Supernova · 12 Quellen</string>
+    <string name="widget_preview_comet">☄  Komet · 5 Quellen</string>
+    <string name="widget_preview_releases">⬆  3 neue Versionen</string>
 </resources>

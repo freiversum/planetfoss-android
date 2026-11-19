@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What the launcher's widget picker shows for the logbook widget: the widget with sample lines (the real one is drawn by Glance). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/widget_sky" android:orientation="vertical"
+    android:paddingHorizontal="16dp" android:paddingVertical="14dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/widget_preview_kicker" android:textAllCaps="true" android:textColor="#FFFFE7A8"
+        android:textSize="10sp" android:textStyle="bold" android:maxLines="1" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp"
+        android:text="@string/widget_preview_headline" android:textColor="#FFF5F6FB" android:textSize="20sp"
+        android:textStyle="bold" android:maxLines="1" android:ellipsize="end" />
+    <Space android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingVertical="2dp"
+        android:text="@string/widget_preview_nova" android:textColor="#FFF5F6FB" android:textSize="12sp" android:maxLines="1" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingVertical="2dp"
+        android:text="@string/widget_preview_comet" android:textColor="#FFF5F6FB" android:textSize="12sp" android:maxLines="1" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingVertical="2dp"
+        android:text="@string/widget_preview_releases" android:textColor="#FFF5F6FB" android:textSize="12sp" android:maxLines="1" />
+</LinearLayout>
