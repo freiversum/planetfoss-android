@@ -101,6 +101,9 @@
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="privacy_policy">Privacy policy</string>
+    <!-- Settings → About: link to freiversum, the umbrella of the independent projects -->
+    <string name="freiversum_title">A star in the freiversum</string>
+    <string name="freiversum_text">Independent projects around Linux and FOSS</string>
     <string name="in_orbit">In orbit</string>
     <string name="rising">Rising</string>
     <string name="logbook_marker">Logbook published</string>

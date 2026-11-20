@@ -4,7 +4,7 @@
 - [x] Phase 2 – architecture and UX (docs/02-*.md)
 - [x] Decide: app icon / wordmark licence – CC BY-SA 4.0; the name stays with the official builds, forks rename (2026-10-30)
 - [ ] Decide: offer the app for https://planetfoss.net/ links
-- [ ] Link to freiversum (the umbrella of the independent projects, like the website footer since 2026-11-19): one quiet row
+- [x] (2026-11-20) Link to freiversum (the umbrella of the independent projects, like the website footer since 2026-11-19): one quiet row
       in Settings → About, "A star in the freiversum" / „Ein Stern im freiversum" with the constellation mark (vector
       drawable from the brand's size S), opens https://freiversum.de/ outside the app; DE + EN strings; no tracking parameters
 - [x] Website parity, priority 4 (2026-11-01): weekly review (API `weekly`), hide sources/rubrics (on the phone), bundle

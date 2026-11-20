@@ -441,6 +441,8 @@ fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> U
                 LinkItem(stringResource(R.string.mastodon), "https://mastodon.social/@planetfoss")
                 LinkItem(stringResource(R.string.imprint), "https://planetfoss.net/impressum/")
                 LinkItem(stringResource(R.string.privacy_policy), "https://planetfoss.net/datenschutz/")
+                // freiversum: the umbrella of the independent projects (like the website footer), one quiet row
+                FreiversumItem()
             }
         }
     }
@@ -453,6 +455,25 @@ private fun LinkItem(title: String, url: String) {
     ListItem(
         headlineContent = { Text(title) },
         supportingContent = { Text(url.removePrefix("https://").removeSuffix("/"), style = net.planetfoss.app.ui.theme.MetaStyle) },
+        trailingContent = { Icon(androidx.compose.ui.res.painterResource(R.drawable.ic_open_in_new), null) },
+        modifier = Modifier.clickable(role = Role.Button) { net.planetfoss.app.ui.components.openOutsideApp(context, url) },
+    )
+}
+
+/** Link to freiversum.de with the constellation mark; opens outside the app, no tracking parameters. */
+@Composable
+private fun FreiversumItem() {
+    val context = LocalContext.current
+    val url = "https://freiversum.de/"
+    ListItem(
+        leadingContent = { androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(R.drawable.ic_freiversum), null) },
+        headlineContent = { Text(stringResource(R.string.freiversum_title)) },
+        supportingContent = {
+            Column {
+                Text(stringResource(R.string.freiversum_text))
+                Text(url.removePrefix("https://").removeSuffix("/"), style = net.planetfoss.app.ui.theme.MetaStyle)
+            }
+        },
         trailingContent = { Icon(androidx.compose.ui.res.painterResource(R.drawable.ic_open_in_new), null) },
         modifier = Modifier.clickable(role = Role.Button) { net.planetfoss.app.ui.components.openOutsideApp(context, url) },
     )

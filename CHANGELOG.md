@@ -5,6 +5,11 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Settings → About ends with a quiet row "A star in the freiversum" ("Ein Stern im freiversum"): the constellation mark
+  of freiversum, the umbrella of the independent projects around PlanetFOSS, and a link to freiversum.de that opens
+  outside the app, without tracking parameters.
+
 ## [0.6.4] - 2026-11-19
 New users follow topics during setup, so Radar is filled from the first minute; lists keep their place, and Settings
 show what changed in the last versions.

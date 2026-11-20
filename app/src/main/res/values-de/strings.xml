@@ -99,6 +99,9 @@
     <string name="theme_light">Hell</string>
     <string name="theme_dark">Dunkel</string>
     <string name="privacy_policy">Datenschutzerklärung</string>
+    <!-- Settings → About: link to freiversum, the umbrella of the independent projects -->
+    <string name="freiversum_title">Ein Stern im freiversum</string>
+    <string name="freiversum_text">Unabhängige Projekte rund um Linux und FOSS</string>
     <string name="in_orbit">Im Orbit</string>
     <string name="rising">Im Aufwind</string>
     <string name="logbook_marker">Logbuch erschienen</string>

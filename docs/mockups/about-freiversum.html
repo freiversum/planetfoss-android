@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Mockup: freiversum-Zeile in Einstellungen › Über die App</title>
+<!-- Mockup 20.11.2026: eine ruhige Zeile mit dem freiversum-Zeichen (Stufe S) am Ende von „Über die App“.
+     Farben aus ui/theme/Theme.kt, Zeilenaufbau wie LinkItem in SettingsScreen.kt. Nicht ausgeliefert. -->
+<style>
+	body { margin: 0; padding: 32px; background: #d9dbe3; font-family: Roboto, "Inter", system-ui, sans-serif; display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; }
+	.tel { width: 390px; border-radius: 36px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,.25); border: 10px solid #111; }
+	.tel h3 { margin: 0; padding: 14px 20px 8px; font: 500 14px Roboto, system-ui, sans-serif; letter-spacing: .1px; }
+	.bar { height: 56px; display: flex; align-items: center; gap: 24px; padding: 0 16px; font-size: 22px; }
+	.row { display: flex; align-items: center; gap: 16px; min-height: 56px; padding: 10px 16px 10px 16px; }
+	.row .txt { flex: 1; }
+	.row .t { font-size: 16px; line-height: 24px; }
+	.row .s { font-size: 14px; line-height: 20px; }
+	.row .meta { font: 12px/16px "Roboto Mono", ui-monospace, monospace; }
+	.row svg.ext { width: 24px; height: 24px; flex: none; }
+	.row .mark { width: 24px; height: 24px; flex: none; }
+	.neu { position: relative; }
+	.neu::after { content: "neu"; position: absolute; right: 52px; top: 8px; font: 600 10px system-ui; letter-spacing: .5px; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: #ff6600; color: #fff; }
+	.cap { width: 100%; text-align: center; font: 14px system-ui; color: #333; margin-top: -20px; }
+	.dark { background: #0B1026; color: #F5F6FB; } .dark .s, .dark .meta, .dark h3 { color: #8F97B5; } .dark h3 { color: #B3A4FF; } .dark svg.ext { fill: #8F97B5; }
+	.light { background: #F5F6FB; color: #0B1026; } .light .s, .light .meta { color: #586079; } .light h3 { color: #5A45E6; } .light svg.ext { fill: #586079; }
+</style>
+</head>
+<body>
+<template id="mark"><svg class="mark" viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#10121c"/><polyline points="3.5,12.5 6.5,6.5 10.5,9.5 13.5,3.5" fill="none" stroke="#5b6080" stroke-width="1"/><rect x="2" y="12" width="3" height="1" fill="#ff6600"/><rect x="3" y="11" width="1" height="3" fill="#ff6600"/><rect x="5" y="6" width="3" height="1" fill="#8370EE"/><rect x="6" y="5" width="1" height="3" fill="#8370EE"/><rect x="9" y="9" width="3" height="1" fill="#ffbc00"/><rect x="10" y="8" width="1" height="3" fill="#ffbc00"/><rect x="12" y="3" width="3" height="1" fill="#eef2f8"/><rect x="13" y="2" width="1" height="3" fill="#eef2f8"/></svg></template>
+<template id="ext"><svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></template>
+
+<div class="tel dark" data-lang="de"></div>
+<div class="tel light" data-lang="en"></div>
+<p class="cap">Links dunkel und deutsch, rechts hell und englisch. Die neue Zeile steht am Ende von „Über die App“, nach Impressum und Datenschutzerklärung; das Zeichen ist die Stufe S des freiversum-Markensatzes (24 dp), Tippen öffnet freiversum.de im Browser.</p>
+
+<script>
+const T = {
+	de: { bar: "Einstellungen", sec: "Über die App", rows: [
+		["Version 0.9.2", ""], ["Was ist neu", "Die letzten fünf Versionen auf einen Blick"], ["Datenschutz", "Kein Konto, keine Werbe-IDs, kein Tracking …"],
+		["Lizenz", "Freie Software unter der GNU GPL, Version 3 oder neuer."],
+		["PlanetFOSS auf Mastodon", "mastodon.social/@planetfoss", 1], ["Impressum", "planetfoss.net/impressum", 1], ["Datenschutzerklärung", "planetfoss.net/datenschutz", 1],
+		["Ein Stern im freiversum", "Unabhängige Projekte rund um Linux und FOSS", 2] ] },
+	en: { bar: "Settings", sec: "About", rows: [
+		["Version 0.9.2", ""], ["What's new", "The last five versions at a glance"], ["Privacy", "No account, no advertising IDs, no tracking …"],
+		["Licence", "Free software under the GNU GPL, version 3 or later."],
+		["PlanetFOSS on Mastodon", "mastodon.social/@planetfoss", 1], ["Imprint", "planetfoss.net/impressum", 1], ["Privacy policy", "planetfoss.net/datenschutz", 1],
+		["A star in the freiversum", "Independent projects around Linux and FOSS", 2] ] },
+};
+const mark = document.getElementById("mark").innerHTML, ext = document.getElementById("ext").innerHTML;
+for (const tel of document.querySelectorAll(".tel")) {
+	const t = T[tel.dataset.lang];
+	let h = `<div class="bar">←&nbsp;&nbsp;${t.bar}</div><h3>${t.sec}</h3>`;
+	for (const [a, b, k] of t.rows) {
+		const sub = (b ? `<div class="${k === 1 ? "s meta" : "s"}">${b}</div>` : "") + (k === 2 ? `<div class="s meta">freiversum.de</div>` : "");
+		h += `<div class="row${k === 2 ? " neu" : ""}">${k === 2 ? mark : ""}<div class="txt"><div class="t">${a}</div>${sub}</div>${k ? ext : ""}</div>`;
+	}
+	tel.innerHTML = h + `<div style="height:24px"></div>`;
+}
+</script>
+</body>
+</html>
