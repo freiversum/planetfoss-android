@@ -182,3 +182,8 @@ so F-Droid needs the full history (default for its build server).
   `dist/planetfoss-0.6.4.aab` (SHA-256 `0da8bcf1ce85350af61e44dfa5a7385e68933c09c9b3c4a2a731ff7e27c1e43f`) as release
   "0.6.4 (182)" in the closed test (Alpha), sent for review together with the new store icon. Play's only warning: no
   native debug symbols. The release APK itself was not installed on a device (the QA builds of the same day were).
+- 2026-11-20: v0.6.5 (versionCode 188, supernovas at ignition) tagged and built from the tag on tinytin (`werkbank gradle
+  planetfoss-android --release`, unit tests in the same run); APK `dist/planetfoss-0.6.5.apk` (SHA-256
+  `2758131f6e24b82cf388c4eaa0c4949a1214ba45c7b6e30f55546ffdc9f4fd0f`) on the GitHub releases page, bundle
+  `dist/planetfoss-0.6.5.aab` (SHA-256 `8ab8daf43beaab19e5c08ec9905e5e2ab4c54d129ccbe411e4bf171f40211961`) for the
+  closed test (Alpha) on Google Play. Needs planetfoss.net with `pending=1` (live 2026-11-20).
