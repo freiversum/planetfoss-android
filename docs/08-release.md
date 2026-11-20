@@ -186,4 +186,5 @@ so F-Droid needs the full history (default for its build server).
   planetfoss-android --release`, unit tests in the same run); APK `dist/planetfoss-0.6.5.apk` (SHA-256
   `2758131f6e24b82cf388c4eaa0c4949a1214ba45c7b6e30f55546ffdc9f4fd0f`) on the GitHub releases page, bundle
   `dist/planetfoss-0.6.5.aab` (SHA-256 `8ab8daf43beaab19e5c08ec9905e5e2ab4c54d129ccbe411e4bf171f40211961`) for the
-  closed test (Alpha) on Google Play. Needs planetfoss.net with `pending=1` (live 2026-11-20).
+  closed test (Alpha) on Google Play as release "0.6.5 (188)", sent for review the same evening (uploaded per Claude in
+  Chrome; Play's only warning again: no native debug symbols). Needs planetfoss.net with `pending=1` (live 2026-11-20).
