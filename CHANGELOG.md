@@ -5,6 +5,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.5] - 2026-11-20
+New supernovas show up the moment they ignite, like on planetfoss.net; the notification still waits half an hour.
+
 ### Added
 - Settings → About ends with a quiet row "A star in the freiversum" ("Ein Stern im freiversum"): the constellation mark
   of freiversum, the umbrella of the independent projects around PlanetFOSS, and a link to freiversum.de that opens

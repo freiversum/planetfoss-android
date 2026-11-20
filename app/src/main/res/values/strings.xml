@@ -545,6 +545,9 @@
     <string name="whatsnew_new">New</string>
     <string name="whatsnew_better">Better</string>
     <string name="whatsnew_fixed">Fixed</string>
+    <string name="whatsnew_065_title">Supernovas the moment they ignite</string>
+    <string name="whatsnew_065_1">New supernovas show up as soon as they ignite, like on planetfoss.net. The notification follows half an hour later.</string>
+    <string name="whatsnew_065_2">Settings → About links to freiversum, the home of PlanetFOSS and its sister projects.</string>
     <string name="whatsnew_064_title">Your Radar from the first minute</string>
     <string name="whatsnew_064_1">During setup you follow topics with a tap. Radar is filled right away.</string>
     <string name="whatsnew_064_2">Notifications about your topics have a switch of their own.</string>

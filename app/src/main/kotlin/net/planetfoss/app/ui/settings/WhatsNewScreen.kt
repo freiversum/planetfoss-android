@@ -83,6 +83,10 @@ data class ReleaseNotes(val version: String, val date: LocalDate, @StringRes val
  */
 val RELEASE_NOTES = listOf(
     ReleaseNotes(
+        "0.6.5", LocalDate.of(2026, 11, 20), R.string.whatsnew_065_title,
+        listOf(NoteKind.BETTER to R.string.whatsnew_065_1, NoteKind.NEW to R.string.whatsnew_065_2),
+    ),
+    ReleaseNotes(
         "0.6.4", LocalDate.of(2026, 11, 19), R.string.whatsnew_064_title,
         listOf(
             NoteKind.NEW to R.string.whatsnew_064_1, NoteKind.NEW to R.string.whatsnew_064_2, NoteKind.NEW to R.string.whatsnew_064_3,

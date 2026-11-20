@@ -1,0 +1,3 @@
+- Neue Supernovas erscheinen sofort beim Zünden, wie auf planetfoss.net
+- Die Supernova-Meldung folgt weiterhin eine halbe Stunde später
+- Unter Einstellungen → Über geht es zu freiversum

@@ -1,0 +1,3 @@
+- New supernovas show up as soon as they ignite, like on planetfoss.net
+- The supernova notification still follows half an hour later
+- Settings → About links to freiversum

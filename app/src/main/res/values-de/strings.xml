@@ -539,6 +539,9 @@
     <string name="whatsnew_new">Neu</string>
     <string name="whatsnew_better">Besser</string>
     <string name="whatsnew_fixed">Behoben</string>
+    <string name="whatsnew_065_title">Supernovas ab dem ersten Moment</string>
+    <string name="whatsnew_065_1">Neue Supernovas erscheinen sofort beim Zünden, wie auf planetfoss.net. Die Meldung folgt eine halbe Stunde später.</string>
+    <string name="whatsnew_065_2">Unter Einstellungen → Über führt ein Link zu freiversum, dem Dach von PlanetFOSS und seinen Schwesterprojekten.</string>
     <string name="whatsnew_064_title">Dein Radar ab der ersten Minute</string>
     <string name="whatsnew_064_1">Beim Einrichten folgst du Themen per Fingertipp. Der Radar ist sofort gefüllt.</string>
     <string name="whatsnew_064_2">Meldungen zu deinen Themen haben einen eigenen Schalter.</string>
