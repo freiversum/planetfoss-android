@@ -231,6 +231,11 @@ data class Supernova(
     val quote: Quote? = null,
     val stats: NovaStats = NovaStats(),
     val burning: Boolean = false,
+    /**
+     * False during the 30 minutes between ignition and [announcedAt] (sent with `pending=1` only): the lists show it
+     * like the website, but it does not notify yet – a misfire can still be hidden. Missing = announced (older server).
+     */
+    val announced: Boolean = true,
     /** The first reports, as full items like in the lists. */
     val reports: List<Item> = emptyList(),
 )

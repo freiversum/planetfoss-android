@@ -10,6 +10,11 @@ versions follow [Semantic Versioning](https://semver.org/).
   of freiversum, the umbrella of the independent projects around PlanetFOSS, and a link to freiversum.de that opens
   outside the app, without tracking parameters.
 
+### Changed
+- A new supernova shows up in Latest and in the Supernovas tab as soon as it ignites, like on planetfoss.net, instead of
+  half an hour later. The notification still waits those 30 minutes, so a misfire hidden in that time never reaches
+  the phone.
+
 ## [0.6.4] - 2026-11-19
 New users follow topics during setup, so Radar is filled from the first minute; lists keep their place, and Settings
 show what changed in the last versions.

@@ -30,7 +30,8 @@ object NovaDetector {
 
     fun process(current: List<Supernova>, seenIds: Set<String>, now: Instant, notificationsOn: Boolean): Result {
         val fresh = now.minus(FRESH)
-        val new = current.distinctBy { it.id }.filter { it.id !in seenIds }
+        // not announced yet: neither seen nor notified, so it notifies once the server announces it (misfires vanish before)
+        val new = current.filter { it.announced }.distinctBy { it.id }.filter { it.id !in seenIds }
         val notify = if (notificationsOn) new.filter { it.announcedAt >= fresh } else emptyList()
         val notifyIds = notify.mapTo(HashSet()) { it.id }
         return Result(

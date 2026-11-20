@@ -66,8 +66,9 @@ class PlanetFossApi(
     suspend fun home(lang: ContentLang, ui: String, page: Int = 1): ItemPage =
         get("home", mapOf("lang" to lang.param, "ui" to ui, "page" to page.toString()), ItemPage.serializer())
 
+    /** `pending=1`: also supernovas not yet announced (ignited less than 30 min ago), marked `announced = false`. */
     suspend fun supernovas(lang: ContentLang, ui: String, use: Use = Use.VIEW): SupernovaList =
-        get("supernovas", mapOf("lang" to lang.param, "ui" to ui), SupernovaList.serializer(), use)
+        get("supernovas", mapOf("lang" to lang.param, "ui" to ui, "pending" to "1"), SupernovaList.serializer(), use)
 
     suspend fun rubrics(ui: String): RubricList = get("rubrics", mapOf("ui" to ui), RubricList.serializer())
 

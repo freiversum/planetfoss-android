@@ -105,4 +105,16 @@ class NovaDetectorTest {
         val b = nova("b", Duration.ofHours(5))
         assertEquals(listOf("b", "a"), run(listOf(a, b), mutableMapOf()).map { it.key })
     }
+
+    @Test
+    fun pendingSupernovaWaitsForItsAnnouncement() {
+        val seen = mutableMapOf<String, SeenNova>()
+        val pending = nova("rust-coreutils", Duration.ofMinutes(-20)).copy(announced = false)
+        assertEquals(emptyList<Supernova>(), run(listOf(pending), seen))
+        assertTrue("not stored as seen, or it could never notify", seen.isEmpty())
+        // half an hour after ignition the server announces it: now it notifies, once
+        val announced = pending.copy(announced = true)
+        assertEquals(listOf("rust-coreutils"), run(listOf(announced), seen).map { it.key })
+        assertEquals(emptyList<Supernova>(), run(listOf(announced), seen))
+    }
 }

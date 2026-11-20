@@ -80,13 +80,18 @@ project `name` instead, `url` is that project's page.
   "quote": { "text": "Writer, Calc and Impress receive fixes…", "source": "FOSS Force" },
   "stats": { "items": 4, "sources": 4 },
   "burning": true,
+  "announced": true,
   "reports": [ Item, … ]
 }
 ```
 
 `id` is **byte-identical to the RSS guid** of `NovaFeed` – one identity for feed
 readers, Mastodon and the app. `announced_at` = ignition + 30 min (`Mastodon::DELAY_SECONDS`);
-before that a supernova is not listed (misfires can still be hidden).
+before that a supernova is not listed (misfires can still be hidden) – unless the app asks with
+`pending=1` (2026-11-20): then it is listed from its ignition on, as on the website, with
+`announced: false` until `announced_at`. The app shows it at once but notifies only once
+`announced` is true (`NovaDetector`); an app without the parameter never sees it early, so it
+cannot notify a misfire. Without `pending=1` the field is always `true`.
 `burning` = topic currently has status `supernova` (else afterglow, still within
 the 7 days).
 `reports` = the first five reports (as in the feed) as full items, so the app shows
@@ -115,7 +120,7 @@ left is dropped. The app puts one comet after each supernova, never before the f
 | Endpoint | Returns | Built on |
 |---|---|---|
 | `GET /api/app/v1/home?lang=&ui=&page=` | `{ items: [Item], has_more, ad, weekly: {week, items, sources, supernovas, story, image} \| null }` (weekly: page 1, Monday to Wednesday only) | `Site::listing(…, 'home')` / `latestPage` |
-| `GET /api/app/v1/supernovas?lang=&ui=` | `{ supernovas: [Supernova], comets: [Comet] }`, 7 days, newest first; comets of the last 24 h | `NovaFeed::entries` + `Site::supernovas` for `burning` |
+| `GET /api/app/v1/supernovas?lang=&ui=&pending=` | `{ supernovas: [Supernova], comets: [Comet] }`, 7 days, newest first; `pending=1` adds the ones not yet announced; comets of the last 24 h | `NovaFeed::entries` + `Site::supernovas` for `burning` |
 | `GET /api/app/v1/rubrics?ui=` | `{ rubrics: [{ slug, name, hot_topics: [{key,label,supernova}] }] }` | `categories` (website order) + burning supernovas/comets per rubric |
 | `GET /api/app/v1/rubric/<slug>?lang=&ui=&page=` | `{ rubric, items, has_more }` | `Site::listing('rubrik')` |
 | `GET /api/app/v1/topic/<key>?lang=&ui=&page=` | `{ topic: {key,label,supernova, status, intro, stats {items, sources, first}, rubric, parent, related, story?}, items, has_more }` | `Site::listing('thema')`; head as the topic page (2026-10-31). `story` (2026-11-03): on page 1 of a supernova with its own story, the ids of that story's posts, listed first; `stats` then count only the story |

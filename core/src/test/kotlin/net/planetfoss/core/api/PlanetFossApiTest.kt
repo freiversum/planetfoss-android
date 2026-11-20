@@ -107,6 +107,9 @@ class PlanetFossApiTest {
     fun supernovasKeepTheFeedGuid() = runTest {
         answer(200, fixture("supernovas.json"))
         val nova = api().supernovas(ContentLang.ALL, "de").supernovas.single()
+        // pending=1: the list shows a supernova from its ignition on, like the website
+        assertEquals("/api/app/v1/supernovas?lang=&ui=de&pending=1", server.takeRequest().target)
+        assertTrue("no announced field = announced (older server)", nova.announced)
         assertEquals("tag:planetfoss.net,2026:supernova/libreoffice-26-8/1793287928", nova.id)
         assertEquals(Instant.parse("2026-10-29T16:02:08Z"), nova.announcedAt)
         assertTrue(nova.burning)
