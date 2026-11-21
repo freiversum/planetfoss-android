@@ -64,8 +64,8 @@ data*), has form autofill and Safe Browsing off and sends no WebView metrics.
   Readeck) – the article's own address, its title and the tags you chose, with your API token. planetfoss.net is not
   involved and never sees the token, the address of your service or what you save there. The token is kept on the
   phone, encrypted with a key in the Android Keystore, and is not part of the export file. HTTPS only. If the address
-  points into your home network, Android 17 and later ask you first for the “Nearby devices” permission, which covers devices in the local network;
-  the app uses it only for this service.
+  points into your home network, Android 17 and later ask you first for the “Nearby devices”
+  permission, which covers devices in the local network; the app uses it only for this service.
 - **Tracker protection, only while it is on:** the EasyPrivacy filter list from easylist.to,
   fetched weekly. Requests are checked on the phone; no visited address is sent anywhere.
 
