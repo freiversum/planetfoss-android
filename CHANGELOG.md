@@ -5,6 +5,12 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- The freiversum mark in Settings → About plays the constellation of the websites once when the row comes into view
+  and when it is pressed: the line draws itself, the four stars light up one after the other and breathe, a comet
+  runs along the line and back, and two radar pulses go out from the violet star, PlanetFOSS. After about five
+  seconds it rests as before. With "Remove animations" switched on, the mark stays still.
+
 ## [0.6.5] - 2026-11-20
 New supernovas show up the moment they ignite, like on planetfoss.net; the notification still waits half an hour.
 

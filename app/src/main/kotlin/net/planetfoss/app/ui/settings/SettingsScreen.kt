@@ -465,8 +465,10 @@ private fun LinkItem(title: String, url: String) {
 private fun FreiversumItem() {
     val context = LocalContext.current
     val url = "https://freiversum.de/"
+    // Shared with the row so a press replays the constellation animation of the mark.
+    val interactions = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
     ListItem(
-        leadingContent = { androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(R.drawable.ic_freiversum), null) },
+        leadingContent = { FreiversumMark(interactions) },
         headlineContent = { Text(stringResource(R.string.freiversum_title)) },
         supportingContent = {
             Column {
@@ -475,7 +477,11 @@ private fun FreiversumItem() {
             }
         },
         trailingContent = { Icon(androidx.compose.ui.res.painterResource(R.drawable.ic_open_in_new), null) },
-        modifier = Modifier.clickable(role = Role.Button) { net.planetfoss.app.ui.components.openOutsideApp(context, url) },
+        modifier = Modifier.clickable(
+            interactionSource = interactions,
+            indication = androidx.compose.material3.ripple(),
+            role = Role.Button,
+        ) { net.planetfoss.app.ui.components.openOutsideApp(context, url) },
     )
 }
 
