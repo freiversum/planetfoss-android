@@ -6,6 +6,12 @@ versions follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Changed
+- Offline, the app catches up by itself: as soon as the phone has a working connection again, every screen that says
+  "No connection" loads again – no need to tap "Try again".
+- The hint over the last loaded state says how old it is: "No connection to PlanetFOSS. Showing what was loaded at
+  14:05." (with the date when it is from another day).
+- Discover, the topic directory and the source directory no longer stay empty offline: they show the last answer the
+  phone received, with the same hint.
 - Settings end with a small, always dark card of the freiversum night sky instead of the quiet row "A star in the
   freiversum": a cut-out of the star map of freiversum.de with the four projects, PlanetFOSS (FV 2) marked with a
   double ring, a short text and the button "Visit freiversum.de" (opens outside the app, without tracking

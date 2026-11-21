@@ -33,4 +33,6 @@ data class ListState<T>(
     val loadingMore: Boolean = false,
     val hasMore: Boolean = false,
     val error: UiError? = null,
+    /** When the items on screen were loaded (epoch ms), for the “as of” in the offline hint; null when unknown. */
+    val since: Long? = null,
 )

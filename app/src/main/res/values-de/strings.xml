@@ -16,6 +16,7 @@
     <string name="retry">Erneut versuchen</string>
     <string name="loading">Wird geladen</string>
     <string name="error_offline">Keine Verbindung zu PlanetFOSS. Du siehst den zuletzt geladenen Stand.</string>
+    <string name="error_offline_since">Keine Verbindung zu PlanetFOSS. Du siehst den Stand von %1$s.</string>
     <string name="error_offline_empty">Keine Verbindung zu PlanetFOSS.</string>
     <string name="error_server">PlanetFOSS antwortet gerade nicht (%1$d).</string>
     <string name="error_malformed">PlanetFOSS hat eine Antwort geschickt, die die App nicht versteht. Eventuell braucht es ein App-Update.</string>

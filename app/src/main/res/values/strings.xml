@@ -18,6 +18,7 @@
     <string name="retry">Try again</string>
     <string name="loading">Loading</string>
     <string name="error_offline">No connection to PlanetFOSS. Showing what was loaded last.</string>
+    <string name="error_offline_since">No connection to PlanetFOSS. Showing what was loaded at %1$s.</string>
     <string name="error_offline_empty">No connection to PlanetFOSS.</string>
     <string name="error_server">PlanetFOSS is not answering right now (%1$d).</string>
     <string name="error_malformed">PlanetFOSS sent an answer the app does not understand. An app update may be needed.</string>

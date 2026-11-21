@@ -47,6 +47,7 @@ class PlanetFossApp : Application(), Configuration.Provider, SingletonImageLoade
 
     override fun onCreate() {
         super.onCreate()
+        NetworkWatch.start(this)
         notifier.createChannel()
         // the periodic supernova check follows the settings: on/off and interval
         scope.launch {

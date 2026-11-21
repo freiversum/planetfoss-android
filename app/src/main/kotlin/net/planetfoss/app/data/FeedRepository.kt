@@ -157,6 +157,12 @@ class FeedRepository @Inject constructor(
     /** The source directory. */
     suspend fun sources(lang: ContentLang): SourcesAnswer = api.sources(lang, uiLanguage())
 
+    /** The source directory; offline the cached answer. */
+    suspend fun sourcesOrCached(lang: ContentLang) = api.sourcesOrCached(lang, uiLanguage())
+
+    /** The topic directory; offline the cached answer. */
+    suspend fun topicsOrCached(lang: ContentLang) = api.topicsOrCached(lang, uiLanguage())
+
     /**
      * The API delivered a sponsor card in this app session – planetfoss.net only does so while ads are
      * switched on in its backend. Until then nothing in the app mentions sponsor cards.
@@ -214,6 +220,10 @@ class FeedRepository @Inject constructor(
 
     /** Rubrics are small and change rarely: no Room cache, OkHttp's HTTP cache (10 min) is enough. */
     suspend fun rubrics(): List<Rubric> = api.rubrics(uiLanguage()).rubrics
+
+    /** For Discover: offline the last answer from the HTTP cache, with its time (Fetched.cachedAt). */
+    suspend fun rubricsOrCached(): net.planetfoss.core.api.Fetched<List<Rubric>> =
+        api.rubricsOrCached(uiLanguage()).let { net.planetfoss.core.api.Fetched(it.value.rubrics, it.cachedAt) }
 
     /**
      * Search goes to the server every time (no local index); OkHttp caches identical queries. [use] PART for the further

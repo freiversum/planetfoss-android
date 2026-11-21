@@ -344,4 +344,32 @@ class PlanetFossApiTest {
         val view = server.takeRequest().headers
         assertNull(view["X-PlanetFOSS-Part"] ?: view["X-PlanetFOSS-Background"])
     }
+
+    @get:Rule
+    val tmp = org.junit.rules.TemporaryFolder()
+
+    /** Offline: the last answer from the HTTP cache, with the time it came; without one the network error stands. */
+    @Test
+    fun rubricsComeFromTheCacheWhenTheNetworkFails() = runTest {
+        val client = OkHttpClient.Builder().cache(okhttp3.Cache(tmp.newFolder("http"), 1024 * 1024)).build()
+        val api = PlanetFossApi(client, server.url("/"))
+        server.enqueue(
+            MockResponse.Builder().code(200).body("""{"rubrics":[{"slug":"linux","name":"Linux"}]}""")
+                .addHeader("Cache-Control", "public, max-age=0").addHeader("ETag", "\"r1\"").build(),
+        )
+        val fresh = api.rubricsOrCached("de")
+        assertNull(fresh.cachedAt)
+        assertEquals("Linux", fresh.value.rubrics.single().name)
+        server.close()
+        val stale = api.rubricsOrCached("de")
+        assertEquals("Linux", stale.value.rubrics.single().name)
+        assertTrue(stale.cachedAt != null)
+        // nothing cached for this one: the network error stands
+        try {
+            api.topicsOrCached(ContentLang.ALL, "de")
+            fail("expected a network error")
+        } catch (e: ApiException.Network) {
+            // expected
+        }
+    }
 }

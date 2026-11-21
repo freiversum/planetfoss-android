@@ -79,7 +79,20 @@ import net.planetfoss.core.api.TopicsAnswer
 import javax.inject.Inject
 
 /** One answer of the API, loaded on open and on pull-to-refresh, in the content language. */
-data class Loaded<T>(val data: T? = null, val refreshing: Boolean = false, val error: UiError? = null)
+data class Loaded<T>(val data: T? = null, val refreshing: Boolean = false, val error: UiError? = null, val since: Long? = null) {
+    companion object {
+        /** A fresh or cached answer, or an error that keeps what was there. */
+        fun <T> of(r: Result<net.planetfoss.core.api.Fetched<T>>, old: Loaded<T>): Loaded<T> {
+            val got = r.getOrNull()
+            return Loaded(
+                got?.value ?: old.data,
+                false,
+                r.exceptionOrNull()?.let(UiError::from) ?: UiError.Offline.takeIf { got?.cachedAt != null },
+                got?.cachedAt ?: if (got != null) null else old.since,
+            )
+        }
+    }
+}
 
 @HiltViewModel
 class TopicsViewModel @Inject constructor(private val repo: FeedRepository, private val settings: SettingsRepository) : ViewModel() {
@@ -91,8 +104,8 @@ class TopicsViewModel @Inject constructor(private val repo: FeedRepository, priv
     fun refresh() {
         viewModelScope.launch {
             _state.update { it.copy(refreshing = true, error = null) }
-            val r = runCatching { repo.topics(settings.settings.first().contentLang) }
-            _state.update { Loaded(r.getOrNull() ?: it.data, false, r.exceptionOrNull()?.let(UiError::from)) }
+            val r = runCatching { repo.topicsOrCached(settings.settings.first().contentLang) }
+            _state.update { Loaded.of(r, it) }
         }
     }
 }
@@ -107,8 +120,8 @@ class SourcesViewModel @Inject constructor(private val repo: FeedRepository, pri
     fun refresh() {
         viewModelScope.launch {
             _state.update { it.copy(refreshing = true, error = null) }
-            val r = runCatching { repo.sources(settings.settings.first().contentLang) }
-            _state.update { Loaded(r.getOrNull() ?: it.data, false, r.exceptionOrNull()?.let(UiError::from)) }
+            val r = runCatching { repo.sourcesOrCached(settings.settings.first().contentLang) }
+            _state.update { Loaded.of(r, it) }
         }
     }
 }
@@ -229,7 +242,10 @@ private fun <T> DirectoryScaffold(title: String, onBack: () -> Unit, state: Load
         RefreshBox(isRefreshing = state.refreshing && state.data != null, onRefresh = onRefresh, modifier = Modifier.padding(padding).fillMaxSize()) {
             val data = state.data
             when {
-                data != null -> Column(Modifier.fillMaxSize()) { content(data) }
+                data != null -> Column(Modifier.fillMaxSize()) {
+                    state.error?.let { net.planetfoss.app.ui.components.ErrorBanner(errorText(it, hasData = true, since = state.since), onRefresh) }
+                    content(data)
+                }
                 state.error != null -> CenterMessage(errorText(state.error, hasData = false), onRetry = onRefresh)
                 else -> CenterMessage(stringResource(R.string.loading), loading = true)
             }

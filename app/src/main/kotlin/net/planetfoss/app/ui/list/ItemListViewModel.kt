@@ -222,6 +222,7 @@ class ItemListViewModel @Inject constructor(
                     loadingMore = act.loadingMore,
                     hasMore = list.hasMore,
                     error = if (target == null) UiError.NotFound else act.error,
+                    since = list.fetchedAt,
                 ),
                 title = list.title,
                 ad = ad,

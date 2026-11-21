@@ -303,7 +303,7 @@ fun ItemListContent(
         state.items.isEmpty() && (state.refreshing || !state.fetched) -> CenterMessage(stringResource(R.string.loading), loading = true)
         state.items.isEmpty() && header == null -> CenterMessage(emptyText, onRetry = onRetry, icon = emptyIcon)
         else -> Column(Modifier.fillMaxSize()) {
-            state.error?.let { ErrorBanner(errorText(it, hasData = true), onRetry ?: {}) }
+            state.error?.let { ErrorBanner(errorText(it, hasData = true, since = state.since), onRetry ?: {}) }
             BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                 val two = maxWidth >= TwoColumnsFrom
                 LazyVerticalStaggeredGrid(

@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Notice when the connection is back, so “no connection” screens reload by themselves. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- WorkManager declares this for foreground workers; the app has none. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" tools:node="remove" />
     <!-- Supernova notifications (asked for only when the user turns them on). -->

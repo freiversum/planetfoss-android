@@ -90,14 +90,17 @@ class RubricsViewModel @Inject constructor(
         if (_state.value.refreshing) return
         viewModelScope.launch {
             _state.update { it.copy(refreshing = true, error = null) }
-            val result = runCatching { repo.rubrics() }
+            val result = runCatching { repo.rubricsOrCached() }
+            val got = result.getOrNull()
             _state.update {
                 it.copy(
-                    items = result.getOrDefault(it.items),
+                    items = got?.value ?: it.items,
                     loaded = true,
                     fetched = result.isSuccess || it.fetched,
                     refreshing = false,
-                    error = result.exceptionOrNull()?.let(UiError::from),
+                    // offline with a cached answer: show it, with the hint how old it is
+                    error = result.exceptionOrNull()?.let(UiError::from) ?: UiError.Offline.takeIf { got?.cachedAt != null },
+                    since = got?.cachedAt ?: if (got != null) null else it.since,
                 )
             }
         }
@@ -139,7 +142,7 @@ fun RubricsScreen(
                 state.items.isEmpty() && state.error != null -> CenterMessage(errorText(state.error!!, hasData = false), onRetry = vm::refresh)
                 state.items.isEmpty() -> CenterMessage(stringResource(R.string.loading), loading = true)
                 else -> Column(Modifier.fillMaxSize()) {
-                    state.error?.let { ErrorBanner(errorText(it, hasData = true), vm::refresh) }
+                    state.error?.let { ErrorBanner(errorText(it, hasData = true, since = state.since), vm::refresh) }
                     LazyColumn(state = listState, contentPadding = PaddingValues(vertical = Space.s), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
                         // search as a field: on Discover one looks for something rather than reads
                         item(key = "search") {

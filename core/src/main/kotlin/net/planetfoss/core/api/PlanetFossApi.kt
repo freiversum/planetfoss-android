@@ -9,6 +9,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl
@@ -47,6 +48,12 @@ sealed class ApiException(message: String, cause: Throwable? = null) : Exception
     class Malformed(cause: Throwable) : ApiException(cause.message ?: "malformed", cause)
 }
 
+/**
+ * An answer of the API. [cachedAt] (epoch ms) is set when the network failed and the answer is the last one the phone
+ * received for this request, from its HTTP cache: the screen shows it with a hint how old it is.
+ */
+data class Fetched<T>(val value: T, val cachedAt: Long? = null)
+
 /** JSON settings shared by the client and the local cache: unknown fields are fine (v1 may grow). */
 val ApiJson = Json {
     ignoreUnknownKeys = true
@@ -72,6 +79,9 @@ class PlanetFossApi(
 
     suspend fun rubrics(ui: String): RubricList = get("rubrics", mapOf("ui" to ui), RubricList.serializer())
 
+    /** [rubrics], or without a connection the last answer from the phone's HTTP cache (Discover offline). */
+    suspend fun rubricsOrCached(ui: String): Fetched<RubricList> = getOrCached("rubrics", mapOf("ui" to ui), RubricList.serializer())
+
     /** “In orbit” and the evergreen topics (website: trend bar and /themen/). */
     suspend fun topics(lang: ContentLang, ui: String, use: Use = Use.VIEW): TopicsAnswer =
         get("topics", mapOf("lang" to lang.param, "ui" to ui), TopicsAnswer.serializer(), use)
@@ -81,6 +91,14 @@ class PlanetFossApi(
 
     /** The source directory in groups (website: /quellen/). */
     suspend fun sources(lang: ContentLang, ui: String): SourcesAnswer = get("sources", mapOf("lang" to lang.param, "ui" to ui), SourcesAnswer.serializer())
+
+    /** [sources], or the cached answer without a connection. */
+    suspend fun sourcesOrCached(lang: ContentLang, ui: String): Fetched<SourcesAnswer> =
+        getOrCached("sources", mapOf("lang" to lang.param, "ui" to ui), SourcesAnswer.serializer())
+
+    /** [topics] for the topic directory, or the cached answer without a connection. */
+    suspend fun topicsOrCached(lang: ContentLang, ui: String): Fetched<TopicsAnswer> =
+        getOrCached("topics", mapOf("lang" to lang.param, "ui" to ui), TopicsAnswer.serializer())
 
     /** Items of one rubric, topic, source or the videos, with the head of that list. */
     suspend fun list(target: ListTarget, lang: ContentLang, ui: String, page: Int = 1, use: Use = Use.VIEW): ListAnswer =
@@ -154,6 +172,33 @@ class PlanetFossApi(
                 }
             }
         }
+        return parse(body, strategy)
+    }
+
+    /**
+     * Like [get], but when the network fails the last answer to the same request comes from OkHttp's cache, however old,
+     * with the time it was received. A cache hit makes no request at all, so nothing is counted. Without a cached
+     * answer the network error stands.
+     */
+    private suspend fun <T> getOrCached(endpoint: String, params: Map<String, String>, strategy: DeserializationStrategy<T>): Fetched<T> {
+        val request = Request.Builder().url(apiUrl(endpoint, params)).build()
+        return try {
+            Fetched(call(request, strategy))
+        } catch (e: ApiException.Network) {
+            fromCache(request, strategy) ?: throw e
+        }
+    }
+
+    private suspend fun <T> fromCache(request: Request, strategy: DeserializationStrategy<T>): Fetched<T>? = runCatching {
+        client.newCall(request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build()).await().use { response ->
+            // 504 = nothing in the cache for this request
+            if (!response.isSuccessful || response.cacheResponse == null) return@use null
+            val body = withContext(Dispatchers.IO) { response.body.string() }
+            Fetched(parse(body, strategy), cachedAt = response.receivedResponseAtMillis)
+        }
+    }.getOrNull()
+
+    private fun <T> parse(body: String, strategy: DeserializationStrategy<T>): T {
         return try {
             json.decodeFromString(strategy, body)
         } catch (e: SerializationException) {
@@ -165,12 +210,13 @@ class PlanetFossApi(
         }
     }
 
-    private suspend fun <T> get(endpoint: String, params: Map<String, String>, strategy: DeserializationStrategy<T>, use: Use = Use.VIEW): T {
-        val url = baseUrl.newBuilder().addPathSegments("api/app/v1").addPathSegments(endpoint).apply {
+    private suspend fun <T> get(endpoint: String, params: Map<String, String>, strategy: DeserializationStrategy<T>, use: Use = Use.VIEW): T =
+        call(Request.Builder().url(apiUrl(endpoint, params)).apply { use.header?.let { header(it, use.value) } }.build(), strategy)
+
+    private fun apiUrl(endpoint: String, params: Map<String, String>): HttpUrl =
+        baseUrl.newBuilder().addPathSegments("api/app/v1").addPathSegments(endpoint).apply {
             params.forEach { (k, v) -> addQueryParameter(k, v) }
         }.build()
-        return call(Request.Builder().url(url).apply { use.header?.let { header(it, use.value) } }.build(), strategy)
-    }
 }
 
 private val JSON_TYPE = "application/json".toMediaType()
