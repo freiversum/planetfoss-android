@@ -21,6 +21,7 @@ file carries an SPDX header.
 | `ic_radar` | own drawing | GPL-3.0-or-later |
 | `ic_supernova`, monochrome launcher icon, wordmark | PlanetFOSS mark | CC BY-SA 4.0, see above |
 | Fonts `res/font/`: Space Grotesk, Inter 4.1, JetBrains Mono 2.304 | the Latin subsets of planetfoss.net (`public/assets/fonts`, made with fontTools), converted from WOFF2 to TTF | SIL OFL 1.1; copyright lines and licence text ship in the APK as `res/raw/fonts_ofl.txt` |
+| Fonts `res/font/`: Oxanium (`oxanium_semibold.ttf`), Atkinson Hyperlegible Mono (`atkinson_hyperlegible_mono_regular.ttf`), for the freiversum card in Settings | the Latin subsets of freiversum.de (`public/fonts`), one static weight each instanced and converted to TTF with fontTools | SIL OFL 1.1; listed in `res/raw/fonts_ofl.txt` |
 
 ## Data downloaded at runtime
 

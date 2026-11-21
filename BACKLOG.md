@@ -7,6 +7,12 @@
 - [x] (2026-11-20) Link to freiversum (the umbrella of the independent projects, like the website footer since 2026-11-19): one quiet row
       in Settings → About, "A star in the freiversum" / „Ein Stern im freiversum" with the constellation mark (vector
       drawable from the brand's size S), opens https://freiversum.de/ outside the app; DE + EN strings; no tracking parameters
+- [x] (2026-11-21) freiversum card "Sternwarte" (concept freiversum.de/docs/app-fuss/, steps 1 + 2) replaces the row in
+      Settings: intro once when fully visible, tap sign, shooting star, UFO (three taps on PlanetFOSS, long press on the
+      sky, World UFO Day 2 July / 24 June), TalkBack as one unit, still with "Remove animations"
+- [ ] freiversum card: move into its own library `sternwarte` (concept step 3) once it has proven itself, with a sync
+      script for projekte.json; star data is copied by hand into `ui/freiversum/Sky.kt` until then
+- [ ] freiversum card on the Pixel 10: haptic ticks, TalkBack by ear, the UFO over Settings in light and dark
 - [x] Website parity, priority 4 (2026-11-01): weekly review (API `weekly`), hide sources/rubrics (on the phone), bundle
       languages (`bundle.langs`), donation link from the backend (API `meta`, off for now)
 - [x] Release with the weekly review once planetfoss.net serves `weekly` and `meta` (website deploy first) – released with v0.6.0

@@ -6,10 +6,24 @@ versions follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Changed
-- The freiversum mark in Settings → About plays the constellation of the websites once when the row comes into view
-  and when it is pressed: the line draws itself, the four stars light up one after the other and breathe, a comet
-  runs along the line and back, and two radar pulses go out from the violet star, PlanetFOSS. After about five
-  seconds it rests as before. With "Remove animations" switched on, the mark stays still.
+- Settings end with a small, always dark card of the freiversum night sky instead of the quiet row "A star in the
+  freiversum": a cut-out of the star map of freiversum.de with the four projects, PlanetFOSS (FV 2) marked with a
+  double ring, a short text and the button "Visit freiversum.de" (opens outside the app, without tracking
+  parameters). When the card comes fully into view for the first time after opening Settings, and from its play
+  icon, it plays once for about four seconds: the line draws itself, the stars light up one after the other, a radar
+  beam sweeps over the sky, two pulses go out from PlanetFOSS and a comet runs along the constellation. Then it
+  stands still. TalkBack reads the card as one item with the link as its action.
+- Two fonts of freiversum.de for the card only: Oxanium for its title and Atkinson Hyperlegible Mono for its labels
+  (Latin, one weight each, 34 KB together, SIL OFL 1.1).
+
+### Added
+- The card can be played with: a tapped star flares and shows its name and role for a moment, a sideways swipe over
+  the sky draws a shooting star, and tapping PlanetFOSS three times quickly calls the UFO of freiversum.de. A long
+  press on the sky sends three radar pulses from the finger, and the UFO comes to that spot, hovers, blinks and leaves
+  with its hyperdrive. It flies over the whole Settings screen and lets every touch through; no sound.
+- World UFO Day: on 2 July and on 24 June (the phone's date) the UFO comes by on its own each time Settings are opened.
+- With "Remove animations" switched on in Android, the card shows its still picture right away, a tapped star shows
+  its sign without flaring, and neither the shooting star nor the UFO appears.
 
 ## [0.6.5] - 2026-11-20
 New supernovas show up the moment they ignite, like on planetfoss.net; the notification still waits half an hour.

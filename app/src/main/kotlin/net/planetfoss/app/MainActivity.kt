@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
     @Inject lateinit var seen: SeenRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        debugExtras(intent)
         intent = sanitize(intent)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -49,7 +50,23 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        debugExtras(intent)
         if (intent.data?.scheme == "planetfoss") newIntents.trySend(sanitize(intent))
+    }
+
+    /**
+     * Debug builds only: `--ez ufo_day true` simulates World UFO Day (2 July) for Settings, `false` returns to
+     * the real date. Release builds never read the extra (BuildConfig.DEBUG is a constant, R8 drops the code).
+     */
+    private fun debugExtras(incoming: Intent) {
+        if (!BuildConfig.DEBUG || !incoming.hasExtra(EXTRA_UFO_DAY)) return
+        net.planetfoss.app.ui.freiversum.UfoDay.clock =
+            if (incoming.getBooleanExtra(EXTRA_UFO_DAY, false)) net.planetfoss.app.ui.freiversum.UfoDay.simulatedClock()
+            else java.time.Clock.systemDefaultZone()
+    }
+
+    private companion object {
+        const val EXTRA_UFO_DAY = "ufo_day"
     }
 
     /**

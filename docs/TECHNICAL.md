@@ -57,3 +57,10 @@ adb reverse tcp:8099 tcp:8099          # phone over USB and emulator alike
 ./gradlew :app:installDebug -PPLANETFOSS_DEBUG_URL=http://localhost:8099/
 ```
 
+World UFO Day (2 July and 24 June: the UFO of freiversum.de flies over Settings each time
+they are opened) can be simulated in debug builds; release builds ignore the extra:
+
+```sh
+adb shell am start -S -n net.planetfoss.app.debug/net.planetfoss.app.MainActivity --ez ufo_day true
+```
+

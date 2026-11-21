@@ -3,6 +3,8 @@ Fonts in this app (subset to Latin with fontTools, converted to TTF):
 Space Grotesk - Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)
 Inter 4.1 - Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)
 JetBrains Mono 2.304 - Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)
+Oxanium (SemiBold instance) - Copyright 2019 The Oxanium Project Authors (https://github.com/sevmeyer/oxanium)
+Atkinson Hyperlegible Mono (Regular instance) - Copyright 2020-2024 The Atkinson Hyperlegible Mono Project Authors (https://github.com/googlefonts/atkinson-hyperlegible-next-mono)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

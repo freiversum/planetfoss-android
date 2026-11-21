@@ -99,9 +99,15 @@
     <string name="theme_light">Hell</string>
     <string name="theme_dark">Dunkel</string>
     <string name="privacy_policy">Datenschutzerklärung</string>
-    <!-- Settings → About: link to freiversum, the umbrella of the independent projects -->
+    <!-- Settings, last block: the freiversum card ("Sternwarte"), the umbrella of the independent projects -->
     <string name="freiversum_title">Ein Stern im freiversum</string>
-    <string name="freiversum_text">Unabhängige Projekte rund um Linux und FOSS</string>
+    <string name="freiversum_text">PlanetFOSS ist einer von vier Sternen im freiversum: unabhängige Projekte rund um Linux und Open Source, ohne Tracking und ohne Verlag.</string>
+    <string name="freiversum_visit">freiversum.de ansehen</string>
+    <string name="freiversum_play">Abspielen</string>
+    <string name="freiversum_role_lui">Das Blog</string>
+    <string name="freiversum_role_pf">Die Nachrichten</string>
+    <string name="freiversum_role_pulse">Die Analyse</string>
+    <string name="freiversum_role_ts">Die Suche</string>
     <string name="in_orbit">Im Orbit</string>
     <string name="rising">Im Aufwind</string>
     <string name="logbook_marker">Logbuch erschienen</string>

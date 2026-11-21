@@ -101,9 +101,17 @@
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="privacy_policy">Privacy policy</string>
-    <!-- Settings → About: link to freiversum, the umbrella of the independent projects -->
+    <!-- Settings, last block: the freiversum card ("Sternwarte"), the umbrella of the independent projects -->
+    <string name="freiversum_section" translatable="false">freiversum</string>
     <string name="freiversum_title">A star in the freiversum</string>
-    <string name="freiversum_text">Independent projects around Linux and FOSS</string>
+    <string name="freiversum_text">PlanetFOSS is one of four stars in the freiversum: independent projects around Linux and open source, without tracking and without a publisher.</string>
+    <string name="freiversum_visit">Visit freiversum.de</string>
+    <string name="freiversum_play">Play</string>
+    <!-- roles of the four stars, as on freiversum.de -->
+    <string name="freiversum_role_lui">The blog</string>
+    <string name="freiversum_role_pf">The news</string>
+    <string name="freiversum_role_pulse">The analysis</string>
+    <string name="freiversum_role_ts">The search</string>
     <string name="in_orbit">In orbit</string>
     <string name="rising">Rising</string>
     <string name="logbook_marker">Logbook published</string>
