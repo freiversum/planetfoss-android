@@ -3,7 +3,15 @@
 
 package net.planetfoss.app.ui.freiversum
 
+import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.SoundPool
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
+import androidx.compose.runtime.DisposableEffect
+import net.planetfoss.app.R
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -51,7 +59,9 @@ import kotlin.random.Random
  * depth, swinging paths, brake thrusters, wobble and tilt), and the same escape: a short shake, then hyperdrive
  * towards the reader and out of the picture, with a light trail and speed lines. Obstacles, beaming and sprints
  * of the website are left out; the flight is short (about 6–8 s): it appears from the side or out of the depth,
- * visits two or three places, hovers, shakes and leaves. No sound.
+ * visits two or three places, hovers, shakes and leaves. The hyperdrive is heard like on the website (the same
+ * synthesis, rendered once to res/raw/ufo_hyperdrive.ogg), but only when the phone rings normally (not silent,
+ * not vibrate).
  *
  * Everything is in map units like on the website; one unit is [UNIT_DP] dp. The layer draws above the screen,
  * lets every touch through and only exists while something flies. With "Remove animations" nothing comes.
@@ -116,6 +126,9 @@ internal class UfoController(private val still: Boolean) {
 
     private fun ink(c: Color): Color = if (onLight) lerp(c, OnLightInk, 0.62f).copy(alpha = c.alpha) else c
     private var pendingLure: Offset? = null   // root px
+
+    /** Called once when the UFO starts its escape (the shake before the hyperdrive). */
+    var onEscape: (() -> Unit)? = null
 
     /** The UFO comes by on its own (World UFO Day, the own star tapped three times). */
     fun visit() {
@@ -287,6 +300,7 @@ internal class UfoController(private val still: Boolean) {
         if (ry > 0.01f) out = min(out, (h - o.y) / ry) else if (ry < -0.01f) out = min(out, -o.y / ry)
         val reach = max(0f, out) + 120f * max(1f, o.gr)
         s.escape = Escape(time, o.x, o.y, rx, ry, o.gr, if (middle) rnd(0.06f, 0.2f) else rnd(0.85f, 1.15f), reach, rnd(0.7f, 1.4f))
+        onEscape?.invoke()
     }
 
     // ---------- drawing ----------
@@ -502,8 +516,61 @@ internal class UfoController(private val still: Boolean) {
 @Composable
 internal fun rememberUfo(): UfoController {
     val context = LocalContext.current
-    return remember {
+    val ufo = remember {
         UfoController(still = Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f)
+    }
+    DisposableEffect(ufo) {
+        val sound = HyperdriveSound(context)
+        // the file jumps at 0.40 s (0.05 s lead + 0.35 s charge); start it so the jump meets the end of the shake
+        ufo.onEscape = { sound.play(delayMs = ((SHAKE_S - 0.40f) * 1000).toLong().coerceAtLeast(0)) }
+        onDispose { ufo.onEscape = null; sound.release() }
+    }
+    return ufo
+}
+
+/**
+ * The hyperdrive sound of freiversum.de (src/lib/hyperantrieb.ts, rendered in docs/ufo-sound/, 1.7 s, 9.6 KB).
+ * Only played when the ringer is normal; silent and vibrate keep the UFO quiet. Loaded lazily on the first escape.
+ */
+private class HyperdriveSound(context: Context) {
+    private val app = context.applicationContext
+    private val audio = app.getSystemService(AudioManager::class.java)
+    private var pool: SoundPool? = null
+    private var id = 0
+    private var ready = false
+    private var playWhenReady = false
+    private val handler = Handler(Looper.getMainLooper())
+
+    fun play(delayMs: Long) {
+        if (audio?.ringerMode != AudioManager.RINGER_MODE_NORMAL) return
+        handler.postDelayed({ start() }, delayMs)
+    }
+
+    private fun start() {
+        val p = pool ?: SoundPool.Builder()
+            .setMaxStreams(1)
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build(),
+            )
+            .build()
+            .also { sp ->
+                pool = sp
+                sp.setOnLoadCompleteListener { _, _, status ->
+                    ready = status == 0
+                    if (ready && playWhenReady) { playWhenReady = false; sp.play(id, 0.8f, 0.8f, 1, 0, 1f) }
+                }
+                id = sp.load(app, R.raw.ufo_hyperdrive, 1)
+            }
+        if (ready) p.play(id, 0.8f, 0.8f, 1, 0, 1f) else playWhenReady = true
+    }
+
+    fun release() {
+        handler.removeCallbacksAndMessages(null)
+        pool?.release()
+        pool = null
     }
 }
 

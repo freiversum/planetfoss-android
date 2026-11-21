@@ -20,7 +20,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 - The card can be played with: a tapped star flares and shows its name and role for a moment, a sideways swipe over
   the sky draws a shooting star, and tapping PlanetFOSS three times quickly calls the UFO of freiversum.de. A long
   press on the sky sends three radar pulses from the finger, and the UFO comes to that spot, hovers, blinks and leaves
-  with its hyperdrive. It flies over the whole Settings screen and lets every touch through; no sound.
+  with its hyperdrive. It flies over the whole Settings screen and lets every touch through. Its hyperdrive is heard
+  like on freiversum.de (1.7 s, the same synthesis), only when the phone rings normally – never in silent or vibrate
+  mode.
 - World UFO Day: on 2 July and on 24 June (the phone's date) the UFO comes by on its own each time Settings are opened.
 - With "Remove animations" switched on in Android, the card shows its still picture right away, a tapped star shows
   its sign without flaring, and neither the shooting star nor the UFO appears.
