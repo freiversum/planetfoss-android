@@ -132,7 +132,9 @@
       Linkwarden, Readeck; checked against local containers of all four (`docs/10-bookmark-services.md`, "Testing")
 - [x] Bookmark service on the Pixel 10 with Christoph's own Karakeep (2026-11-21, debug build from intern): connected,
       a saved article arrived with the tag "planetfoss" within seconds
-- [ ] Bookmark service on the Pixel 10: offline save, failed + "Try again", English (all checked in the emulator only)
+- [x] Bookmark service on the Pixel 10, 2026-11-21: saved in airplane mode → "on its way" note, delivered 9 s after
+      airplane mode ended; English UI in the dark design checked
+- [ ] Bookmark service on the Pixel 10: failed + "Try again" (needs a broken token or server; checked in the emulator)
 - [ ] Bookmark service phase 2: wallabag (OAuth2) and Nextcloud Bookmarks (Login Flow v2)
 - [ ] Bookmark service: plain HTTP for LAN instances (network security config allows HTTPS only today) and
       self-signed certificates – only if readers ask
