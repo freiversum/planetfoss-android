@@ -188,3 +188,69 @@ so F-Droid needs the full history (default for its build server).
   `dist/planetfoss-0.6.5.aab` (SHA-256 `8ab8daf43beaab19e5c08ec9905e5e2ab4c54d129ccbe411e4bf171f40211961`) for the
   closed test (Alpha) on Google Play as release "0.6.5 (188)", sent for review the same evening (uploaded per Claude in
   Chrome; Play's only warning again: no native debug symbols). Needs planetfoss.net with `pending=1` (live 2026-11-20).
+
+## Next release: 0.6.6 (planned 2026-11-26, Google Play)
+
+Collected 2026-11-21. Everything since v0.6.5 is in `CHANGELOG.md` under `[Unreleased]`; the in-app "What is new"
+entry (0.6.6, dated 2026-11-26) and its strings are already in. On the day:
+
+1. Last look at `[Unreleased]` for anything added after 2026-11-21; then heading `## [0.6.6] - 2026-11-26`
+   (drop the "Planned as" line).
+2. The store changelog files are named after the versionCode, which is only known at the release commit
+   (commits on `main` + 140): create `fastlane/metadata/android/{de-DE,en-US}/changelogs/<versionCode>.txt` with the
+   texts below in the same commit as the changelog (as for 0.6.5: "Changelog and store texts", then "Release 0.6.6"),
+   and check the number with `git rev-list --count HEAD` + 140 after the release commit. If the "What is new" date
+   is not 2026-11-26 any more, change it in `WhatsNewScreen.kt`.
+3. Google Play, besides the bundle:
+   - **Permissions:** new runtime permission "Nearby devices" (`ACCESS_LOCAL_NETWORK`, Android 17), only asked for a
+     bookmark service in the home network. No Play declaration form is known for it; check what the console says.
+   - **Data safety:** the bookmark service sends the address and title of saved articles to a server the user
+     entered, never to planetfoss.net or the developer. Check whether the form wants it listed (Google counts data
+     sent to the user's own chosen service on the user's action differently from collection); decide in the console.
+4. GitHub release (first line for users, `lui:` comments for linuxundich.de), draft below.
+5. Tag `v0.6.6` on `main`, build from the tag on tinytin, then `intern` gets `main` merged as usual.
+
+Tested before collecting: bookmark service end to end against Christoph's own Karakeep on the Pixel 10 (also saved in
+airplane mode and delivered afterwards, English UI); offline behaviour on the Pixel 10 and the emulator. Not yet on
+the phone: a failed send with "Try again" (emulator only).
+
+### Store texts (Google Play "What's new" and F-Droid, max. 500 characters each)
+
+de-DE:
+
+```text
+- Gespeichertes auf Wunsch auch im eigenen Lesezeichendienst: Karakeep, linkding, Linkwarden oder Readeck
+- Offline: Ist das Netz wieder da, lädt die App von selbst neu; der Hinweis sagt, wie alt der Stand ist
+- Entdecken, Themen und Quellen zeigen offline den letzten Stand statt einer leeren Seite
+- Die Einstellungen enden mit dem Nachthimmel von freiversum
+```
+
+en-US:
+
+```text
+- Saved articles can also go to your own bookmark service: Karakeep, linkding, Linkwarden or Readeck
+- Offline: back online, the app reloads by itself; the hint says how old the shown state is
+- Discover, topics and sources show the last loaded state offline instead of an empty page
+- Settings end with the night sky of freiversum
+```
+
+### GitHub release notes (draft)
+
+```markdown
+PlanetFOSS 0.6.6 can send saved articles to your own bookmark service and copes better without a connection.
+
+### Added
+- Bookmark service: Karakeep, linkding, Linkwarden or Readeck (Settings → Saved → Bookmark service). Saved articles
+  are sent from the phone directly to your server; planetfoss.net never sees the token or the bookmarks.
+- The freiversum night sky at the end of Settings, with a few things to discover.
+
+### Changed
+- Back online, every "No connection" screen reloads by itself.
+- The offline hint says how old the shown state is.
+- Discover, topics and sources show the last loaded state offline.
+
+Install: `planetfoss-0.6.6.apk` below (Android 14 or newer), or Google Play (closed test).
+
+<!-- lui:de PlanetFOSS 0.6.6 schickt Gespeichertes auf Wunsch an den eigenen Lesezeichendienst und kommt besser ohne Netz zurecht. -->
+<!-- lui:en PlanetFOSS 0.6.6 sends saved articles to your own bookmark service and copes better without a connection. -->
+```

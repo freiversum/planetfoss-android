@@ -592,6 +592,11 @@
     <string name="whatsnew_new">Neu</string>
     <string name="whatsnew_better">Besser</string>
     <string name="whatsnew_fixed">Behoben</string>
+    <string name="whatsnew_066_title">Dein eigener Lesezeichendienst</string>
+    <string name="whatsnew_066_1">Gespeichertes landet auf Wunsch auch in deinem Karakeep, linkding, Linkwarden oder Readeck: Einstellungen → Gespeichert → Lesezeichendienst.</string>
+    <string name="whatsnew_066_2">Ist das Netz wieder da, lädt die App von selbst neu, und der Offline-Hinweis sagt, wie alt der Stand ist.</string>
+    <string name="whatsnew_066_3">Entdecken, Themen und Quellen zeigen offline den letzten Stand statt einer leeren Seite.</string>
+    <string name="whatsnew_066_4">Die Einstellungen enden mit dem Nachthimmel von freiversum – tippe auf die Sterne oder ruf das UFO.</string>
     <string name="whatsnew_065_title">Supernovas ab dem ersten Moment</string>
     <string name="whatsnew_065_1">Neue Supernovas erscheinen sofort beim Zünden, wie auf planetfoss.net. Die Meldung folgt eine halbe Stunde später.</string>
     <string name="whatsnew_065_2">Unter Einstellungen → Über führt ein Link zu freiversum, dem Dach von PlanetFOSS und seinen Schwesterprojekten.</string>

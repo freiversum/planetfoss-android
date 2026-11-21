@@ -5,22 +5,7 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Changed
-- Offline, the app catches up by itself: as soon as the phone has a working connection again, every screen that says
-  "No connection" loads again – no need to tap "Try again".
-- The hint over the last loaded state says how old it is: "No connection to PlanetFOSS. Showing what was loaded at
-  14:05." (with the date when it is from another day).
-- Discover, the topic directory and the source directory no longer stay empty offline: they show the last answer the
-  phone received, with the same hint.
-- Settings end with a small, always dark card of the freiversum night sky instead of the quiet row "A star in the
-  freiversum": a cut-out of the star map of freiversum.de with the four projects, PlanetFOSS (FV 2) marked with a
-  double ring, a short text and the button "Visit freiversum.de" (opens outside the app, without tracking
-  parameters). When the card comes fully into view for the first time after opening Settings, and from its play
-  icon, it plays once for about four seconds: the line draws itself, the stars light up one after the other, a radar
-  beam sweeps over the sky, two pulses go out from PlanetFOSS and a comet runs along the constellation. Then it
-  stands still. TalkBack reads the card as one item with the link as its action.
-- Two fonts of freiversum.de for the card only: Oxanium for its title and Atkinson Hyperlegible Mono for its labels
-  (Latin, one weight each, 34 KB together, SIL OFL 1.1).
+Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-release.md`, "Next release").
 
 ### Added
 - Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
@@ -31,6 +16,13 @@ versions follow [Semantic Versioning](https://semver.org/).
   again". The app talks to your service directly, HTTPS only; the token stays encrypted on the phone and is not in the
   export file. Removing an article from Saved leaves it in your service; imported files are not sent. For a service in
   the home network, Android 17 and later first ask for the "Nearby devices" permission, which covers the local network.
+- Settings end with a small, always dark card of the freiversum night sky instead of the quiet row "A star in the
+  freiversum": a cut-out of the star map of freiversum.de with the four projects, PlanetFOSS (FV 2) marked with a
+  double ring, a short text and the button "Visit freiversum.de" (opens outside the app, without tracking
+  parameters). When the card comes fully into view for the first time after opening Settings, and from its play
+  icon, it plays once for about four seconds: the line draws itself, the stars light up one after the other, a radar
+  beam sweeps over the sky, two pulses go out from PlanetFOSS and a comet runs along the constellation. Then it
+  stands still. TalkBack reads the card as one item with the link as its action.
 - The card can be played with: a tapped star flares and shows its name and role for a moment, a sideways swipe over
   the sky draws a shooting star, and tapping PlanetFOSS three times quickly calls the UFO of freiversum.de. A long
   press on the sky sends three radar pulses from the finger, and the UFO comes to that spot, hovers, blinks and leaves
@@ -38,8 +30,22 @@ versions follow [Semantic Versioning](https://semver.org/).
   like on freiversum.de (1.7 s, the same synthesis), only when the phone rings normally – never in silent or vibrate
   mode.
 - World UFO Day: on 2 July and on 24 June (the phone's date) the UFO comes by on its own each time Settings are opened.
-- With "Remove animations" switched on in Android, the card shows its still picture right away, a tapped star shows
-  its sign without flaring, and neither the shooting star nor the UFO appears.
+
+### Changed
+- Offline, the app catches up by itself: as soon as the phone has a working connection again, every screen that says
+  "No connection" loads again – no need to tap "Try again".
+- The hint over the last loaded state says how old it is: "No connection to PlanetFOSS. Showing what was loaded at
+  14:05." (with the date when it is from another day).
+- Discover, the topic directory and the source directory no longer stay empty offline: they show the last answer the
+  phone received, with the same hint.
+- With "Remove animations" switched on in Android, the freiversum card shows its still picture right away, a tapped
+  star shows its sign without flaring, and neither the shooting star nor the UFO appears.
+- Two fonts of freiversum.de for the card only: Oxanium for its title and Atkinson Hyperlegible Mono for its labels
+  (Latin, one weight each, 34 KB together, SIL OFL 1.1).
+
+### Permissions
+- New: "Nearby devices" (`ACCESS_LOCAL_NETWORK`, Android 17+), asked for only when a bookmark service in the home
+  network is connected. `ACCESS_NETWORK_STATE` is now declared by the app itself (WorkManager brought it in before).
 
 ## [0.6.5] - 2026-11-20
 New supernovas show up the moment they ignite, like on planetfoss.net; the notification still waits half an hour.

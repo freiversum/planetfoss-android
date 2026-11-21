@@ -600,6 +600,11 @@
     <string name="whatsnew_new">New</string>
     <string name="whatsnew_better">Better</string>
     <string name="whatsnew_fixed">Fixed</string>
+    <string name="whatsnew_066_title">Your own bookmark service</string>
+    <string name="whatsnew_066_1">Saved articles can also go to your own Karakeep, linkding, Linkwarden or Readeck: Settings → Saved → Bookmark service.</string>
+    <string name="whatsnew_066_2">Back online, the app reloads by itself, and the offline hint says how old the shown state is.</string>
+    <string name="whatsnew_066_3">Discover, topics and sources show the last loaded state offline instead of an empty page.</string>
+    <string name="whatsnew_066_4">Settings end with the night sky of freiversum – tap the stars, or call the UFO.</string>
     <string name="whatsnew_065_title">Supernovas the moment they ignite</string>
     <string name="whatsnew_065_1">New supernovas show up as soon as they ignite, like on planetfoss.net. The notification follows half an hour later.</string>
     <string name="whatsnew_065_2">Settings → About links to freiversum, the home of PlanetFOSS and its sister projects.</string>
