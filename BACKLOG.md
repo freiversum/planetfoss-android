@@ -130,7 +130,9 @@
       Christoph decided on 2026-11-19 to leave it (the website's bot filter and country numbers need the address)
 - [x] Save to the reader's bookmark service when tapping the bookmark icon, phase 1 (2026-11-21): Karakeep, linkding,
       Linkwarden, Readeck; checked against local containers of all four (`docs/10-bookmark-services.md`, "Testing")
-- [ ] Bookmark service on the Pixel 10: set up, save, offline save, failed + "Try again", German and English
+- [x] Bookmark service on the Pixel 10 with Christoph's own Karakeep (2026-11-21, debug build from intern): connected,
+      a saved article arrived with the tag "planetfoss" within seconds
+- [ ] Bookmark service on the Pixel 10: offline save, failed + "Try again", English (all checked in the emulator only)
 - [ ] Bookmark service phase 2: wallabag (OAuth2) and Nextcloud Bookmarks (Login Flow v2)
 - [ ] Bookmark service: plain HTTP for LAN instances (network security config allows HTTPS only today) and
       self-signed certificates – only if readers ask
