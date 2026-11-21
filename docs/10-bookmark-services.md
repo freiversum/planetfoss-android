@@ -1,6 +1,7 @@
 # Idea: save to a bookmark service
 
-Status: analysis only (2026-11-21), nothing built. Tracked in `BACKLOG.md`.
+Status: analysis only (2026-11-21), nothing built. Website part: see
+"Website (planetfoss.net)" below. Tracked in `BACKLOG.md`.
 
 ## Goal
 
@@ -78,11 +79,74 @@ building.
   host list for this feature.
 - F-Droid: plain OkHttp/Ktor calls, no SDKs, no proprietary dependencies.
 
+## Website (planetfoss.net)
+
+Added 2026-11-21. Question: does the website need its own way to send articles
+to a bookmark service, or do the services' browser extensions cover it?
+
+### What the website does today
+
+- Every card and every report in a bundle links **directly to the source
+  article** (`templates/site/_card.php`, `bundle.php`). No intermediate
+  planetfoss.net article page exists.
+- The star on a card is a public vote, not a personal "saved" list. No
+  accounts, no cookies; per-visitor settings live in `localStorage` only.
+
+### Are browser extensions enough?
+
+Mostly yes, for desktop browsers:
+
+- **Click, then save:** the click opens the real article; the extension's
+  toolbar button saves the source URL with its own title and content. This
+  is the normal case and needs nothing from us.
+- **Save without opening:** several extensions add a context-menu entry for
+  links (right-click on a headline). That saves the source URL straight from
+  planetfoss.net. Which extensions offer it (wallabagger, Karakeep, Linkwarden,
+  linkding) must be checked per version before we document it.
+- **Pitfall:** pressing the toolbar button while on planetfoss.net saves the
+  planetfoss.net page (home page, topic, bundle), not an article. Nothing to
+  fix there; it is the expected behaviour of the extension.
+
+Where extensions do not help:
+
+- **Mobile browsers.** Chrome on Android has no extensions, Firefox for
+  Android only some. Mobile readers can only long-press, copy the link and
+  switch apps.
+- Readers who do not want an extension installed.
+
+### Options, cheapest first
+
+1. **Nothing.** Clicks go to the source, extensions do the rest.
+2. **Share button via the Web Share API** (`navigator.share({url, title})`),
+   shown only where the browser supports it (mostly mobile). On Android it
+   opens the same system share sheet as the app, which reaches every bookmark
+   service with an Android app (Karakeep, Readeck, wallabag, linkding via
+   third-party apps). About 20 lines in `site.js`, no server change, no data
+   leaves the page. Shares the source URL, not planetfoss.net.
+3. **"Save to …" link templates, stored in `localStorage`.** The reader enters
+   their instance address once (no token); the card gets a link to the
+   service's own "add bookmark" page, e.g. linkding
+   `/bookmarks/new?url=…&title=…&auto_close`, wallabag
+   `/bookmarklet?url=…`. The reader is logged in to their service in the same
+   browser, so no API and no token. Only works for services with such an
+   add-page URL (Karakeep, Linkwarden and Readeck: unclear, check). More UI
+   (settings panel) for a small audience.
+4. **API calls with tokens from the website.** Rejected: tokens would sit in
+   `localStorage` of a third-party site or on our server, CORS on the
+   reader's instance would block most calls, and it breaks "planetfoss.net
+   never sees bookmarks".
+
+### Recommendation
+
+Not needed as a separate feature. If anything, option 2 (Web Share button),
+because it closes the only real gap (mobile browsers) at almost no cost and
+matches what the app does. Option 3 only if readers ask for it. Optional: one
+sentence on the "About" page that extensions can save headlines via
+right-click, once checked which ones do.
+
 ## Open questions
 
 - Is one service at a time enough, or do some readers want two (e.g. Karakeep
   for bookmarks, wallabag for reading)?
-- Should "save" on the website side (planetfoss.net) get the same option?
-  Probably not: it would need server-side tokens.
 - Send the planetfoss.net discussion/summary as a note (Karakeep, linkding and
   Linkwarden have description fields)?
