@@ -101,7 +101,9 @@ Google service involved. Notifications are off until you turn them on.
 
 Articles open in your phone's browser, or in the app's own browser with
 optional protection from third-party trackers. The bookmark keeps posts under
-*Saved*, also offline, and the collection can be exported and imported.
+*Saved*, also offline, and the collection can be exported and imported. If you
+run Karakeep, linkding, Linkwarden or Readeck, every saved post can also go
+straight to your own bookmark service.
 
 ### On your home screen
 

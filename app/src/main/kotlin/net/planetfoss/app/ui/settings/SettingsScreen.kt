@@ -84,7 +84,10 @@ class SettingsViewModel @Inject constructor(
     private val feed: FeedRepository,
     private val notifier: NovaNotifier,
     private val saved: net.planetfoss.app.data.SavedRepository,
+    bookmarkRepo: net.planetfoss.app.data.bookmarks.BookmarkRepository,
 ) : ViewModel() {
+    val bookmarks = bookmarkRepo.config.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), net.planetfoss.app.data.bookmarks.BookmarkConfig())
+
     /** Saved articles to a file the user picked (Storage Access Framework); the result as a short message. */
     fun exportSaved(context: android.content.Context, uri: android.net.Uri) {
         viewModelScope.launch {
@@ -204,7 +207,8 @@ internal fun applyThemeMode(context: android.content.Context, mode: ThemeMode) {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> Unit = {}, onWhatsNew: () -> Unit = {}, vm: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> Unit = {}, onWhatsNew: () -> Unit = {}, onBookmarks: () -> Unit = {}, vm: SettingsViewModel = hiltViewModel()) {
+    val bookmarks by vm.bookmarks.collectAsStateWithLifecycle()
     val settings by vm.settings.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var systemAllows by remember { mutableStateOf(vm.systemAllows()) }
@@ -340,6 +344,17 @@ fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> U
 
                     // saved articles: the app has Android's backup off, so a file is the way to keep them or move them
                     Section(stringResource(R.string.tab_saved))
+                    // the reader's own bookmark service (Karakeep, linkding …): its own page, a summary here
+                    ListItem(
+                        headlineContent = { Text(stringResource(R.string.bookmark_title)) },
+                        supportingContent = {
+                            Text(
+                                bookmarks.takeIf { it.active }?.let { it.service!!.label + " · " + it.address.removePrefix("https://").removeSuffix("/") }
+                                    ?: stringResource(R.string.bookmark_off),
+                            )
+                        },
+                        modifier = Modifier.clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onBookmarks),
+                    )
                     val exporter = androidx.activity.compose.rememberLauncherForActivityResult(
                         androidx.activity.result.contract.ActivityResultContracts.CreateDocument("application/json"),
                     ) { uri -> if (uri != null) vm.exportSaved(context, uri) }
@@ -494,7 +509,7 @@ internal fun SwitchItem(title: String, explain: String, checked: Boolean, onChan
 }
 
 @Composable
-private fun Section(title: String, first: Boolean = false) {
+internal fun Section(title: String, first: Boolean = false) {
     Text(
         title,
         style = MaterialTheme.typography.titleSmall,

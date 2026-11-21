@@ -84,6 +84,18 @@ class SavedAndMigrationTest {
         }
     }
 
+    @Test
+    fun migrationToVersion6KeepsSavedItemsAsNotSent() {
+        helper.createDatabase("m6.db", 5).apply {
+            execSQL("INSERT INTO saved_item (id, json, savedAt) VALUES (7, '{}', 1)")
+            close()
+        }
+        helper.runMigrationsAndValidate("m6.db", 6, true).apply {
+            query("SELECT remote FROM saved_item WHERE id = 7").use { c -> assertTrue(c.moveToFirst() && c.getInt(0) == 0) }
+            close()
+        }
+    }
+
     /** 19.11.: the English sister of a post was announced; the German original reached planetfoss.net later, with an older time. */
     @Test
     fun followCheckAnnouncesAPostThatArrivesLateWithAnOlderTime() {

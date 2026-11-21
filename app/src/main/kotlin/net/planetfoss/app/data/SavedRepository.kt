@@ -15,12 +15,21 @@ import java.time.Clock
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Saved articles, local only. Nothing about them is sent anywhere. */
+/** Told about every article saved by the reader (not by an import): the bookmark service sends it on. */
+fun interface SaveHook {
+    suspend fun onSaved(id: Long)
+}
+
+/**
+ * Saved articles, kept on the phone. Nothing about them goes to planetfoss.net; only when the reader has set up their
+ * own bookmark service does a newly saved article also go there ([BookmarkRepository]).
+ */
 @Singleton
 class SavedRepository @Inject constructor(
     private val dao: SavedDao,
     private val json: Json,
     private val clock: Clock,
+    private val hook: SaveHook = SaveHook {},
 ) {
     val items: Flow<List<Item>> = dao.observeAll().map { rows ->
         rows.mapNotNull { runCatching { json.decodeFromString(Item.serializer(), it) }.getOrNull() }
@@ -28,7 +37,11 @@ class SavedRepository @Inject constructor(
 
     val ids: Flow<Set<Long>> = dao.observeIds().map { it.toSet() }
 
-    suspend fun save(item: Item) = dao.insert(SavedItemEntity(item.id, json.encodeToString(Item.serializer(), item), clock.millis()))
+    /** Save on the phone. [send]: also to the reader's bookmark service, if one is set up (not for an import). */
+    suspend fun save(item: Item, send: Boolean = true) {
+        dao.insert(SavedItemEntity(item.id, json.encodeToString(Item.serializer(), item), clock.millis()))
+        if (send) hook.onSaved(item.id)
+    }
 
     suspend fun remove(id: Long) = dao.delete(id)
 
@@ -47,7 +60,7 @@ class SavedRepository @Inject constructor(
         var added = 0
         for (item in file.items.reversed()) {
             if (dao.count(item.id) == 0) {
-                save(item)
+                save(item, send = false)
                 added++
             }
         }

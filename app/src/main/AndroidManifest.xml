@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" tools:node="remove" />
     <!-- Supernova notifications (asked for only when the user turns them on). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Android 17+: a bookmark service in the home network (asked for only when its address is a local one). -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
     <!-- Custom Tabs: find browsers that support them (Android 11+ package visibility). -->
     <queries>

@@ -1,7 +1,7 @@
 # Idea: save to a bookmark service
 
-Status: analysis only (2026-11-21), nothing built. Website part: see
-"Website (planetfoss.net)" below. Tracked in `BACKLOG.md`.
+Status: phase 1 built 2026-11-21 (Karakeep, linkding, Linkwarden, Readeck), see "Built" below. Website part:
+see "Website (planetfoss.net)". Tracked in `BACKLOG.md`.
 
 ## Goal
 
@@ -78,6 +78,53 @@ building.
 - Network security config must allow the reader's host; the app has no fixed
   host list for this feature.
 - F-Droid: plain OkHttp/Ktor calls, no SDKs, no proprietary dependencies.
+
+## Built (phase 1, 2026-11-21)
+
+- `core/…/bookmarks/BookmarkClient.kt`: one client, a table of path, header and field names per service.
+  `test()` is a read call that needs the token: Karakeep `GET api/v1/users/me`, linkding `GET api/user/profile/`,
+  Linkwarden `GET api/v1/tags`, Readeck `GET api/profile`. Answers sorted into ok / token / address / refused /
+  unreachable; only unreachable (IO, 408, 429, 5xx) is retried. A 2xx that is not JSON (a login page in front)
+  counts as wrong address. Karakeep tags go in a second call; if that fails the bookmark still counts as sent.
+- `app/…/data/bookmarks/`: `BookmarkRepository` (settings in the app's DataStore, token AES-GCM with an Android
+  Keystore key, `TokenCipher`), column `saved_item.remote` (Room 6: 0 none, 1 pending, 2 sent, 3 failed).
+  `SavedRepository.save()` calls the `SaveHook`; an import does not send.
+- `sync/BookmarkWork.kt`: one unique WorkManager job per article, network required, exponential backoff from one
+  minute, 8 attempts (about a day), then failed.
+- Settings → Saved → *Bookmark service* (`ui/settings/BookmarkServiceScreen.kt`): service, address, token; *Connect*
+  tests and stores only what worked; afterwards a summary with *Change* / *Disconnect* and the two tag switches.
+  The Saved tab shows a card "n on their way" / "n could not be sent" with *Try again*.
+- Android 17 (target SDK 37) blocks addresses in the home network without the runtime permission
+  `ACCESS_LOCAL_NETWORK` – found in the emulator on 2026-11-21: the app's uid could not even reach `10.0.2.2`, the
+  shell could. *Connect* resolves the host; private IPv4, link-local or ULA → asks for the permission first, a "no"
+  gets its own explanation. A public name with split DNS that resolves to a LAN address at home counts as local, too.
+- Decided: HTTPS only (the network security config forbids cleartext; LAN HTTP is a backlog item; debug builds
+  accept `http://10.0.2.2:…` for the test containers, like the fixture server), no user CAs,
+  one service at a time, one-way, the source URL is sent (not planetfoss.net), duplicates are the service's business
+  (linkding updates the entry, Karakeep answers 200 with the existing one, Linkwarden and Readeck add a second one).
+
+### Testing
+
+Unit tests: `BookmarkClientTest` (MockWebServer), `BookmarkRepositoryTest` (Robolectric), migration 5 → 6.
+
+Against real services, local containers (podman), checked 2026-11-21 with the then current images:
+
+```bash
+podman run -d --rm --name pf-linkding -p 127.0.0.1:19090:9090 -e LD_SUPERUSER_NAME=tester -e LD_SUPERUSER_PASSWORD=… docker.io/sissbruecker/linkding:latest
+podman run -d --rm --name pf-readeck -p 127.0.0.1:18000:8000 codeberg.org/readeck/readeck:latest
+podman run -d --rm --name pf-karakeep -p 127.0.0.1:13000:3000 -v pf-karakeep-data:/data -e DATA_DIR=/data -e NEXTAUTH_SECRET=… -e NEXTAUTH_URL=http://localhost:13000 ghcr.io/karakeep-app/karakeep:release
+# Linkwarden needs Postgres: a pod with postgres:16-alpine and ghcr.io/linkwarden/linkwarden:latest (DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL)
+```
+
+Users and tokens through each web UI (Readeck: `readeck user -u … -p …` in the container, then Profile › API Tokens;
+Linkwarden: register, then `POST /api/v1/session` gives a token that works like an access token). Then a file with
+one line per service, `<id> <base url> <token>`, and
+
+```bash
+./gradlew :core:test --tests '*BookmarkLiveTest*' -Pplanetfoss.bookmarks=<file>
+```
+
+tests, saves, and checks that a wrong token and a wrong path are told apart, for every line.
 
 ## Website (planetfoss.net)
 

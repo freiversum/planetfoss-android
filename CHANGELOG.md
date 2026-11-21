@@ -17,6 +17,14 @@ versions follow [Semantic Versioning](https://semver.org/).
   (Latin, one weight each, 34 KB together, SIL OFL 1.1).
 
 ### Added
+- Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
+  linkding, Linkwarden or Readeck with its address and an API token. "Connect" tries the service first and says what is
+  wrong (token, address, server not reachable). From then on, every article you save is sent there in the background,
+  with its own address and title and optionally the tags "planetfoss" and its topic and rubrics; without network it
+  waits and tries again for about a day. The Saved tab shows what is still on its way and what failed, with "Try
+  again". The app talks to your service directly, HTTPS only; the token stays encrypted on the phone and is not in the
+  export file. Removing an article from Saved leaves it in your service; imported files are not sent. For a service in
+  the home network, Android 17 and later first ask for the "Nearby devices" permission, which covers the local network.
 - The card can be played with: a tapped star flares and shows its name and role for a moment, a sideways swipe over
   the sky draws a shooting star, and tapping PlanetFOSS three times quickly calls the UFO of freiversum.de. A long
   press on the sky sends three radar pulses from the finger, and the UFO comes to that spot, hovers, blinks and leaves

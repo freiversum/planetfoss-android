@@ -128,5 +128,9 @@
 - [x] planetfoss.net: counting changes rolled out (commit 6817ef4, live 2026-11-19); a development build is no longer counted
 - [ ] Hosting provider: "store no IP addresses" is set for planetfoss.net but has no effect since the move of 2026-10-27;
       Christoph decided on 2026-11-19 to leave it (the website's bot filter and country numbers need the address)
-- [ ] Idea: also save to the reader's bookmark service when tapping the bookmark icon (Karakeep, linkding,
-      Linkwarden, Readeck first; wallabag and Nextcloud Bookmarks later). Analysis: `docs/10-bookmark-services.md`
+- [x] Save to the reader's bookmark service when tapping the bookmark icon, phase 1 (2026-11-21): Karakeep, linkding,
+      Linkwarden, Readeck; checked against local containers of all four (`docs/10-bookmark-services.md`, "Testing")
+- [ ] Bookmark service on the Pixel 10: set up, save, offline save, failed + "Try again", German and English
+- [ ] Bookmark service phase 2: wallabag (OAuth2) and Nextcloud Bookmarks (Login Flow v2)
+- [ ] Bookmark service: plain HTTP for LAN instances (network security config allows HTTPS only today) and
+      self-signed certificates – only if readers ask

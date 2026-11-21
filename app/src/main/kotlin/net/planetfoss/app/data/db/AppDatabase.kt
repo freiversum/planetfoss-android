@@ -54,7 +54,12 @@ data class SavedItemEntity(
     @PrimaryKey val id: Long,
     val json: String,
     val savedAt: Long,
+    /** How far it got to the reader's bookmark service (RemoteState); 0 = not sent, nothing to send. */
+    @ColumnInfo(defaultValue = "0") val remote: Int = 0,
 )
+
+/** One row of [SavedDao.observeRemoteCounts]. */
+data class RemoteCount(val remote: Int, val n: Int)
 
 /**
  * An item the user starred on planetfoss.net from the app, with the token that takes the star back
@@ -193,6 +198,21 @@ interface SavedDao {
 
     @Query("SELECT COUNT(*) FROM saved_item WHERE id = :id")
     suspend fun count(id: Long): Int
+
+    @Query("SELECT * FROM saved_item WHERE id = :id")
+    suspend fun get(id: Long): SavedItemEntity?
+
+    @Query("UPDATE saved_item SET remote = :state WHERE id = :id")
+    suspend fun setRemote(id: Long, state: Int)
+
+    @Query("UPDATE saved_item SET remote = :to WHERE remote = :from")
+    suspend fun setRemoteWhere(from: Int, to: Int)
+
+    @Query("SELECT id FROM saved_item WHERE remote = :state")
+    suspend fun idsWithRemote(state: Int): List<Long>
+
+    @Query("SELECT remote, COUNT(*) AS n FROM saved_item WHERE remote != 0 GROUP BY remote")
+    fun observeRemoteCounts(): Flow<List<RemoteCount>>
 }
 
 @Dao
@@ -253,9 +273,9 @@ interface FollowDao {
         ItemEntity::class, ListEntryEntity::class, ListMetaEntity::class, NovaListEntity::class, SeenSupernovaEntity::class,
         SavedItemEntity::class, MyStarEntity::class, FollowEntity::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4), AutoMigration(from = 4, to = 5)],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4), AutoMigration(from = 4, to = 5), AutoMigration(from = 5, to = 6)],
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun feedDao(): FeedDao

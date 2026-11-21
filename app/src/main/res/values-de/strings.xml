@@ -459,6 +459,52 @@
         <item quantity="one">%d Beitrag hinzugefügt</item>
         <item quantity="other">%d Beiträge hinzugefügt</item>
     </plurals>
+    <!-- Lesezeichendienst (docs/10-bookmark-services.md) -->
+    <string name="bookmark_title">Lesezeichendienst</string>
+    <string name="bookmark_off">Aus – Gespeichertes bleibt auf diesem Handy</string>
+    <string name="bookmark_intro">Jeder Beitrag, den du speicherst, landet zusätzlich in deinem eigenen Lesezeichendienst, etwa einem Karakeep auf deinem Server. Die App schickt ihn direkt von diesem Handy; planetfoss.net sieht weder Token noch Lesezeichen.</string>
+    <string name="bookmark_setup">Einrichten</string>
+    <string name="bookmark_service">Dienst</string>
+    <string name="bookmark_address">Adresse</string>
+    <string name="bookmark_address_hint">Die Adresse, mit der du den Dienst im Browser öffnest, nur HTTPS</string>
+    <string name="bookmark_address_invalid">Keine Webadresse oder kein HTTPS</string>
+    <string name="bookmark_token">API-Token</string>
+    <string name="bookmark_token_kept">Gespeichert – leer lassen, um es zu behalten</string>
+    <string name="bookmark_token_where_karakeep">In Karakeep: Settings › API Keys › New API key</string>
+    <string name="bookmark_token_where_linkding">In linkding: Settings › Integrations › REST API</string>
+    <string name="bookmark_token_where_linkwarden">In Linkwarden: Settings › Access Tokens › New Access Token</string>
+    <string name="bookmark_token_where_readeck">In Readeck: Profile › API Tokens › Create a new API token</string>
+    <string name="bookmark_connect">Verbinden</string>
+    <string name="bookmark_connecting">Verbinde …</string>
+    <string name="bookmark_connected">Verbunden</string>
+    <string name="bookmark_change">Ändern</string>
+    <string name="bookmark_disconnect">Trennen</string>
+    <string name="bookmark_tags">Schlagwörter</string>
+    <string name="bookmark_tag_planetfoss">Schlagwort „planetfoss“</string>
+    <string name="bookmark_tag_planetfoss_hint">So findest du alles wieder, was aus der App kommt</string>
+    <string name="bookmark_tag_topic">Thema und Rubriken als Schlagwörter</string>
+    <string name="bookmark_tag_topic_hint">Zum Beispiel „gnome“ oder „sicherheit“</string>
+    <string name="bookmark_good_to_know">Gut zu wissen</string>
+    <string name="bookmark_notes">Der Dienst bekommt Adresse und Titel des Beitrags selbst, keine Seite von planetfoss.net. Gesendet wird nur, was du ab jetzt speicherst. Entfernst du einen Beitrag aus „Gespeichert“, bleibt er in deinem Dienst. Das Token liegt verschlüsselt auf diesem Handy und steht nicht in der Exportdatei.</string>
+    <string name="bookmark_error_token">Der Dienst nimmt das Token nicht an. Prüfe es oder lege ein neues an.</string>
+    <string name="bookmark_error_address">Unter dieser Adresse antwortet kein %1$s. Prüfe Adresse und Dienst.</string>
+    <string name="bookmark_error_refused">Der Dienst hat die Anfrage abgelehnt (HTTP %1$d).</string>
+    <string name="bookmark_error_unreachable">Der Dienst ist nicht erreichbar. Stimmt die Adresse, läuft der Server?</string>
+    <string name="bookmark_error_host">Diese Adresse gibt es nicht (der Name ist unbekannt). Prüfe sie auf Tippfehler.</string>
+    <string name="bookmark_error_connect">Keine Verbindung zum Server. Läuft er, und erreicht dieses Handy ihn (VPN, Heimnetz)?</string>
+    <string name="bookmark_error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuch es später noch einmal.</string>
+    <string name="bookmark_error_certificate">Dem Zertifikat des Servers wird nicht vertraut. Die App braucht ein gültiges HTTPS-Zertifikat, etwa von Let’s Encrypt.</string>
+    <string name="bookmark_error_server">Der Server hat ein Problem (HTTP %1$d). Versuch es später noch einmal.</string>
+    <string name="bookmark_error_local_denied">Der Dienst steht in deinem Heimnetz, und Android lässt die App nur mit der Berechtigung „Geräte in der Nähe“ dorthin. Erlaube sie in Androids App-Einstellungen für PlanetFOSS und verbinde dann erneut.</string>
+    <string name="bookmark_retry">Erneut versuchen</string>
+    <plurals name="bookmark_pending">
+        <item quantity="one">%1$d Beitrag ist unterwegs zu %2$s</item>
+        <item quantity="other">%1$d Beiträge sind unterwegs zu %2$s</item>
+    </plurals>
+    <plurals name="bookmark_failed">
+        <item quantity="one">%1$d Beitrag konnte nicht an %2$s gehen</item>
+        <item quantity="other">%1$d Beiträge konnten nicht an %2$s gehen</item>
+    </plurals>
     <string name="disc_share">Weitersagen</string>
     <string name="since_today">heute, %s</string>
     <string name="since_yesterday">gestern, %s</string>

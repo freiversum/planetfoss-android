@@ -59,6 +59,13 @@ data*), has form autofill and Safe Browsing off and sends no WebView metrics.
   When you last opened the app (for the “New” markers) stays on the phone.
 - **Widgets, only while placed on the home screen:** the logbook widget asks for the newest logbook entry, the Radar
   widget for page 1 of what you follow, at most every two hours and marked as background.
+- **Your bookmark service, only while it is set up** (Settings → *Saved* → *Bookmark service*): every article you
+  save from then on goes from the phone straight to the address you entered (Karakeep, linkding, Linkwarden or
+  Readeck) – the article's own address, its title and the tags you chose, with your API token. planetfoss.net is not
+  involved and never sees the token, the address of your service or what you save there. The token is kept on the
+  phone, encrypted with a key in the Android Keystore, and is not part of the export file. HTTPS only. If the address
+  points into your home network, Android 17 and later ask you first for the “Nearby devices” permission, which covers devices in the local network;
+  the app uses it only for this service.
 - **Tracker protection, only while it is on:** the EasyPrivacy filter list from easylist.to,
   fetched weekly. Requests are checked on the phone; no visited address is sent anywhere.
 

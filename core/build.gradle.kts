@@ -32,5 +32,7 @@ dependencies {
 tasks.test {
     // optional: real filter lists for FilterSetTest.realLists (-Pplanetfoss.lists=<dir>)
     providers.gradleProperty("planetfoss.lists").orNull?.let { systemProperty("planetfoss.lists", it) }
+    // optional: real bookmark services for BookmarkLiveTest (-Pplanetfoss.bookmarks=<file>, see that test)
+    providers.gradleProperty("planetfoss.bookmarks").orNull?.let { systemProperty("planetfoss.bookmarks", it) }
     testLogging { showStandardStreams = true }
 }

@@ -467,6 +467,52 @@
         <item quantity="one">%d article added</item>
         <item quantity="other">%d articles added</item>
     </plurals>
+    <!-- bookmark service (docs/10-bookmark-services.md) -->
+    <string name="bookmark_title">Bookmark service</string>
+    <string name="bookmark_off">Off – saved articles stay on this phone</string>
+    <string name="bookmark_intro">Every article you save also goes to your own bookmark service, for example a Karakeep on your server. The app sends it directly from this phone; planetfoss.net never sees your token or your bookmarks.</string>
+    <string name="bookmark_setup">Set up</string>
+    <string name="bookmark_service">Service</string>
+    <string name="bookmark_address">Address</string>
+    <string name="bookmark_address_hint">The address you open the service with in the browser, HTTPS only</string>
+    <string name="bookmark_address_invalid">Not a web address, or not HTTPS</string>
+    <string name="bookmark_token">API token</string>
+    <string name="bookmark_token_kept">Stored – leave empty to keep it</string>
+    <string name="bookmark_token_where_karakeep">In Karakeep: Settings › API Keys › New API key</string>
+    <string name="bookmark_token_where_linkding">In linkding: Settings › Integrations › REST API</string>
+    <string name="bookmark_token_where_linkwarden">In Linkwarden: Settings › Access Tokens › New Access Token</string>
+    <string name="bookmark_token_where_readeck">In Readeck: Profile › API Tokens › Create a new API token</string>
+    <string name="bookmark_connect">Connect</string>
+    <string name="bookmark_connecting">Connecting …</string>
+    <string name="bookmark_connected">Connected</string>
+    <string name="bookmark_change">Change</string>
+    <string name="bookmark_disconnect">Disconnect</string>
+    <string name="bookmark_tags">Tags</string>
+    <string name="bookmark_tag_planetfoss">Tag “planetfoss”</string>
+    <string name="bookmark_tag_planetfoss_hint">So you find everything saved from the app</string>
+    <string name="bookmark_tag_topic">Topic and rubrics as tags</string>
+    <string name="bookmark_tag_topic_hint">For example “gnome” or “security”</string>
+    <string name="bookmark_good_to_know">Good to know</string>
+    <string name="bookmark_notes">The service gets the article’s own address and title, not a planetfoss.net page. Only articles saved from now on are sent. Removing one from Saved leaves it in your service. The token stays encrypted on this phone and is not part of the export file.</string>
+    <string name="bookmark_error_token">The service does not accept the token. Check it, or create a new one.</string>
+    <string name="bookmark_error_address">No %1$s answers at this address. Check the address and the service.</string>
+    <string name="bookmark_error_refused">The service refused the request (HTTP %1$d).</string>
+    <string name="bookmark_error_unreachable">The service cannot be reached. Is the address right and the server running?</string>
+    <string name="bookmark_error_host">This address does not exist (the name is unknown). Check it for typos.</string>
+    <string name="bookmark_error_connect">No connection to the server. Is it running, and can this phone reach it (VPN, home network)?</string>
+    <string name="bookmark_error_timeout">The server did not answer in time. Try again later.</string>
+    <string name="bookmark_error_certificate">The server’s certificate is not trusted. The app needs a valid HTTPS certificate, for example from Let’s Encrypt.</string>
+    <string name="bookmark_error_server">The server has a problem (HTTP %1$d). Try again later.</string>
+    <string name="bookmark_error_local_denied">The service is in your home network, and Android only lets the app reach it with the “Nearby devices” permission. Allow it in Android’s app settings for PlanetFOSS, then connect again.</string>
+    <string name="bookmark_retry">Try again</string>
+    <plurals name="bookmark_pending">
+        <item quantity="one">%1$d article on its way to %2$s</item>
+        <item quantity="other">%1$d articles on their way to %2$s</item>
+    </plurals>
+    <plurals name="bookmark_failed">
+        <item quantity="one">%1$d article could not be sent to %2$s</item>
+        <item quantity="other">%1$d articles could not be sent to %2$s</item>
+    </plurals>
     <string name="disc_share">Pass it on</string>
     <string name="since_today">today, %s</string>
     <string name="since_yesterday">yesterday, %s</string>
