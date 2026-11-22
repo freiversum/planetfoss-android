@@ -149,6 +149,10 @@ so F-Droid needs the full history (default for its build server).
 - Phone screenshots redone 2026-11-16 for the brand refresh (same eight views, DE + EN), status bar demo mode, the
   live-update chip and notification icons painted over, sides extended to 1220 x 2424. The tablet screenshots still show the
   old colours.
+- Phone screenshots redone 2026-11-22 as designed store images (`docs/store-screenshots/`, built by its `build.sh`): five
+  1080 x 1920 images per language with captions on a night-sky panorama, live content from many sources through
+  `tools/store-proxy.py` (article images only from linuxundich.de, OMG! Ubuntu and LinuxNews), captured in the emulator.
+  Not yet uploaded in the Play Console.
 - Privacy policy URL: https://planetfoss.net/datenschutz/ (has an Android app section; German only).
 - Done 2026-11-10: report and block for fediverse replies (UGC policy), decision D1 built, website deploy of `weekly`,
   `meta`, `logbook`, v0.6.0 tagged and the AAB rebuilt (versionCode 139).

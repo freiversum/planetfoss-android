@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>PlanetFOSS Store-Bilder</title>
+<!-- Play-Store-Bilder (2026-11-22): fünf Bilder 1080 x 1920 als ein Panorama, DE und EN.
+     Bauen: ./build.sh (rendert index.html und index.html?lang=en, schneidet die Einzelbilder) -->
+<style>
+@font-face{font-family:"Space Grotesk";font-weight:700;src:url(space-grotesk-bold.woff2)}
+@font-face{font-family:"Space Grotesk";font-weight:400;src:url(space-grotesk-regular.woff2)}
+@font-face{font-family:"JetBrains Mono";font-weight:700;src:url(jetbrains-mono-bold.woff2)}
+:root{--space950:#070A1A;--space900:#0B1026;--space800:#141A3A;--nebula300:#B3A4FF;--nebula500:#7C5CFF;
+  --nebula700:#4527D9;--aurora:#2DD4BF;--star:#FFC94D;--star-d:#F0A30A;--moon:#F5F6FB}
+html,body{margin:0;background:var(--space950)}
+.strip{position:relative;width:5400px;height:1920px;overflow:hidden;
+  background:linear-gradient(180deg,var(--space950) 0%,var(--space900) 55%,#120F33 100%)}
+#sky{position:absolute;inset:0}
+.slide{position:absolute;top:0;width:1080px;height:1920px;overflow:hidden}
+.slide+.slide{box-shadow:-1px 0 0 rgba(255,255,255,0)}
+.cap{position:absolute;left:96px;right:96px;top:120px}
+.kicker{font:700 34px/1 "JetBrains Mono",monospace;letter-spacing:.18em;color:var(--star);
+  display:flex;align-items:center;gap:18px;text-transform:uppercase}
+.kicker svg{width:34px;height:34px}
+h1{margin:26px 0 0;font:700 88px/1.04 "Space Grotesk",sans-serif;color:var(--moon);letter-spacing:-.015em}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--nebula300),var(--aurora));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.phone{position:absolute;width:800px;left:140px;top:550px;border-radius:84px;padding:16px;
+  background:linear-gradient(160deg,#2A3160,#11163A 60%);box-shadow:0 0 0 2px rgba(179,164,255,.25),
+  0 40px 120px rgba(124,92,255,.35),0 0 220px rgba(45,212,191,.12)}
+.phone img{display:block;width:100%;border-radius:70px}
+.brand{display:flex;align-items:center;gap:18px;margin-bottom:44px;font:700 52px/1 "Space Grotesk";color:var(--moon)}
+.brand img{height:62px}
+.brand b{background:linear-gradient(90deg,var(--nebula300),var(--aurora));-webkit-background-clip:text;background-clip:text;color:transparent}
+.s1 .cap{top:96px}
+.s1 .phone{top:620px}
+.duo .phone{width:600px}
+.duo .a{left:90px;top:650px;transform:rotate(-6deg)}
+.duo .b{left:400px;top:570px;transform:rotate(5deg)}
+</style>
+</head>
+<body>
+<div class="strip">
+  <svg id="sky" width="5400" height="1920" viewBox="0 0 5400 1920">
+    <defs>
+      <radialGradient id="neb" r=".5"><stop offset="0" stop-color="#7C5CFF" stop-opacity=".42"/><stop offset="1" stop-color="#7C5CFF" stop-opacity="0"/></radialGradient>
+      <radialGradient id="aur" r=".5"><stop offset="0" stop-color="#2DD4BF" stop-opacity=".22"/><stop offset="1" stop-color="#2DD4BF" stop-opacity="0"/></radialGradient>
+      <radialGradient id="sn" r=".5"><stop offset="0" stop-color="#FFC94D" stop-opacity=".30"/><stop offset="1" stop-color="#FFC94D" stop-opacity="0"/></radialGradient>
+      <linearGradient id="ring" x1="0" x2="1"><stop offset="0" stop-color="#7C5CFF"/><stop offset=".5" stop-color="#2DD4BF"/><stop offset="1" stop-color="#7C5CFF"/></linearGradient>
+    </defs>
+    <ellipse cx="900" cy="1250" rx="900" ry="700" fill="url(#neb)"/>
+    <ellipse cx="760" cy="1050" rx="520" ry="420" fill="url(#sn)"/>
+    <ellipse cx="2300" cy="1500" rx="800" ry="600" fill="url(#aur)"/>
+    <ellipse cx="3350" cy="1200" rx="900" ry="700" fill="url(#neb)"/>
+    <ellipse cx="4700" cy="1350" rx="900" ry="700" fill="url(#aur)"/>
+    <ellipse cx="4500" cy="1100" rx="700" ry="600" fill="url(#neb)"/>
+    <!-- eine Umlaufbahn quer über alle Bilder: verbindet die Reihe in der Store-Ansicht -->
+    <ellipse cx="2700" cy="1090" rx="2900" ry="520" transform="rotate(-6 2700 1090)" fill="none" stroke="url(#ring)" stroke-width="5" opacity=".5"/>
+    <g id="stars"></g>
+  </svg>
+
+  <section class="slide s1" style="left:0">
+    <div class="cap">
+      <div class="brand"><img src="bildmarke.svg" alt=""><span>Planet<b>FOSS</b></span></div>
+      <div class="kicker"><svg viewBox="-1 -1 2 2"><path d="M0-1Q.12-.12 1 0Q.12 .12 0 1Q-.12 .12-1 0Q-.12-.12 0-1Z" fill="currentColor"/></svg><span>Supernovas</span></div>
+      <h1>Was die Linux-Welt <em>gerade bewegt</em></h1>
+    </div>
+    <div class="phone"><img src="shots/de-supernova.jpg" alt=""></div>
+  </section>
+
+  <section class="slide" style="left:1080px">
+    <div class="cap">
+      <div class="kicker">Aktuell</div>
+      <h1>Über 200 Quellen in <em>einem Strom</em></h1>
+    </div>
+    <div class="phone"><img src="shots/de-aktuell.jpg" alt=""></div>
+  </section>
+
+  <section class="slide" style="left:2160px">
+    <div class="cap">
+      <div class="kicker">Logbuch · 6 Uhr</div>
+      <h1>Jeden Morgen <em>dein Logbuch</em></h1>
+    </div>
+    <div class="phone"><img src="shots/de-logbuch.jpg" alt=""></div>
+  </section>
+
+  <section class="slide" style="left:3240px">
+    <div class="cap">
+      <div class="kicker">Themen</div>
+      <h1>Ein Thema, <em>alle Quellen</em></h1>
+    </div>
+    <div class="phone"><img src="shots/de-thema-gnome.jpg" alt=""></div>
+  </section>
+
+  <section class="slide duo" style="left:4320px">
+    <div class="cap">
+      <div class="kicker">Open Source · GPL</div>
+      <h1>Freie Software, <em>hell oder dunkel</em></h1>
+    </div>
+    <div class="phone a"><img src="shots/de-suche.jpg" alt=""></div>
+    <div class="phone b"><img src="shots/de-aktuell-dunkel.jpg" alt=""></div>
+  </section>
+</div>
+<script>
+// feste Sterne (gleicher Seed → gleiches Bild bei jedem Rendern)
+let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+const g=document.getElementById('stars');let h='';
+for(let i=0;i<260;i++){const x=r()*5400,y=r()*1920,a=.25+r()*.6,rad=r()<.08?3.2:1.2+r()*1.2;
+  h+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${rad.toFixed(1)}" fill="#fff" opacity="${a.toFixed(2)}"/>`}
+g.innerHTML=h;
+// Englische Fassung: index.html?lang=en tauscht Texte und Bildschirmfotos (shots/en-…)
+const EN = [
+  ["Supernovas", "What the Linux world <em>is talking about</em>"],
+  ["Latest", "200+ sources in <em>one stream</em>"],
+  ["Logbook · 6 AM", "Every morning, <em>your logbook</em>"],
+  ["Topics", "One topic, <em>every source</em>"],
+  ["Open Source · GPL", "Free software, <em>light or dark</em>"],
+];
+if (new URLSearchParams(location.search).get("lang") === "en") {
+  document.documentElement.lang = "en";
+  document.querySelectorAll(".slide").forEach((sl, i) => {
+    const k = sl.querySelector(".kicker span") || sl.querySelector(".kicker");
+    k.textContent = EN[i][0];
+    sl.querySelector("h1").innerHTML = EN[i][1];
+  });
+  document.querySelectorAll(".phone img").forEach(im => im.src = im.getAttribute("src").replace("shots/de-", "shots/en-"));
+}
+document.fonts.ready.then(()=>document.querySelectorAll(".cap").forEach((c,i)=>console.log("cap",i+1,Math.round(c.getBoundingClientRect().bottom))));
+</script>
+</body>
+</html>
