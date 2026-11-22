@@ -141,3 +141,9 @@
 - [ ] Bookmark service phase 2: wallabag (OAuth2) and Nextcloud Bookmarks (Login Flow v2)
 - [ ] Bookmark service: plain HTTP for LAN instances (network security config allows HTTPS only today) and
       self-signed certificates – only if readers ask
+- [ ] Idea (2026-11-22): a full tablet mode. Today only Latest uses the width (rail plus two staggered columns from
+      700 dp); seen on the Pixel Tablet emulator while making the store images: Supernovas, Logbook and topic pages sit
+      in one centred column with wide empty margins, a supernova's lead image takes most of the screen and its reports
+      start below the fold. Ideas: list and detail side by side (open an article, supernova or topic in a right-hand
+      pane instead of a new screen), supernova reports next to the image, Logbook and Weekly review in two columns,
+      Discover as a grid, landscape and portrait both thought through, keyboard and mouse (shortcuts, hover)
