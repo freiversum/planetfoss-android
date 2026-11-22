@@ -4,6 +4,7 @@
 package net.planetfoss.app.ui.directory
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,7 +53,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import coil3.compose.AsyncImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -65,6 +65,7 @@ import net.planetfoss.app.data.FeedRepository
 import net.planetfoss.app.data.prefs.SettingsRepository
 import net.planetfoss.app.ui.components.CenterMessage
 import net.planetfoss.app.ui.components.ChipTag
+import net.planetfoss.app.ui.components.LogoDot
 import net.planetfoss.app.ui.components.RefreshBox
 import net.planetfoss.app.ui.components.TopicStatusBadge
 import net.planetfoss.app.ui.components.UiError
@@ -203,7 +204,7 @@ private fun SourceRow(s: Source, onClick: () -> Unit) {
         leadingContent = {
             val logo = s.logo
             if (logo != null) {
-                AsyncImage(model = logo, contentDescription = null, modifier = Modifier.size(28.dp).clip(CircleShape).background(Color.White))
+                LogoDot(logo, Modifier.size(28.dp).clip(CircleShape).border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape))
             } else {
                 val color = s.color?.let { runCatching { Color(it.toColorInt()) }.getOrNull() } ?: MaterialTheme.colorScheme.primary
                 Box(Modifier.size(28.dp).clip(CircleShape).background(color))

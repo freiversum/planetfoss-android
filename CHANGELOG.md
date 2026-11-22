@@ -90,6 +90,9 @@ show what changed in the last versions.
   the stars always stay whole.
 
 ### Fixed
+- Dark source logos that fill their square, such as Linux und Ich's, no longer sit as a dark square inside a white
+  ring in the supernova card and the source directory: they now fill the round dot, and a fine outline sets them off
+  from the dark background. Logos with a transparent or white margin stay on white as before.
 - Latest stays where it was after reading an article in the app's own browser; it jumped back to the top.
 - A list that was scrolled past its first page keeps the loaded pages when it refreshes by itself after a while away; new
   posts go on top. Before, it dropped back to its first page and the place was lost. Pull to refresh still starts the

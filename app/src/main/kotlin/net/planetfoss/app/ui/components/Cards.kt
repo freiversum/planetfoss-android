@@ -3,6 +3,7 @@
 
 package net.planetfoss.app.ui.components
 
+import android.graphics.Bitmap
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.compositeOver
@@ -98,6 +99,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.core.graphics.toColorInt
 import coil3.compose.AsyncImage
+import coil3.toBitmap
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.draw.shadow
@@ -680,12 +682,7 @@ private fun NovaReport(report: Item, onOpen: (Item) -> Unit, brief: Boolean = fa
         val logo = report.source.logo
         val dot = Modifier.padding(top = 2.dp).size(28.dp).clip(CircleShape)
         if (logo != null) {
-            AsyncImage(
-                model = logo,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = dot.background(Color.White).border(1.dp, tone.line, CircleShape).padding(3.dp),
-            )
+            LogoDot(logo, dot.border(1.dp, tone.line, CircleShape))
         } else {
             val color = report.source.color?.let { runCatching { Color(it.toColorInt()) }.getOrNull() }
             Box(dot.background(color ?: planet.nebula))
@@ -1064,4 +1061,43 @@ private fun AdInfoSheet(ad: Ad, onDismiss: () -> Unit) {
             }
         }
     }
+}
+
+/**
+ * A source logo in a round dot. Logos with a transparent or white margin sit on white with a little air
+ * (as before); logos that fill their square edge to edge (Linux und Ich's dark tile) fill the whole dot,
+ * so no dark square shows inside a white ring.
+ */
+@Composable
+internal fun LogoDot(logo: String, modifier: Modifier = Modifier) {
+    var tile by remember(logo) { mutableStateOf(false) }
+    AsyncImage(
+        model = logo,
+        contentDescription = null,
+        contentScale = if (tile) ContentScale.Crop else ContentScale.Fit,
+        onSuccess = { tile = fillsSquare(it.result.image.toBitmap()) },
+        modifier = if (tile) modifier else modifier.background(Color.White).padding(3.dp),
+    )
+}
+
+/** True when every pixel along the edge is opaque and not near-white: the logo is a full tile, not a mark on a margin. */
+internal fun fillsSquare(source: Bitmap): Boolean {
+    val bmp = if (source.config == Bitmap.Config.HARDWARE) source.copy(Bitmap.Config.ARGB_8888, false) ?: return false else source
+    val w = bmp.width
+    val h = bmp.height
+    if (w < 4 || h < 4) return false
+    val step = maxOf(1, minOf(w, h) / 16)
+    var light = 0
+    var total = 0
+    fun check(x: Int, y: Int): Boolean {
+        val p = bmp.getPixel(x, y)
+        if (android.graphics.Color.alpha(p) < 240) return false
+        if (android.graphics.Color.red(p) > 235 && android.graphics.Color.green(p) > 235 && android.graphics.Color.blue(p) > 235) light++
+        total++
+        return true
+    }
+    for (x in 0 until w step step) if (!check(x, 0) || !check(x, h - 1)) return false
+    for (y in 0 until h step step) if (!check(0, y) || !check(w - 1, y)) return false
+    // a white edge already blends with the white dot: keep the air around it
+    return light * 2 < total
 }
