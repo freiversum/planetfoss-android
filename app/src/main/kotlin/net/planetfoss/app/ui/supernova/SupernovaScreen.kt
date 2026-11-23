@@ -64,16 +64,22 @@ fun SupernovaScreen(
     onSettings: () -> Unit,
     onTopic: (String, String) -> Unit,
     onBack: (() -> Unit)? = null,
-    /** Another title: the situation in the detail pane on wide screens (“Right now”). */
+    /** Another title: the situation in the detail pane on wide screens (“Right now”), with the logbook and weekly review on top. */
     title: String? = null,
+    onLogbook: (String) -> Unit = {},
+    onWeekly: (String) -> Unit = {},
     vm: SupernovaViewModel = hiltViewModel(),
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val lang by vm.lang.collectAsStateWithLifecycle()
     val notifyOn by vm.notifyOn.collectAsStateWithLifecycle()
+    val hints by vm.hints.collectAsStateWithLifecycle()
     val actions = LocalItemActions.current
     val scroll = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val listState = rememberLazyStaggeredGridState()
+    // the hints arrive after the supernovas; inserted on top they would sit above the scroll anchor and stay out of view
+    val hinted = title != null && (hints.first != null || hints.second != null)
+    androidx.compose.runtime.LaunchedEffect(hinted) { if (hinted && listState.firstVisibleItemIndex <= 1) listState.scrollToItem(0) }
     ScrollToTopOnTabTap(listState, scroll)
 
     Scaffold(
@@ -104,6 +110,16 @@ fun SupernovaScreen(
                             horizontalArrangement = Arrangement.spacedBy(Space.m),
                             modifier = Modifier.fillMaxHeight().widthIn(max = (if (two) WideMaxWidth else ContentMaxWidth) + Space.l * 2),
                         ) {
+                            // the situation: today's logbook entry (with last week's review beside it Monday to Wednesday)
+                            if (title != null) {
+                                val (logbook, week) = hints
+                                when {
+                                    logbook != null -> item(key = "logbook", span = full) {
+                                        net.planetfoss.app.ui.logbook.LogbookBand(logbook, week, onLogbook = { onLogbook(logbook.day) }, onWeekly = onWeekly)
+                                    }
+                                    week != null -> item(key = "weekly", span = full) { net.planetfoss.app.ui.weekly.WeeklyTeaserCard(week) { onWeekly(week.week) } }
+                                }
+                            }
                             if (notifyOn == false) item(key = "notify", span = full) { NotifyOffer(vm::enableNotify, Modifier.fillMaxWidth()) }
                             if (state.items.none { it is Sky.Nova }) {
                                 item(key = "empty", span = full) {

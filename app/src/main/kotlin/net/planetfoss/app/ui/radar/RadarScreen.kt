@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import net.planetfoss.app.ui.components.openBeside
 import net.planetfoss.app.R
 import net.planetfoss.app.data.FeedRepository
 import net.planetfoss.app.data.FollowRepository
@@ -186,7 +187,7 @@ fun RadarScreen(onSettings: () -> Unit, onSearch: () -> Unit, vm: RadarViewModel
                                     FollowRow(
                                         label = h.label,
                                         kind = stringResource(if (h.comet) R.string.radar_comet else R.string.radar_supernova),
-                                        icon = if (h.comet) "☄" else "✦", count = null, burning = false, modifier = width,
+                                        icon = if (h.comet) "☄" else "✦", count = null, burning = false, modifier = width.openBeside("topic:" + h.key),
                                     ) { actions.topic(TopicRef(h.key, h.label, !h.comet)) }
                                 }
                             }
@@ -203,7 +204,8 @@ fun RadarScreen(onSettings: () -> Unit, onSearch: () -> Unit, vm: RadarViewModel
                                 FollowRow(
                                     label = r.follow.label, kind = kind,
                                     icon = when { r.supernova -> "✦"; r.comet -> "☄"; topic -> "#"; else -> r.follow.label.take(2) },
-                                    count = if (r.failed) -1 else r.fresh, burning = r.supernova, modifier = width,
+                                    count = if (r.failed) -1 else r.fresh, burning = r.supernova,
+                                    modifier = width.openBeside((if (topic) "topic:" else "source:") + r.follow.ref),
                                 ) {
                                     if (topic) actions.topic(TopicRef(r.follow.ref, r.follow.label, r.supernova))
                                     else actions.source(Source(r.follow.ref, r.follow.label))

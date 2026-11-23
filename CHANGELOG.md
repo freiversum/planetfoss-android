@@ -20,6 +20,10 @@ Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-re
   While nothing is open, the right side shows the burning supernovas ("Right now"), which then no longer stand on top
   of Latest. Switching tabs empties the right side. When the window becomes narrow (rotation, split screen), what was
   open on the right moves on top of the list. Phones, split screen and tablets in portrait keep one page at a time.
+  The row of what is open on the right is marked in Discover, Radar and the topic and source lists. The right side's
+  "Right now" also carries today's logbook entry and the weekly review, which then leave the top of Latest. Links and
+  notifications (a topic, a source, a logbook entry) open on the right with Latest on the left, also on a cold start;
+  so do pages that were opened while the window was narrow once it is wide again.
 - Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
   linkding, Linkwarden or Readeck with its address and an API token. "Connect" tries the service first and says what is
   wrong (token, address, server not reachable). From then on, every article you save is sent there in the background,

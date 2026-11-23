@@ -48,6 +48,17 @@ class SupernovaViewModel @Inject constructor(
 
     private val showComets = settings.settings.map { it.showComets }
 
+    /**
+     * The situation pane on wide screens: Latest's logbook entry and weekly review hints. They come with Latest's first
+     * page (the list beside the pane on start), no request of their own.
+     */
+    val hints: StateFlow<Pair<net.planetfoss.core.api.LogbookTeaser?, net.planetfoss.core.api.WeekTeaser?>> =
+        settings.settings.map { it.contentLang }.distinctUntilChanged()
+            .flatMapLatest { lang ->
+                combine(repo.observeLogbookTeaser(net.planetfoss.core.api.ListTarget.Home, lang), repo.observeWeeklyTeaser(net.planetfoss.core.api.ListTarget.Home, lang)) { l, w -> l to w }
+            }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null to null)
+
     val state: StateFlow<ListState<Sky>> = settings.settings.map { it.contentLang }.distinctUntilChanged()
         .flatMapLatest { lang ->
             repo.observeSupernovas(lang).also { flow ->

@@ -115,7 +115,7 @@ fun ItemListScreen(
     /** Latest: the supernova sky (end of the row “This week in the sky”) and a logbook entry (card or marker). */
     onSky: () -> Unit = {},
     onLogbook: (String) -> Unit = {},
-    /** Latest beside the detail pane: the burning supernovas stand there (the situation), not on top of the list. */
+    /** Latest beside the detail pane: the burning supernovas, the logbook and the weekly review stand there (the situation), not on top of the list. */
     novasBeside: Boolean = false,
     vm: ItemListViewModel = hiltViewModel(),
 ) {
@@ -211,7 +211,10 @@ fun ItemListScreen(
                 rising?.let { r -> item(key = "rising", span = StaggeredGridItemSpan.FullLine) { OrbitRow(r, actions.topic, onTopics, title = stringResource(R.string.rising)) } }
                 // the logbook card carries last week's review beside it (Monday to Wednesday); without the card the review stands alone
                 val logbook = ui.logbook
-                if (logbookCard && logbook != null) {
+                // beside the detail pane the logbook and the weekly review stand in the situation there
+                if (novasBeside) {
+                    Unit
+                } else if (logbookCard && logbook != null) {
                     item(key = "logbook", span = StaggeredGridItemSpan.FullLine) {
                         net.planetfoss.app.ui.logbook.LogbookBand(logbook, weekly, onLogbook = { onLogbook(logbook.day) }, onWeekly = onWeekly)
                     }

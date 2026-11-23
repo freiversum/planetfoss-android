@@ -152,8 +152,13 @@
   - [x] T0 wide forms of Supernova, Logbook, Weekly review, Discover (2026-11-23; emulator as Pixel Tablet both ways and as phone)
   - [x] T1 list and detail side by side (Latest, Radar, Saved, search, lists), situation pane (2026-11-23; D-T2 and D-T3
         as proposed, not confirmed yet; emulator as Pixel Tablet both ways, rotation with two pages open, phone)
-  - [ ] T1 rest: mark the card that is open on the right; logbook entry of today in the situation pane; open deep links
-        and notifications (topic, source, logbook) on the right instead of full width; search not checked on the tablet yet
+  - [x] T1 rest (2026-11-23): mark what is open on the right (Discover, Radar, topic and source lists); logbook and weekly
+        review in the situation pane; links and notifications open on the right (also on a cold start); search checked
+  - [ ] Tablet: mark the open topic among chips and the open story on its card (only rows are marked so far); hide the
+        on-screen keyboard when a search result opens on the right
+- [ ] Flaky unit test: `ItemListViewModelTest` failed once (2026-11-23) with “uncaught exceptions before the test
+      started” – a Room write of the previous test after its database was closed (`arch_disk_io_0`); three runs after
+      it green
   - [ ] T2 article in the detail pane (app's own browser)
   - [ ] T3 keyboard shortcuts, hover, right click, focus ring; menus/dialogs instead of sheets
   - [ ] T4 settings in two panes, topic side column, draggable divider, foldable hinge

@@ -65,6 +65,7 @@ import net.planetfoss.app.data.FeedRepository
 import net.planetfoss.app.data.prefs.SettingsRepository
 import net.planetfoss.app.ui.components.CenterMessage
 import net.planetfoss.app.ui.components.ChipTag
+import net.planetfoss.app.ui.components.openBeside
 import net.planetfoss.app.ui.components.LogoDot
 import net.planetfoss.app.ui.components.RefreshBox
 import net.planetfoss.app.ui.components.TopicStatusBadge
@@ -140,7 +141,7 @@ fun TopicsScreen(onBack: () -> Unit, onTopic: (TopicRef) -> Unit, vm: TopicsView
                     ListItem(
                         headlineContent = { Text(t.label) },
                         trailingContent = { TopicStatusBadge(t.status) },
-                        modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button) { onTopic(t.ref) },
+                        modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("topic:" + t.key).clickable(role = Role.Button) { onTopic(t.ref) },
                     )
                 }
             }
@@ -213,7 +214,7 @@ private fun SourceRow(s: Source, onClick: () -> Unit) {
         trailingContent = if (s.support != null) ({
             Icon(Icons.Filled.Favorite, stringResource(R.string.sources_can_support), tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
         }) else null,
-        modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onClick),
+        modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("source:" + s.slug).clickable(role = Role.Button, onClick = onClick),
     )
 }
 

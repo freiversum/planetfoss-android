@@ -207,7 +207,10 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
     val paneBack = { detailNav.popBackStack(); Unit }
     val paneGraph: NavGraphBuilder.() -> Unit = {
         composable<SituationRoute> {
-            SupernovaScreen(onSettingsPane, onTopic = { key, label -> toDetail(ListRoute("topic", key, label), true) }, title = stringResource(R.string.situation_title))
+            SupernovaScreen(
+                onSettingsPane, onTopic = { key, label -> toDetail(ListRoute("topic", key, label), true) }, title = stringResource(R.string.situation_title),
+                onLogbook = { toDetail(LogbookRoute(it), true) }, onWeekly = { toDetail(WeeklyRoute(it), true) },
+            )
         }
         composable<SupernovasRoute> {
             SupernovaScreen(onSettingsPane, onTopic = { key, label -> toDetail(ListRoute("topic", key, label), true) }, onBack = paneBack)
@@ -237,6 +240,31 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
         }
         open.forEach { nav.navigate(it) }
     }
+
+    // the other way: a page that belongs in the pane but stands on the list (a notification or link, or pushed while the
+    // window was narrow) moves into the pane once there are two – the list page below it stays on the left
+    var pendingPane by remember { mutableStateOf<Any?>(null) }
+    LaunchedEffect(entry, twoPanes) {
+        val e = entry ?: return@LaunchedEffect
+        val route = e.toPane() ?: return@LaunchedEffect
+        if (!twoPanes) return@LaunchedEffect
+        val below = nav.previousBackStackEntry
+        when {
+            below?.destination?.isListPage() == true -> { pendingPane = route; nav.popBackStack() }
+            // a link replaces the whole stack: Latest goes on the left
+            below == null -> { pendingPane = route; nav.navigate(HomeRoute) { popUpTo(e.destination.id) { inclusive = true } } }
+        }
+    }
+    LaunchedEffect(split, pendingPane) {
+        val route = pendingPane ?: return@LaunchedEffect
+        if (!split) return@LaunchedEffect
+        pendingPane = null
+        resetPane()
+        detailNav.navigate(route)
+    }
+    // what the pane shows, so the list can mark it
+    val paneEntry by detailNav.currentBackStackEntryAsState()
+    val paneOpen = if (split) paneEntry?.paneKey() else null
 
     val inside: (String) -> Unit = { if (UrlPolicy.isWebUrl(it)) nav.navigate(BrowserRoute(it)) }
     val outside: (String) -> Unit = { if (settings.browserMode == BrowserMode.CHOOSER) openWithChooser(context, it) else openOutsideApp(context, it) }
@@ -348,7 +376,10 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
             val listWidth = if (windowWidth >= WideMaxWidth) ListPaneWide else ListPane
             // the list's NavHost stays the first child in every layout, so it keeps its state when the pane comes and goes
             Row(Modifier.fillMaxSize()) {
-                CompositionLocalProvider(net.planetfoss.app.ui.components.LocalBesidePane provides split) {
+                CompositionLocalProvider(
+                    net.planetfoss.app.ui.components.LocalBesidePane provides split,
+                    net.planetfoss.app.ui.components.LocalPaneOpen provides paneOpen,
+                ) {
                     NavHost(
                         nav, startDestination = HomeRoute,
                         modifier = (if (split) Modifier.width(listWidth) else Modifier.weight(1f)).then(if (hidesOnScroll) Modifier.nestedScroll(barOnScroll) else Modifier),
@@ -435,6 +466,25 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
 /** Pages that are lists: on a wide screen they stay on the left and open their targets in the detail pane. */
 private fun NavDestination.isListPage() = Tab.entries.any { hasRoute(it.routeClass) } || hasRoute(ListRoute::class) || hasRoute(TopicsRoute::class) ||
     hasRoute(SourcesRoute::class) || hasRoute(SearchRoute::class) || hasRoute(TopicRoute::class) || hasRoute(SourceLinkRoute::class)
+
+/** A page on the list's stack that belongs in the detail pane on wide screens, as the pane's route (links name topics and sources by key only). */
+private fun NavBackStackEntry.toPane(): Any? = when {
+    destination.hasRoute(TopicRoute::class) -> ListRoute("topic", toRoute<TopicRoute>().key)
+    destination.hasRoute(SourceLinkRoute::class) -> ListRoute("source", toRoute<SourceLinkRoute>().slug)
+    destination.hasRoute(SupernovasRoute::class) -> SupernovasRoute
+    destination.hasRoute(WeeklyRoute::class) -> toRoute<WeeklyRoute>()
+    destination.hasRoute(LogbookRoute::class) -> toRoute<LogbookRoute>()
+    else -> null
+}
+
+/** Key of what the pane shows, for [net.planetfoss.app.ui.components.LocalPaneOpen]. */
+private fun NavBackStackEntry.paneKey(): String? = when {
+    destination.hasRoute(ListRoute::class) -> toRoute<ListRoute>().let { it.kind + ":" + it.ref }
+    destination.hasRoute(SupernovasRoute::class) -> "supernovas"
+    destination.hasRoute(WeeklyRoute::class) -> "weekly"
+    destination.hasRoute(LogbookRoute::class) -> "logbook"
+    else -> null
+}
 
 /** The route of a page in the detail pane, to move it on top of the list when the window becomes narrow. */
 private fun NavBackStackEntry.paneRoute(): Any? = when {

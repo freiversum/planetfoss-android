@@ -70,6 +70,7 @@ import net.planetfoss.app.data.FeedRepository
 import net.planetfoss.app.data.prefs.SettingsRepository
 import net.planetfoss.app.ui.components.CenterMessage
 import net.planetfoss.app.ui.components.ChipTag
+import net.planetfoss.app.ui.components.openBeside
 import net.planetfoss.app.ui.components.ErrorBanner
 import net.planetfoss.app.ui.components.ListState
 import net.planetfoss.app.ui.components.TabTopBar
@@ -179,7 +180,7 @@ fun RubricsScreen(
                                     headlineContent = { androidx.compose.material3.Text(stringResource(R.string.tab_supernovas)) },
                                     supportingContent = { androidx.compose.material3.Text(stringResource(R.string.sky_hint)) },
                                     leadingContent = { Icon(painterResource(R.drawable.ic_supernova), null) },
-                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onSky),
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("supernovas").clickable(role = Role.Button, onClick = onSky),
                                 )
                             }
                             // the website's logbook (/logbuch/): every morning at 6:00 what mattered in the 24 hours before
@@ -188,7 +189,7 @@ fun RubricsScreen(
                                     headlineContent = { androidx.compose.material3.Text(stringResource(R.string.logbook_title)) },
                                     supportingContent = { androidx.compose.material3.Text(stringResource(R.string.logbook_hint)) },
                                     leadingContent = { Icon(painterResource(R.drawable.ic_logbook), null) },
-                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onLogbook),
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("logbook").clickable(role = Role.Button, onClick = onLogbook),
                                 )
                             }
                             // the website's weekly review (/rueckblick/): what the week was about, compiled automatically
@@ -197,7 +198,7 @@ fun RubricsScreen(
                                     headlineContent = { androidx.compose.material3.Text(stringResource(R.string.weekly_title)) },
                                     supportingContent = { androidx.compose.material3.Text(stringResource(R.string.weekly_hint)) },
                                     leadingContent = { Icon(painterResource(R.drawable.ic_calendar), null) },
-                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onWeekly),
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("weekly").clickable(role = Role.Button, onClick = onWeekly),
                                 )
                             }
                             item(key = "starred") {
@@ -205,14 +206,14 @@ fun RubricsScreen(
                                     headlineContent = { androidx.compose.material3.Text(stringResource(R.string.starred)) },
                                     supportingContent = { androidx.compose.material3.Text(stringResource(R.string.starred_hint)) },
                                     leadingContent = { Icon(Icons.Filled.Star, null, tint = MaterialTheme.colorScheme.tertiary) },
-                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onStarred),
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("starred:").clickable(role = Role.Button, onClick = onStarred),
                                 )
                             }
                             item(key = "videos") {
                                 ListItem(
                                     headlineContent = { androidx.compose.material3.Text(stringResource(R.string.videos)) },
                                     leadingContent = { Icon(painterResource(R.drawable.ic_video), null) },
-                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onVideos),
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("videos:").clickable(role = Role.Button, onClick = onVideos),
                                 )
                                 HorizontalDivider(Modifier.widthIn(max = ContentMaxWidth))
                             }
@@ -234,7 +235,7 @@ fun RubricsScreen(
                                             rubric.hotTopics.forEach { t -> ChipTag(t.label, t.supernova) { onTopic(t) } }
                                         }
                                     }),
-                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button) { onRubric(rubric) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).openBeside("rubric:" + rubric.slug).clickable(role = Role.Button) { onRubric(rubric) },
                                 )
                             }
                             item(key = "directories-divider") { HorizontalDivider(Modifier.widthIn(max = ContentMaxWidth)) }
