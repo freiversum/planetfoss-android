@@ -621,8 +621,7 @@
     <string name="whatsnew_fixed">Behoben</string>
     <string name="whatsnew_066_title">Tablet-Modus und eigener Lesezeichendienst</string>
     <string name="whatsnew_066_1">Gespeichertes landet auf Wunsch auch in deinem Karakeep, linkding, Linkwarden oder Readeck: Einstellungen → Gespeichert → Lesezeichendienst.</string>
-    <string name="whatsnew_066_2">Ist das Netz wieder da, lädt die App von selbst neu, und der Offline-Hinweis sagt, wie alt der Stand ist.</string>
-    <string name="whatsnew_066_3">Entdecken, Themen und Quellen zeigen offline den letzten Stand statt einer leeren Seite.</string>
+    <string name="whatsnew_066_2">Ist das Netz wieder da, lädt die App von selbst neu; offline sagt der Hinweis, wie alt der Stand ist, und Entdecken, Themen und Quellen zeigen ihn statt einer leeren Seite.</string>
     <string name="whatsnew_066_5">Auf Tablets und breiten Fenstern stehen die Liste und das Geöffnete nebeneinander: Artikel öffnen rechts, die Einstellungen in zwei Bereichen.</string>
     <string name="whatsnew_066_6">Mit Tastatur springen J und K von Beitrag zu Beitrag, Enter öffnet, B merkt, S setzt einen Stern; ? zeigt alle Kürzel. Ein Rechtsklick öffnet das Menü eines Beitrags.</string>
     <string name="whatsnew_066_4">Die Einstellungen enden mit dem Nachthimmel von freiversum – tippe auf die Sterne oder ruf das UFO.</string>

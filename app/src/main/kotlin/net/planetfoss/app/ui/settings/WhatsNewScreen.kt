@@ -87,7 +87,7 @@ val RELEASE_NOTES = listOf(
         listOf(
             NoteKind.NEW to R.string.whatsnew_066_5, NoteKind.NEW to R.string.whatsnew_066_6,
             NoteKind.NEW to R.string.whatsnew_066_1, NoteKind.BETTER to R.string.whatsnew_066_2,
-            NoteKind.BETTER to R.string.whatsnew_066_3, NoteKind.NEW to R.string.whatsnew_066_4,
+            NoteKind.NEW to R.string.whatsnew_066_4,
         ),
     ),
     ReleaseNotes(
