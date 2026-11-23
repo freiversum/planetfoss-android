@@ -177,6 +177,10 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { repo.setBrowserMode(mode) }
     }
 
+    fun setArticlesBeside(on: Boolean) {
+        viewModelScope.launch { repo.setArticlesBeside(on) }
+    }
+
     fun setJavaScript(on: Boolean) {
         viewModelScope.launch { repo.setBrowserJavaScript(on) }
     }
@@ -407,6 +411,11 @@ fun SettingsScreen(onBack: () -> Unit, onHelp: () -> Unit = {}, onSetup: () -> U
                     )
 
                     Section(stringResource(R.string.settings_browser))
+                    // only where there is a pane beside the list (docs/11-tablet-mode.md, D-T1)
+                    val wideWindow = with(androidx.compose.ui.platform.LocalDensity.current) {
+                        androidx.compose.ui.platform.LocalWindowInfo.current.containerSize.width.toDp()
+                    } >= net.planetfoss.app.ui.theme.PanesFrom
+                    if (wideWindow) SwitchItem(stringResource(R.string.articles_beside), stringResource(R.string.articles_beside_text), settings.articlesBeside, vm::setArticlesBeside)
                     ChoiceItem(
                         stringResource(R.string.open_with),
                         listOf(

@@ -162,7 +162,7 @@ fun ItemCard(item: Item, modifier: Modifier = Modifier, lead: Boolean = false) {
     val img = item.image
     Card(
         onClick = { actions.openItem(item) },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().clip(Radius.card).openBeside("article:" + item.url),
         shape = Radius.card,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
     ) {

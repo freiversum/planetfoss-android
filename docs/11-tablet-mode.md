@@ -1,7 +1,7 @@
 # 11 – Tablet mode
 
-Status: concept, 2026-11-23. T1 built 2026-11-23 with D-T2 and D-T3 as proposed (`AppNavigation.kt`: a second NavHost for the pane, `SituationRoute`, handover on narrowing). T0 built 2026-11-23 (shared limits `TwoColumnsFrom`, `WideMaxWidth`, `SideBySideFrom` in `ui/theme/Dimens.kt`). Mockups: `docs/tablet-mode-mockup.html`.
-Decisions D-T1 to D-T5 are open (Christoph).
+Status: concept, 2026-11-23. T2 built 2026-11-23 (article as `BrowserRoute` in the pane, setting `articlesBeside`). T1 built 2026-11-23 with D-T2 and D-T3 as proposed (`AppNavigation.kt`: a second NavHost for the pane, `SituationRoute`, handover on narrowing). T0 built 2026-11-23 (shared limits `TwoColumnsFrom`, `WideMaxWidth`, `SideBySideFrom` in `ui/theme/Dimens.kt`). Mockups: `docs/tablet-mode-mockup.html`.
+Decisions D-T1 to D-T5 confirmed 2026-11-23 as proposed.
 
 ## Problem
 
@@ -195,7 +195,9 @@ Each phase is a release of its own; phones must look and behave unchanged after 
 - Tests: Robolectric with `@Config(qualifiers = "w1280dp-h800dp")` and `"w800dp-h1280dp"` for the
   pane decisions; device checks as in T5.
 
-## Decisions (open)
+## Decisions
+
+Confirmed by Christoph on 2026-11-23: D-T1, D-T2 (as built in T1), D-T3, D-T4 and D-T5 as proposed below.
 
 - **D-T1 Article beside the list:** in the detail pane with the app's own browser by default, switch to
   turn it off (proposal) – or always by the browser mode (Custom Tab over the whole screen).

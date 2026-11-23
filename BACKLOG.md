@@ -160,7 +160,7 @@
       started” – the view models of a test outlived it and a refresh hit the closed in-memory database on Room's disk
       thread. Fixed 2026-11-23: `tearDown` cancels and joins their scopes before closing the database; eight runs of the
       class green, no “already-closed” errors in the output any more
-  - [ ] T2 article in the detail pane (app's own browser)
+  - [x] T2 article in the detail pane (app's own browser) (2026-11-23; D-T1, D-T4, D-T5 confirmed as proposed)
   - [ ] T3 keyboard shortcuts, hover, right click, focus ring; menus/dialogs instead of sheets
   - [ ] T4 settings in two panes, topic side column, draggable divider, foldable hinge
   - [ ] T5 device checks (tablet both ways, Fold, split screen, TalkBack) and new tablet store images

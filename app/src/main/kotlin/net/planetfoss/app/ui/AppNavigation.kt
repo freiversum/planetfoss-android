@@ -20,6 +20,7 @@ import net.planetfoss.app.ui.theme.ListPane
 import net.planetfoss.app.ui.theme.ListPaneWide
 import net.planetfoss.app.ui.theme.PanesFrom
 import net.planetfoss.app.ui.theme.WideMaxWidth
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -191,6 +192,10 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
     val twoPanes = windowWidth >= PanesFrom && windowInfo.windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
     val split = twoPanes && destination?.isListPage() == true
     val splitNow by rememberUpdatedState(split)
+    // articles beside the list: only with a pane and while the switch is on (D-T1)
+    val besideNow by rememberUpdatedState(split && settings.articlesBeside)
+    // the articles opened in the pane, for its save and star buttons (gone after the process ends: then no buttons)
+    val paneItems = remember { mutableMapOf<String, net.planetfoss.core.api.Item>() }
     // a list opens its target fresh in the pane; inside the pane it goes on top (back returns there)
     val toDetail: (Any, Boolean) -> Unit = { route, fromPane ->
         if (splitNow) {
@@ -218,6 +223,32 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
         composable<ListRoute> { e -> ItemListScreen(onSettingsPane, onSearchPane, onBack = paneBack, fallbackTitle = e.toRoute<ListRoute>().title) }
         composable<WeeklyRoute> { net.planetfoss.app.ui.weekly.WeeklyScreen(onBack = paneBack, onLogbook = { toDetail(LogbookRoute(it), true) }) }
         composable<LogbookRoute> { net.planetfoss.app.ui.logbook.LogbookScreen(onBack = paneBack, onWeekly = { toDetail(WeeklyRoute(it), true) }) }
+        composable<BrowserRoute> { e ->
+            val r = e.toRoute<BrowserRoute>()
+            val item = paneItems[r.url]
+            val paneActs = LocalItemActions.current
+            BrowserScreen(
+                r.url, javaScript = settings.browserJavaScript, onClose = paneBack,
+                support = r.support?.let { Support(it, if (r.supportName != null) "forward" else "self", r.supportName) to r.sourceName.orEmpty() },
+                extraActions = {
+                    item?.let { i ->
+                        val saved = i.id in net.planetfoss.app.ui.components.LocalSavedIds.current
+                        val starred = i.id in net.planetfoss.app.ui.components.LocalStars.current.mine
+                        androidx.compose.material3.IconButton(onClick = { paneActs.toggleStar(i) }) {
+                            if (starred) Icon(androidx.compose.material.icons.Icons.Filled.Star, stringResource(R.string.unstar), tint = androidx.compose.material3.MaterialTheme.colorScheme.tertiary)
+                            else Icon(painterResource(R.drawable.ic_star_border), stringResource(R.string.star))
+                        }
+                        androidx.compose.material3.IconButton(onClick = { paneActs.toggleSave(i) }) {
+                            Icon(painterResource(if (saved) R.drawable.ic_bookmark else R.drawable.ic_bookmark_border), stringResource(if (saved) R.string.unsave else R.string.save))
+                        }
+                    }
+                    // over the whole screen: the same page as a full-screen browser, the pane goes back
+                    androidx.compose.material3.IconButton(onClick = { paneBack(); nav.navigate(r) }) {
+                        Icon(painterResource(R.drawable.ic_open_in_full), stringResource(R.string.browser_full_screen))
+                    }
+                },
+            )
+        }
     }
     val viewModelStore = checkNotNull(LocalViewModelStoreOwner.current).viewModelStore
     // the window became narrow (rotation, fold, split screen): what was open in the pane goes on top of the list
@@ -272,16 +303,25 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
         val internal = settings.browserMode == BrowserMode.INTERNAL
         return ItemActions(
             // the only plain-URL opens are a bundle's other reports
-            open = { url -> appVm.opened(url, "buendel"); if (internal) inside(url) else outside(url) },
+            open = { url ->
+                appVm.opened(url, "buendel")
+                when {
+                    besideNow && UrlPolicy.isWebUrl(url) -> toDetail(BrowserRoute(url), fromPane)
+                    internal -> inside(url)
+                    else -> outside(url)
+                }
+            },
             openFrom = { item, place ->
                 appVm.opened(item.url, place)
+                val route = item.source.support?.takeIf { UrlPolicy.isWebUrl(it.url) }.let { s -> BrowserRoute(item.url, s?.url, item.source.name, s?.recommended) }
                 when {
                     // videos go to the app made for them (YouTube, NewPipe …), else the browser; the app's own browser only when chosen
                     !internal && settings.browserMode == BrowserMode.CUSTOM_TAB && (item.isVideo || isVideoSite(item.url)) -> openInHandlerApp(context, item.url)
-                    item.source.openExternal || !internal -> outside(item.url)
-                    UrlPolicy.isWebUrl(item.url) -> nav.navigate(item.source.support?.takeIf { UrlPolicy.isWebUrl(it.url) }.let { s ->
-                        BrowserRoute(item.url, s?.url, item.source.name, s?.recommended)
-                    })
+                    item.source.openExternal -> outside(item.url)
+                    // wide screens: in the pane beside the list, in the app's own browser (D-T1)
+                    besideNow && UrlPolicy.isWebUrl(item.url) -> { paneItems[item.url] = item; toDetail(route, fromPane) }
+                    !internal -> outside(item.url)
+                    UrlPolicy.isWebUrl(item.url) -> nav.navigate(route)
                 }
             },
             openOther = { url -> appVm.opened(url, "liste"); if (internal) openOutsideApp(context, url) else inside(url) },
@@ -483,6 +523,7 @@ private fun NavBackStackEntry.paneKey(): String? = when {
     destination.hasRoute(SupernovasRoute::class) -> "supernovas"
     destination.hasRoute(WeeklyRoute::class) -> "weekly"
     destination.hasRoute(LogbookRoute::class) -> "logbook"
+    destination.hasRoute(BrowserRoute::class) -> "article:" + toRoute<BrowserRoute>().url
     else -> null
 }
 
@@ -492,6 +533,7 @@ private fun NavBackStackEntry.paneRoute(): Any? = when {
     destination.hasRoute(SupernovasRoute::class) -> SupernovasRoute
     destination.hasRoute(WeeklyRoute::class) -> toRoute<WeeklyRoute>()
     destination.hasRoute(LogbookRoute::class) -> toRoute<LogbookRoute>()
+    destination.hasRoute(BrowserRoute::class) -> toRoute<BrowserRoute>()
     else -> null
 }
 

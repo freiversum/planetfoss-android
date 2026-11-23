@@ -24,6 +24,11 @@ Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-re
   "Right now" also carries today's logbook entry and the weekly review, which then leave the top of Latest. Links and
   notifications (a topic, a source, a logbook entry) open on the right with Latest on the left, also on a cold start;
   so do pages that were opened while the window was narrow once it is wide again.
+- Articles beside the list on wide screens: an article opens on the right in the app's own browser (tracker
+  protection, support link of the source), the card of the open article is marked on the left. The bar on top adds
+  star, save and "Full screen", which opens the page over the whole screen; back returns to both sides. Settings →
+  *Open articles* → *Open articles beside the list* (only on wide screens, on by default) turns it off; then articles
+  open as chosen below. Videos and sources that ask for the user's own browser still go outside.
 - Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
   linkding, Linkwarden or Readeck with its address and an API token. "Connect" tries the service first and says what is
   wrong (token, address, server not reachable). From then on, every article you save is sent there in the background,

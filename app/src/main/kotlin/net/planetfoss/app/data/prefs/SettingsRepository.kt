@@ -36,6 +36,8 @@ data class Settings(
     val browserMode: BrowserMode = BrowserMode.CUSTOM_TAB,
     /** JavaScript in the internal browser. On by default: most sources need it for their layout. */
     val browserJavaScript: Boolean = true,
+    /** Wide screens: articles open in the detail pane beside the list (app's own browser), whatever [browserMode] says. */
+    val articlesBeside: Boolean = true,
     /** Comets (rising topics) between the supernovas of the Supernovas tab. */
     val showComets: Boolean = true,
     /**
@@ -113,6 +115,7 @@ class SettingsRepository @Inject constructor(private val store: DataStore<Prefer
                 novaIntervalMinutes = (it[NOVA_INTERVAL] ?: Settings.DEFAULT_INTERVAL).takeIf { m -> m in Settings.INTERVALS } ?: Settings.DEFAULT_INTERVAL,
                 browserMode = BrowserMode.entries.firstOrNull { m -> m.name == it[BROWSER_MODE] } ?: BrowserMode.CUSTOM_TAB,
                 browserJavaScript = it[BROWSER_JS] ?: true,
+                articlesBeside = it[ARTICLES_BESIDE] ?: true,
                 showComets = it[SHOW_COMETS] ?: true,
                 countReach = it[COUNT_REACH] ?: false,
                 theme = ThemeMode.entries.firstOrNull { m -> m.name == it[THEME] } ?: ThemeMode.SYSTEM,
@@ -132,6 +135,10 @@ class SettingsRepository @Inject constructor(private val store: DataStore<Prefer
 
     suspend fun setBrowserJavaScript(on: Boolean) {
         store.edit { it[BROWSER_JS] = on }
+    }
+
+    suspend fun setArticlesBeside(on: Boolean) {
+        store.edit { it[ARTICLES_BESIDE] = on }
     }
 
     suspend fun setTheme(mode: ThemeMode) {
@@ -229,6 +236,7 @@ class SettingsRepository @Inject constructor(private val store: DataStore<Prefer
         val LOGBOOK_READ = stringPreferencesKey("logbook_read")
         val BROWSER_MODE = stringPreferencesKey("browser_mode")
         val BROWSER_JS = booleanPreferencesKey("browser_js")
+        val ARTICLES_BESIDE = booleanPreferencesKey("articles_beside")
         val SHOW_COMETS = booleanPreferencesKey("show_comets")
         val COUNT_REACH = booleanPreferencesKey("count_reach")
         val THEME = stringPreferencesKey("theme")

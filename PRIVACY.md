@@ -38,8 +38,10 @@ service and no Google services. This is everything that leaves the phone.
 
 ## Sites you open
 
-Articles open in your own browser (Custom Tab, default) or in the app's browser. The site
-sees what it sees from any browser: IP address, user agent, and PlanetFOSS as referrer.
+Articles open in your own browser (Custom Tab, default) or in the app's browser. On wide
+screens (tablets) they open beside the list in the app's browser by default; Settings →
+*Open articles beside the list* turns that off. The site sees what it sees from any browser:
+IP address, user agent, and PlanetFOSS as referrer.
 The app's browser keeps cookies and site data on the phone (Settings → *Delete browser
 data*), has form autofill and Safe Browsing off and sends no WebView metrics.
 

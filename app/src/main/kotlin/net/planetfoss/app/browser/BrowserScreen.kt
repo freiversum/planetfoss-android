@@ -83,7 +83,15 @@ import net.planetfoss.core.url.UrlPolicy
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun BrowserScreen(startUrl: String, javaScript: Boolean, onClose: () -> Unit, support: Pair<Support, String>? = null, vm: BrowserViewModel = hiltViewModel()) {
+fun BrowserScreen(
+    startUrl: String,
+    javaScript: Boolean,
+    onClose: () -> Unit,
+    support: Pair<Support, String>? = null,
+    /** Buttons before reload: save, star and full screen when the article is in the pane beside the list. */
+    extraActions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
+    vm: BrowserViewModel = hiltViewModel(),
+) {
     val adblock by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var url by rememberSaveable { mutableStateOf(startUrl) }
@@ -175,6 +183,7 @@ fun BrowserScreen(startUrl: String, javaScript: Boolean, onClose: () -> Unit, su
                         }
                     },
                     actions = {
+                        extraActions()
                         IconButton(onClick = { if (loading) webView.stopLoading() else webView.reload() }) {
                             Icon(if (loading) Icons.Filled.Close else Icons.Filled.Refresh, stringResource(if (loading) R.string.browser_stop else R.string.browser_reload))
                         }
