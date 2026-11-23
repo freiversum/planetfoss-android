@@ -8,7 +8,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import app.cash.turbine.test
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.job
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -94,8 +99,14 @@ class ItemListViewModelTest {
         follows = FollowRepository(db.followDao(), Clock.systemUTC(), widgets)
     }
 
+    /** Every view model of the test: their scopes outlive it and are ended before the database closes. */
+    private val vms = mutableListOf<ItemListViewModel>()
+
     @After
     fun tearDown() {
+        // a refresh still running on Room's disk thread hit the closed database, and the next test failed with
+        // "uncaught exceptions before the test started" (23.11.2026, noCandidatesNoCard)
+        runBlocking { withTimeout(5.seconds) { vms.forEach { it.viewModelScope.coroutineContext.job.cancelAndJoin() } } }
         db.close()
         server.close()
     }
@@ -115,7 +126,8 @@ class ItemListViewModelTest {
         fun resetMain() = Dispatchers.resetMain()
     }
 
-    private fun latest() = ItemListViewModel(repo, settings, follows, SavedStateHandle())
+    private fun vm(handle: SavedStateHandle) = ItemListViewModel(repo, settings, follows, handle).also { vms += it }
+    private fun latest() = vm(SavedStateHandle())
 
     @Test
     fun burningSupernovasOnTopTheOthersInTheWeeksSky() = runTest {
@@ -202,7 +214,7 @@ class ItemListViewModelTest {
 
     @Test
     fun theIntroBelongsToLatestOnly() = runTest {
-        val rubric = ItemListViewModel(repo, settings, follows, SavedStateHandle(mapOf("kind" to "rubric", "ref" to "gaming")))
+        val rubric = vm(SavedStateHandle(mapOf("kind" to "rubric", "ref" to "gaming")))
         rubric.introOpen.test(timeout = 10.seconds) {
             assertFalse(awaitItem())
             expectNoEvents()

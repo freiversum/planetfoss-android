@@ -156,9 +156,10 @@
         review in the situation pane; links and notifications open on the right (also on a cold start); search checked
   - [ ] Tablet: mark the open topic among chips and the open story on its card (only rows are marked so far); hide the
         on-screen keyboard when a search result opens on the right
-- [ ] Flaky unit test: `ItemListViewModelTest` failed once (2026-11-23) with “uncaught exceptions before the test
-      started” – a Room write of the previous test after its database was closed (`arch_disk_io_0`); three runs after
-      it green
+- [x] Flaky unit test: `ItemListViewModelTest` failed twice (2026-11-23) with “uncaught exceptions before the test
+      started” – the view models of a test outlived it and a refresh hit the closed in-memory database on Room's disk
+      thread. Fixed 2026-11-23: `tearDown` cancels and joins their scopes before closing the database; eight runs of the
+      class green, no “already-closed” errors in the output any more
   - [ ] T2 article in the detail pane (app's own browser)
   - [ ] T3 keyboard shortcuts, hover, right click, focus ring; menus/dialogs instead of sheets
   - [ ] T4 settings in two panes, topic side column, draggable divider, foldable hinge
