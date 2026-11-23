@@ -1,6 +1,6 @@
 # 11 – Tablet mode
 
-Status: concept, 2026-11-23. T4 built 2026-11-23 except the topic side column and the hinge (`SettingsPage`, `PaneHandle`). T3 built 2026-11-23 (`components/Keys.kt`: `Shortcut`, `KeyCursor`, `KeysDialog`; keys from `MainActivity.onKeyDown`). T2 built 2026-11-23 (article as `BrowserRoute` in the pane, setting `articlesBeside`). T1 built 2026-11-23 with D-T2 and D-T3 as proposed (`AppNavigation.kt`: a second NavHost for the pane, `SituationRoute`, handover on narrowing). T0 built 2026-11-23 (shared limits `TwoColumnsFrom`, `WideMaxWidth`, `SideBySideFrom` in `ui/theme/Dimens.kt`). Mockups: `docs/tablet-mode-mockup.html`.
+Status: concept, 2026-11-23. T5 checks and new tablet store images done 2026-11-23. T4 built 2026-11-23 except the topic side column and the hinge (`SettingsPage`, `PaneHandle`). T3 built 2026-11-23 (`components/Keys.kt`: `Shortcut`, `KeyCursor`, `KeysDialog`; keys from `MainActivity.onKeyDown`). T2 built 2026-11-23 (article as `BrowserRoute` in the pane, setting `articlesBeside`). T1 built 2026-11-23 with D-T2 and D-T3 as proposed (`AppNavigation.kt`: a second NavHost for the pane, `SituationRoute`, handover on narrowing). T0 built 2026-11-23 (shared limits `TwoColumnsFrom`, `WideMaxWidth`, `SideBySideFrom` in `ui/theme/Dimens.kt`). Mockups: `docs/tablet-mode-mockup.html`.
 Decisions D-T1 to D-T5 confirmed 2026-11-23 as proposed.
 
 ## Problem

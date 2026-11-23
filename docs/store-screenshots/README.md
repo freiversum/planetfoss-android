@@ -13,6 +13,13 @@ PlanetFOSS CI. Phone and tablet share captions and order. Captions are short, on
 | 4 | Ein Thema, alle Quellen | One topic, every source | Topic GNOME |
 | 5 | Freie Software, hell oder dunkel | Free software, light or dark | Search (light), Latest (dark) |
 
+The tablet images (since 2026-11-23) show the tablet mode, list and detail side by side: 1 Latest with "Right now"
+(logbook band, supernova) on the right, 2 Latest with the linuxundich.de post about the app open in the app's browser
+on the right (consent dialog declined), 3 Discover with the logbook on the right, 4 the topics directory with GNOME on
+the right, 5 search "plasma" with KDE Plasma on the right (light) and Latest with "Right now" (dark). Taken in the
+Werkbank emulator on tinytin with the display set to 2560 x 1600 at 320 dpi (`wm size`, `wm density`), which is the
+Pixel Tablet's size.
+
 ## Build
 
 ```sh

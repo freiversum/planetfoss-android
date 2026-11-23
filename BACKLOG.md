@@ -170,7 +170,13 @@
   - [ ] T4 rest: topic and source head as a side column – only pays from ~1000 dp of pane width, which the Pixel Tablet
         never reaches (the pane is ~790 dp), so later for desktop windows; keep the dragged list width across restarts;
         foldable hinge (no content under it) – check with the Pixel Fold emulator in T5
-  - [ ] T5 device checks (tablet both ways, Fold, split screen, TalkBack) and new tablet store images
+  - [x] T5 checks in the emulator (2026-11-23): foldable open (841 x 701 dp: two panes, list 320, pane ~420), split
+        screen half (640 dp: one pane, the open topic moves onto the list), phone landscape (923 x 411 dp: rail, one
+        pane), tablet portrait and landscape in dark, German, 130 % font; accessibility tree: the marked row is
+        "checkable/checked" (Compose's way of `selected` for buttons), the handle is "Width of the list"
+  - [x] New tablet store images with list and detail side by side (2026-11-23, docs/store-screenshots, DE + EN)
+  - [ ] Upload the new tablet images in the Play Console (Christoph)
+  - [ ] T5 rest: TalkBack by ear on a real tablet; foldable hinge on a Pixel Fold emulator with a real hinge
 
 ## GitHub presentation
 
