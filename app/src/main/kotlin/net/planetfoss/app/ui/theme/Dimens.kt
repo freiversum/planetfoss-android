@@ -49,4 +49,7 @@ val PanesFrom = 840.dp
 
 /** Width of the list beside the detail pane; [ListPaneWide] from a window of [WideMaxWidth]. */
 val ListPane = 360.dp
+
+/** The list is never narrower than this when the reader drags the handle between list and pane. */
+val ListPaneMin = 320.dp
 val ListPaneWide = 400.dp

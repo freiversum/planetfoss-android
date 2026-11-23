@@ -165,7 +165,11 @@
         focus ring (2026-11-23; keys checked in the emulator by adb, mouse clicks and hover not – adb cannot send them)
   - [ ] T3 rest: menus at the pointer and dialogs instead of bottom sheets on wide screens; J/K also in Radar, Saved
         and the supernova pages (only post lists so far); check right click, middle click and hover with a real mouse
-  - [ ] T4 settings in two panes, topic side column, draggable divider, foldable hinge
+  - [x] T4 settings in two panes with the rail, draggable divider between list and pane (2026-11-23; emulator as
+        Pixel Tablet and phone)
+  - [ ] T4 rest: topic and source head as a side column – only pays from ~1000 dp of pane width, which the Pixel Tablet
+        never reaches (the pane is ~790 dp), so later for desktop windows; keep the dragged list width across restarts;
+        foldable hinge (no content under it) – check with the Pixel Fold emulator in T5
   - [ ] T5 device checks (tablet both ways, Fold, split screen, TalkBack) and new tablet store images
 
 ## GitHub presentation

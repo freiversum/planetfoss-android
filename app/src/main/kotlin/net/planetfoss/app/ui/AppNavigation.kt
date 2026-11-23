@@ -9,7 +9,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.navigation.NavBackStackEntry
@@ -18,6 +17,7 @@ import androidx.navigation.createGraph
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import net.planetfoss.app.ui.theme.ListPane
 import net.planetfoss.app.ui.theme.ListPaneWide
+import net.planetfoss.app.ui.theme.ListPaneMin
 import net.planetfoss.app.ui.theme.PanesFrom
 import net.planetfoss.app.ui.theme.WideMaxWidth
 import androidx.compose.material.icons.filled.Star
@@ -300,6 +300,7 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>, shortcuts: Flow<net.planetfos
         detailNav.navigate(route)
     }
     // what the pane shows, so the list can mark it
+    var dragWidth by rememberSaveable { androidx.compose.runtime.mutableFloatStateOf(0f) }
     val paneEntry by detailNav.currentBackStackEntryAsState()
     val paneOpen = if (split) paneEntry?.paneKey() else null
 
@@ -356,7 +357,12 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>, shortcuts: Flow<net.planetfos
     val noPage = remember { MutableStateFlow(Lifecycle.State.CREATED) }
     val belowState by (below?.lifecycle?.currentStateFlow ?: noPage).collectAsStateWithLifecycle()
     val belowShows = below != null && belowState.isAtLeast(Lifecycle.State.STARTED) && !below.destination.fillsScreen()
-    val fullScreen = destination?.fillsScreen() == true && !belowShows
+    // wide windows: settings and its pages keep the rail (D-T4), so the place never jumps; the browser and the setup
+    // assistant still fill the screen
+    val keepsRail = twoPanes && destination?.let { d ->
+        d.hasRoute(SettingsRoute::class) || d.hasRoute(HelpRoute::class) || d.hasRoute(WhatsNewRoute::class) || d.hasRoute(BookmarkServiceRoute::class)
+    } == true
+    val fullScreen = destination?.fillsScreen() == true && !belowShows && !keepsRail
     val shift = with(LocalDensity.current) { 100.dp.roundToPx() } * if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
     val pages = remember(shift) { PageTransitions(shift) { e -> Tab.entries.any { e.destination.hasRoute(it.routeClass) } } }
     // Expressive: short navigation bar on phones, wide navigation rail on large screens – and a rail
@@ -445,7 +451,10 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>, shortcuts: Flow<net.planetfos
                 }
             },
         ) {
-            val listWidth = if (windowWidth >= WideMaxWidth) ListPaneWide else ListPane
+            // the list's width: by default from the window, else where the reader dragged the handle (this session);
+            // the pane keeps at least 480 dp
+            val maxList = (windowWidth - 88.dp - 480.dp).coerceAtLeast(ListPaneMin)
+            val listWidth = (if (dragWidth > 0f) dragWidth.dp else if (windowWidth >= WideMaxWidth) ListPaneWide else ListPane).coerceIn(ListPaneMin, maxList)
             // the list's NavHost stays the first child in every layout, so it keeps its state when the pane comes and goes
             Row(Modifier.fillMaxSize()) {
                 CompositionLocalProvider(
@@ -523,7 +532,10 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>, shortcuts: Flow<net.planetfos
                     }
                 }
                 if (split) {
-                    VerticalDivider()
+                    net.planetfoss.app.ui.components.PaneHandle(
+                        width = listWidth,
+                        onWidth = { dragWidth = it.coerceIn(ListPaneMin, maxList).value },
+                    )
                     CompositionLocalProvider(LocalItemActions provides paneActions) {
                         NavHost(detailNav, startDestination = SituationRoute, modifier = Modifier.weight(1f), builder = paneGraph)
                     }

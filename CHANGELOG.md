@@ -35,6 +35,10 @@ Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-re
   Enter opens it, O opens it in the browser outside the app, B saves it, S stars it. A right click on a post opens its
   menu, a middle click opens it in the browser; star, save and menu buttons show a tooltip on hover or long press, and
   a focused post gets a visible ring. Keys typed into a text field never trigger a shortcut.
+- Settings on wide screens: the sections on the left, the chosen one on the right, as in Android's own settings, and
+  the navigation rail stays (also on Help, What is new and the bookmark service). The handle between the list and the
+  right side can be dragged to make the list wider or narrower (until the app is closed); TalkBack offers "Wider" and
+  "Narrower".
 - Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
   linkding, Linkwarden or Readeck with its address and an API token. "Connect" tries the service first and says what is
   wrong (token, address, server not reachable). From then on, every article you save is sent there in the background,
