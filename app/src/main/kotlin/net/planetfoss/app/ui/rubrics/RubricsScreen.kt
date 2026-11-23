@@ -3,6 +3,11 @@
 
 package net.planetfoss.app.ui.rubrics
 
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,6 +53,8 @@ import net.planetfoss.app.ui.theme.rubricColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import net.planetfoss.app.ui.theme.ContentMaxWidth
+import net.planetfoss.app.ui.theme.TwoColumnsFrom
+import net.planetfoss.app.ui.theme.WideMaxWidth
 import net.planetfoss.app.ui.theme.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -143,104 +150,202 @@ fun RubricsScreen(
                 state.items.isEmpty() -> CenterMessage(stringResource(R.string.loading), loading = true)
                 else -> Column(Modifier.fillMaxSize()) {
                     state.error?.let { ErrorBanner(errorText(it, hasData = true, since = state.since), vm::refresh) }
-                    LazyColumn(state = listState, contentPadding = PaddingValues(vertical = Space.s), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
-                        // search as a field: on Discover one looks for something rather than reads
-                        item(key = "search") {
-                            androidx.compose.material3.Surface(
-                                onClick = onSearch,
-                                shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).fillMaxWidth().padding(horizontal = Space.l, vertical = Space.s),
-                            ) {
-                                Row(Modifier.padding(horizontal = Space.l, vertical = Space.m), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.m)) {
-                                    Icon(Icons.Filled.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    androidx.compose.material3.Text(stringResource(R.string.discover_search), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize()) {
+                        // wide: tiles in a row and rubrics as cards in three columns instead of a phone list (docs/11-tablet-mode.md)
+                        val wide = maxWidth >= TwoColumnsFrom
+                        val maxW = if (wide) WideMaxWidth else ContentMaxWidth
+                        LazyColumn(state = listState, contentPadding = PaddingValues(vertical = Space.s), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
+                            // search as a field: on Discover one looks for something rather than reads
+                            item(key = "search") {
+                                androidx.compose.material3.Surface(
+                                    onClick = onSearch,
+                                    shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
+                                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                    modifier = Modifier.widthIn(max = maxW).fillMaxWidth().padding(horizontal = Space.l, vertical = Space.s),
+                                ) {
+                                    Row(Modifier.padding(horizontal = Space.l, vertical = Space.m), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.m)) {
+                                        Icon(Icons.Filled.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        androidx.compose.material3.Text(stringResource(R.string.discover_search), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    }
                                 }
                             }
-                        }
-                        // the sky: supernovas and comets of the last seven days
-                        item(key = "sky") {
-                            ListItem(
-                                headlineContent = { androidx.compose.material3.Text(stringResource(R.string.tab_supernovas)) },
-                                supportingContent = { androidx.compose.material3.Text(stringResource(R.string.sky_hint)) },
-                                leadingContent = { Icon(painterResource(R.drawable.ic_supernova), null) },
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onSky),
-                            )
-                        }
-                        // the website's logbook (/logbuch/): every morning at 6:00 what mattered in the 24 hours before
-                        item(key = "logbook") {
-                            ListItem(
-                                headlineContent = { androidx.compose.material3.Text(stringResource(R.string.logbook_title)) },
-                                supportingContent = { androidx.compose.material3.Text(stringResource(R.string.logbook_hint)) },
-                                leadingContent = { Icon(painterResource(R.drawable.ic_logbook), null) },
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onLogbook),
-                            )
-                        }
-                        // the website's weekly review (/rueckblick/): what the week was about, compiled automatically
-                        item(key = "weekly") {
-                            ListItem(
-                                headlineContent = { androidx.compose.material3.Text(stringResource(R.string.weekly_title)) },
-                                supportingContent = { androidx.compose.material3.Text(stringResource(R.string.weekly_hint)) },
-                                leadingContent = { Icon(painterResource(R.drawable.ic_calendar), null) },
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onWeekly),
-                            )
-                        }
-                        item(key = "starred") {
-                            ListItem(
-                                headlineContent = { androidx.compose.material3.Text(stringResource(R.string.starred)) },
-                                supportingContent = { androidx.compose.material3.Text(stringResource(R.string.starred_hint)) },
-                                leadingContent = { Icon(Icons.Filled.Star, null, tint = MaterialTheme.colorScheme.tertiary) },
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onStarred),
-                            )
-                        }
-                        item(key = "videos") {
-                            ListItem(
-                                headlineContent = { androidx.compose.material3.Text(stringResource(R.string.videos)) },
-                                leadingContent = { Icon(painterResource(R.drawable.ic_video), null) },
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onVideos),
-                            )
-                            HorizontalDivider(Modifier.widthIn(max = ContentMaxWidth))
-                        }
-                        items(state.items, key = { it.slug }) { rubric ->
-                            ListItem(
-                                // the rubric's colour on the website, so it is recognised at a glance; in the
-                                // headline (not leadingContent) so it stays on the name's line when chips follow
-                                headlineContent = {
-                                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.l)) {
-                                        Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
-                                            Box(Modifier.size(12.dp).clip(CircleShape).background(rubricColor(rubric.slug) ?: MaterialTheme.colorScheme.outline))
+                            if (wide) {
+                                wideDiscover(state.items, onRubric, onTopic, onVideos, onStarred, onTopics, onSources, onWeekly, onLogbook, onSky)
+                                return@LazyColumn
+                            }
+                            // the sky: supernovas and comets of the last seven days
+                            item(key = "sky") {
+                                ListItem(
+                                    headlineContent = { androidx.compose.material3.Text(stringResource(R.string.tab_supernovas)) },
+                                    supportingContent = { androidx.compose.material3.Text(stringResource(R.string.sky_hint)) },
+                                    leadingContent = { Icon(painterResource(R.drawable.ic_supernova), null) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onSky),
+                                )
+                            }
+                            // the website's logbook (/logbuch/): every morning at 6:00 what mattered in the 24 hours before
+                            item(key = "logbook") {
+                                ListItem(
+                                    headlineContent = { androidx.compose.material3.Text(stringResource(R.string.logbook_title)) },
+                                    supportingContent = { androidx.compose.material3.Text(stringResource(R.string.logbook_hint)) },
+                                    leadingContent = { Icon(painterResource(R.drawable.ic_logbook), null) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onLogbook),
+                                )
+                            }
+                            // the website's weekly review (/rueckblick/): what the week was about, compiled automatically
+                            item(key = "weekly") {
+                                ListItem(
+                                    headlineContent = { androidx.compose.material3.Text(stringResource(R.string.weekly_title)) },
+                                    supportingContent = { androidx.compose.material3.Text(stringResource(R.string.weekly_hint)) },
+                                    leadingContent = { Icon(painterResource(R.drawable.ic_calendar), null) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onWeekly),
+                                )
+                            }
+                            item(key = "starred") {
+                                ListItem(
+                                    headlineContent = { androidx.compose.material3.Text(stringResource(R.string.starred)) },
+                                    supportingContent = { androidx.compose.material3.Text(stringResource(R.string.starred_hint)) },
+                                    leadingContent = { Icon(Icons.Filled.Star, null, tint = MaterialTheme.colorScheme.tertiary) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onStarred),
+                                )
+                            }
+                            item(key = "videos") {
+                                ListItem(
+                                    headlineContent = { androidx.compose.material3.Text(stringResource(R.string.videos)) },
+                                    leadingContent = { Icon(painterResource(R.drawable.ic_video), null) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onVideos),
+                                )
+                                HorizontalDivider(Modifier.widthIn(max = ContentMaxWidth))
+                            }
+                            items(state.items, key = { it.slug }) { rubric ->
+                                ListItem(
+                                    // the rubric's colour on the website, so it is recognised at a glance; in the
+                                    // headline (not leadingContent) so it stays on the name's line when chips follow
+                                    headlineContent = {
+                                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.l)) {
+                                            Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                                                Box(Modifier.size(12.dp).clip(CircleShape).background(rubricColor(rubric.slug) ?: MaterialTheme.colorScheme.outline))
+                                            }
+                                            androidx.compose.material3.Text(rubric.name)
                                         }
-                                        androidx.compose.material3.Text(rubric.name)
-                                    }
-                                },
-                                supportingContent = if (rubric.hotTopics.isEmpty()) null else ({
-                                    // chips start under the name
-                                    FlowRow(Modifier.padding(start = 40.dp, top = Space.xs), horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-                                        rubric.hotTopics.forEach { t -> ChipTag(t.label, t.supernova) { onTopic(t) } }
-                                    }
-                                }),
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button) { onRubric(rubric) },
-                            )
-                        }
-                        item(key = "directories-divider") { HorizontalDivider(Modifier.widthIn(max = ContentMaxWidth)) }
-                        // the website's overview pages: topics (/themen/) and the source directory (/quellen/)
-                        item(key = "topics") {
-                            ListItem(
-                                headlineContent = { androidx.compose.material3.Text(stringResource(R.string.topics_title)) },
-                                supportingContent = { androidx.compose.material3.Text(stringResource(R.string.topics_hint)) },
-                                leadingContent = { Icon(painterResource(R.drawable.ic_supernova), null) },
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onTopics),
-                            )
-                        }
-                        item(key = "sources") {
-                            ListItem(
-                                headlineContent = { androidx.compose.material3.Text(stringResource(R.string.sources_title)) },
-                                supportingContent = { androidx.compose.material3.Text(stringResource(R.string.sources_hint)) },
-                                leadingContent = { Icon(painterResource(R.drawable.ic_article), null) },
-                                modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onSources),
-                            )
+                                    },
+                                    supportingContent = if (rubric.hotTopics.isEmpty()) null else ({
+                                        // chips start under the name
+                                        FlowRow(Modifier.padding(start = 40.dp, top = Space.xs), horizontalArrangement = Arrangement.spacedBy(Space.s)) {
+                                            rubric.hotTopics.forEach { t -> ChipTag(t.label, t.supernova) { onTopic(t) } }
+                                        }
+                                    }),
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button) { onRubric(rubric) },
+                                )
+                            }
+                            item(key = "directories-divider") { HorizontalDivider(Modifier.widthIn(max = ContentMaxWidth)) }
+                            // the website's overview pages: topics (/themen/) and the source directory (/quellen/)
+                            item(key = "topics") {
+                                ListItem(
+                                    headlineContent = { androidx.compose.material3.Text(stringResource(R.string.topics_title)) },
+                                    supportingContent = { androidx.compose.material3.Text(stringResource(R.string.topics_hint)) },
+                                    leadingContent = { Icon(painterResource(R.drawable.ic_supernova), null) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onTopics),
+                                )
+                            }
+                            item(key = "sources") {
+                                ListItem(
+                                    headlineContent = { androidx.compose.material3.Text(stringResource(R.string.sources_title)) },
+                                    supportingContent = { androidx.compose.material3.Text(stringResource(R.string.sources_hint)) },
+                                    leadingContent = { Icon(painterResource(R.drawable.ic_article), null) },
+                                    modifier = Modifier.widthIn(max = ContentMaxWidth).clickable(role = Role.Button, onClick = onSources),
+                                )
+                            }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Discover on wide screens (docs/11-tablet-mode.md): the sky, logbook, weekly review, Sternstunden and videos as one
+ * row of tiles, the rubrics as cards in three columns with their colour and hot topics, then topics and sources.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+private fun androidx.compose.foundation.lazy.LazyListScope.wideDiscover(
+    rubrics: List<Rubric>,
+    onRubric: (Rubric) -> Unit,
+    onTopic: (TopicRef) -> Unit,
+    onVideos: () -> Unit,
+    onStarred: () -> Unit,
+    onTopics: () -> Unit,
+    onSources: () -> Unit,
+    onWeekly: () -> Unit,
+    onLogbook: () -> Unit,
+    onSky: () -> Unit,
+) {
+    val row = Modifier.widthIn(max = WideMaxWidth).fillMaxWidth().padding(horizontal = Space.l, vertical = Space.s)
+    item(key = "tiles") {
+        Row(row.height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(Space.m)) {
+            val tile = Modifier.weight(1f).fillMaxHeight()
+            Tile(stringResource(R.string.tab_supernovas), stringResource(R.string.sky_hint), { Icon(painterResource(R.drawable.ic_supernova), null) }, onSky, tile, night = true)
+            Tile(stringResource(R.string.logbook_title), stringResource(R.string.logbook_hint), { Icon(painterResource(R.drawable.ic_logbook), null) }, onLogbook, tile)
+            Tile(stringResource(R.string.weekly_title), stringResource(R.string.weekly_hint), { Icon(painterResource(R.drawable.ic_calendar), null) }, onWeekly, tile)
+            Tile(stringResource(R.string.starred), stringResource(R.string.starred_hint), { Icon(Icons.Filled.Star, null, tint = MaterialTheme.colorScheme.tertiary) }, onStarred, tile)
+            Tile(stringResource(R.string.videos), null, { Icon(painterResource(R.drawable.ic_video), null) }, onVideos, tile)
+        }
+    }
+    items(rubrics.chunked(3), key = { r -> "rubrics-" + r.first().slug }) { three ->
+        Row(row.height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(Space.m)) {
+            three.forEach { rubric -> RubricCard(rubric, { onRubric(rubric) }, onTopic, Modifier.weight(1f).fillMaxHeight()) }
+            // an incomplete last row: empty places keep the cards at a third
+            repeat(3 - three.size) { Box(Modifier.weight(1f)) }
+        }
+    }
+    item(key = "directories") {
+        Row(row.height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(Space.m)) {
+            val tile = Modifier.weight(1f).fillMaxHeight()
+            Tile(stringResource(R.string.topics_title), stringResource(R.string.topics_hint), { Icon(painterResource(R.drawable.ic_supernova), null) }, onTopics, tile)
+            Tile(stringResource(R.string.sources_title), stringResource(R.string.sources_hint), { Icon(painterResource(R.drawable.ic_article), null) }, onSources, tile)
+        }
+    }
+}
+
+/** A tile of Discover on wide screens: icon on a tonal square, name and hint; [night] in the supernova night blue. */
+@Composable
+private fun Tile(title: String, hint: String?, icon: @Composable () -> Unit, onClick: () -> Unit, modifier: Modifier, night: Boolean = false) {
+    val colors = if (night) {
+        androidx.compose.material3.CardDefaults.outlinedCardColors(containerColor = net.planetfoss.app.ui.components.NovaSpace, contentColor = net.planetfoss.app.ui.components.NovaInk)
+    } else {
+        androidx.compose.material3.CardDefaults.outlinedCardColors()
+    }
+    androidx.compose.material3.OutlinedCard(onClick = onClick, modifier = modifier, shape = net.planetfoss.app.ui.theme.Radius.card, colors = colors) {
+        Column(Modifier.padding(Space.l), verticalArrangement = Arrangement.spacedBy(Space.s)) {
+            Box(
+                Modifier.size(40.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+                    .background(if (night) Color(0x33FCC954) else MaterialTheme.colorScheme.secondaryContainer),
+                contentAlignment = Alignment.Center,
+            ) {
+                CompositionLocalProvider(androidx.compose.material3.LocalContentColor provides if (night) Color(0xFFFCC954) else MaterialTheme.colorScheme.onSecondaryContainer) { icon() }
+            }
+            androidx.compose.material3.Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            hint?.let {
+                androidx.compose.material3.Text(
+                    it, style = MaterialTheme.typography.bodySmall,
+                    color = if (night) net.planetfoss.app.ui.components.NovaInk3 else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+/** A rubric on wide screens: its colour as a stripe on top, the name and the hot topics as chips. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun RubricCard(rubric: Rubric, onOpen: () -> Unit, onTopic: (TopicRef) -> Unit, modifier: Modifier) {
+    androidx.compose.material3.OutlinedCard(onClick = onOpen, modifier = modifier, shape = net.planetfoss.app.ui.theme.Radius.card) {
+        Box(Modifier.fillMaxWidth().height(5.dp).background(rubricColor(rubric.slug) ?: MaterialTheme.colorScheme.outline))
+        Column(Modifier.padding(Space.l), verticalArrangement = Arrangement.spacedBy(Space.s)) {
+            androidx.compose.material3.Text(rubric.name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            if (rubric.hotTopics.isNotEmpty()) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s)) {
+                    rubric.hotTopics.forEach { t -> ChipTag(t.label, t.supernova) { onTopic(t) } }
                 }
             }
         }

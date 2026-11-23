@@ -147,3 +147,15 @@
       start below the fold. Ideas: list and detail side by side (open an article, supernova or topic in a right-hand
       pane instead of a new screen), supernova reports next to the image, Logbook and Weekly review in two columns,
       Discover as a grid, landscape and portrait both thought through, keyboard and mouse (shortcuts, hover)
+      Concept and mockups 2026-11-23: `docs/11-tablet-mode.md`, `docs/tablet-mode-mockup.html`; phases T0–T5
+  - [ ] Decisions D-T1 to D-T5 (Christoph)
+  - [x] T0 wide forms of Supernova, Logbook, Weekly review, Discover (2026-11-23; emulator as Pixel Tablet both ways and as phone)
+  - [ ] T1 list and detail side by side (Latest, Radar, Saved, search, lists), situation pane
+  - [ ] T2 article in the detail pane (app's own browser)
+  - [ ] T3 keyboard shortcuts, hover, right click, focus ring; menus/dialogs instead of sheets
+  - [ ] T4 settings in two panes, topic side column, draggable divider, foldable hinge
+  - [ ] T5 device checks (tablet both ways, Fold, split screen, TalkBack) and new tablet store images
+
+## GitHub presentation
+
+- [ ] Social preview image with the next update: a screenshot or a designed card of the app, 1280×640 PNG (2:1), under 1 MB, keep text and key content in the centre with ~40 px margin. Keep the source in the repo (`docs/social-preview.png`). Upload by hand under *Settings* | *General* | *Social preview* (there is no API for it). GitHub shows it on topic pages (github.com/topics/…), in Explore, and as the link card on Mastodon, Bluesky and in chats.

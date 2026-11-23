@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -26,7 +29,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import net.planetfoss.app.ui.components.RefreshBox
 import net.planetfoss.app.ui.components.ScrollToTopOnTabTap
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +44,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.planetfoss.app.R
 import net.planetfoss.app.ui.theme.ContentMaxWidth
+import net.planetfoss.app.ui.theme.TwoColumnsFrom
+import net.planetfoss.app.ui.theme.WideMaxWidth
 import net.planetfoss.app.ui.theme.Radius
 import net.planetfoss.app.ui.theme.Space
 import net.planetfoss.app.ui.components.CenterMessage
@@ -62,7 +66,7 @@ fun SupernovaScreen(onSettings: () -> Unit, onTopic: (String, String) -> Unit, o
     val notifyOn by vm.notifyOn.collectAsStateWithLifecycle()
     val actions = LocalItemActions.current
     val scroll = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val listState = rememberLazyListState()
+    val listState = rememberLazyStaggeredGridState()
     ScrollToTopOnTabTap(listState, scroll)
 
     Scaffold(
@@ -80,28 +84,36 @@ fun SupernovaScreen(onSettings: () -> Unit, onTopic: (String, String) -> Unit, o
                 state.items.isEmpty() && (state.refreshing || !state.fetched) -> CenterMessage(stringResource(R.string.loading), loading = true)
                 else -> Column(Modifier.fillMaxSize()) {
                     state.error?.let { ErrorBanner(errorText(it, hasData = true), vm::refresh) }
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = PaddingValues(Space.l),
-                        verticalArrangement = Arrangement.spacedBy(Space.m),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        if (notifyOn == false) item(key = "notify") { NotifyOffer(vm::enableNotify, Modifier.widthIn(max = ContentMaxWidth)) }
-                        if (state.items.none { it is Sky.Nova }) {
-                            item(key = "empty") {
-                                Text(stringResource(R.string.empty_supernovas), color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.widthIn(max = ContentMaxWidth).padding(vertical = Space.xl))
-                            }
-                        }
-                        // the first supernova in full, the others compact (as on the website), comets in between
-                        itemsIndexed(state.items, key = { _, it -> it.key }) { i, entry ->
-                            val wide = Modifier.widthIn(max = ContentMaxWidth)
-                            when (entry) {
-                                is Sky.Nova -> entry.nova.let { nova ->
-                                    NovaCard(nova, onOpen = { actions.openFrom(it, "supernova") }, onAll = { onTopic(nova.key, nova.label) }, modifier = wide, compact = i > 0)
+                    // wide: the first supernova over both columns (picture beside its reports), the others and the
+                    // comets in two columns (docs/11-tablet-mode.md)
+                    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                        val two = maxWidth >= TwoColumnsFrom
+                        val full = StaggeredGridItemSpan.FullLine
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(if (two) 2 else 1),
+                            state = listState,
+                            contentPadding = PaddingValues(Space.l),
+                            verticalItemSpacing = Space.m,
+                            horizontalArrangement = Arrangement.spacedBy(Space.m),
+                            modifier = Modifier.fillMaxHeight().widthIn(max = (if (two) WideMaxWidth else ContentMaxWidth) + Space.l * 2),
+                        ) {
+                            if (notifyOn == false) item(key = "notify", span = full) { NotifyOffer(vm::enableNotify, Modifier.fillMaxWidth()) }
+                            if (state.items.none { it is Sky.Nova }) {
+                                item(key = "empty", span = full) {
+                                    Text(stringResource(R.string.empty_supernovas), color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.padding(vertical = Space.xl))
                                 }
-                                is Sky.Rising -> entry.comet.let { c -> CometCard(c, onOpen = { actions.openFrom(it, "supernova") }, onTopic = { onTopic(c.key, c.label) }, modifier = wide) }
+                            }
+                            // the first supernova in full, the others compact (as on the website), comets in between
+                            state.items.forEachIndexed { i, entry ->
+                                item(key = entry.key, span = if (i == 0) full else StaggeredGridItemSpan.SingleLane) {
+                                    when (entry) {
+                                        is Sky.Nova -> entry.nova.let { nova ->
+                                            NovaCard(nova, onOpen = { actions.openFrom(it, "supernova") }, onAll = { onTopic(nova.key, nova.label) }, compact = i > 0)
+                                        }
+                                        is Sky.Rising -> entry.comet.let { c -> CometCard(c, onOpen = { actions.openFrom(it, "supernova") }, onTopic = { onTopic(c.key, c.label) }) }
+                                    }
+                                }
                             }
                         }
                     }

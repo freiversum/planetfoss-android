@@ -408,49 +408,67 @@ fun NovaCard(
     note: String? = null,
 ) {
     if (compact) return NovaCompact(nova, onOpen, onAll, modifier, note)
-    val planet = LocalPlanetColors.current
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = Radius.card,
         colors = CardDefaults.cardColors(containerColor = NovaSpace, contentColor = NovaInk),
     ) {
-        Column(
-            Modifier.fillMaxWidth().drawBehind { novaSky() }.padding(start = Space.l, end = Space.l, top = Space.l, bottom = Space.xs),
-            verticalArrangement = Arrangement.spacedBy(Space.m),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                NovaBurst(nova.burning)
-                Text(relative(nova.ignitedAt), style = NovaMono, color = NovaInk3)
-            }
-            Text(
-                nova.label,
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = (-0.5).sp,
-                modifier = Modifier.semantics { heading() },
-            )
-            nova.summary?.let { Text(it, style = NovaMono, color = NovaInk2) }
-            note?.let { Text(it, style = NovaMono, color = NovaInk3) }
-            NovaLead(nova.reports, Modifier.fillMaxWidth().aspectRatio(16f / 9f))
-            // the quote is a clipped excerpt of one report; once reports show their excerpts it would only repeat it
-            val shown = !largeFont()
-            nova.quote?.takeUnless { q -> shown && nova.reports.any { it.excerpt?.startsWith(q.text.take(40)) == true } }?.let { q ->
-                Row(Modifier.height(IntrinsicSize.Min)) {
-                    Box(Modifier.width(3.dp).fillMaxHeight().background(planet.supernova))
-                    Column(Modifier.padding(start = Space.m), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
-                        Text(stringResource(R.string.quote, q.text), style = MaterialTheme.typography.bodyLarge, color = NovaInk2, maxLines = 4, overflow = TextOverflow.Ellipsis)
-                        Text(q.source, style = NovaMono, fontWeight = FontWeight.Bold, color = planet.supernova)
+        androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth().drawBehind { novaSky() }) {
+            // wide (tablets, the top of Latest over two columns): the picture beside the reports, so the first
+            // reports are in view without scrolling (docs/11-tablet-mode.md)
+            val side = maxWidth >= net.planetfoss.app.ui.theme.SideBySideFrom
+            Column(
+                Modifier.fillMaxWidth().padding(start = Space.l, end = Space.l, top = Space.l, bottom = Space.xs),
+                verticalArrangement = Arrangement.spacedBy(Space.m),
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    NovaBurst(nova.burning)
+                    Text(relative(nova.ignitedAt), style = NovaMono, color = NovaInk3)
+                }
+                if (side) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(Space.xl)) {
+                        NovaLead(nova.reports, Modifier.weight(5f).aspectRatio(16f / 9f).padding(top = Space.xs))
+                        Column(Modifier.weight(7f), verticalArrangement = Arrangement.spacedBy(Space.m)) { NovaBody(nova, note, onOpen, onAll) }
                     }
+                } else {
+                    NovaBody(nova, note, onOpen, onAll, lead = { NovaLead(nova.reports, Modifier.fillMaxWidth().aspectRatio(16f / 9f)) })
                 }
-            }
-            Column {
-                nova.reports.forEachIndexed { i, r ->
-                    if (i > 0) HorizontalDivider(color = NovaLine)
-                    NovaReport(r, onOpen)
-                }
-                NovaAll(stringResource(R.string.supernova_all_reports), onAll)
             }
         }
+    }
+}
+
+/** Name, numbers, quote and reports of the full supernova card; [lead] (the picture) goes between numbers and quote. */
+@Composable
+private fun NovaBody(nova: Supernova, note: String?, onOpen: (Item) -> Unit, onAll: () -> Unit, lead: @Composable () -> Unit = {}) {
+    val planet = LocalPlanetColors.current
+    Text(
+        nova.label,
+        style = MaterialTheme.typography.headlineLarge,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = (-0.5).sp,
+        modifier = Modifier.semantics { heading() },
+    )
+    nova.summary?.let { Text(it, style = NovaMono, color = NovaInk2) }
+    note?.let { Text(it, style = NovaMono, color = NovaInk3) }
+    lead()
+    // the quote is a clipped excerpt of one report; once reports show their excerpts it would only repeat it
+    val shown = !largeFont()
+    nova.quote?.takeUnless { q -> shown && nova.reports.any { it.excerpt?.startsWith(q.text.take(40)) == true } }?.let { q ->
+        Row(Modifier.height(IntrinsicSize.Min)) {
+            Box(Modifier.width(3.dp).fillMaxHeight().background(planet.supernova))
+            Column(Modifier.padding(start = Space.m), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
+                Text(stringResource(R.string.quote, q.text), style = MaterialTheme.typography.bodyLarge, color = NovaInk2, maxLines = 4, overflow = TextOverflow.Ellipsis)
+                Text(q.source, style = NovaMono, fontWeight = FontWeight.Bold, color = planet.supernova)
+            }
+        }
+    }
+    Column {
+        nova.reports.forEachIndexed { i, r ->
+            if (i > 0) HorizontalDivider(color = NovaLine)
+            NovaReport(r, onOpen)
+        }
+        NovaAll(stringResource(R.string.supernova_all_reports), onAll)
     }
 }
 

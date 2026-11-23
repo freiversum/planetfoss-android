@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlanetFOSS Tablet-Modus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Seite: Konzepttext, darunter Tablets in echter dp-Größe (1280×800), per JS auf die Spaltenbreite skaliert */
+:root{
+  --bg:#F5F6FB; --fg:#141A3A; --muted:#586079; --line:#DCE0EE; --card:#FFFFFF;
+  --accent:#4527D9; --accent-soft:#E6E0FF; --star:#FFC94D; --star-ink:#7A5600;
+  --aurora:#0B7A6E; --aurora-soft:#D7F0EB; --warn:#C2401F; --warn-soft:#FBE3DC;
+  --t-bg:#F5F6FB; --t-surface:#FFFFFF; --t-cont:#EDEFF7; --t-line:#DCE0EE; --t-sel:#E6E0FF;
+  --t-fg:#141A3A; --t-muted:#586079; --t-frame:#0B1026;
+  --nova:#1B1748; --nova2:#0B1026; --nova-ink:#F5F6FB; --nova-ink2:#DCE0EE; --nova-ink3:#9AA2C2; --nova-line:#2E3566;
+  --f-display:"Space Grotesk",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#070A1A; --fg:#F5F6FB; --muted:#8F97B5; --line:#232B55; --card:#0B1026;
+  --accent:#B3A4FF; --accent-soft:#2A2363; --star-ink:#FFC94D;
+  --aurora:#2DD4BF; --aurora-soft:#0F3B36; --warn:#FF8A6E; --warn-soft:#3A1810;
+  --t-bg:#0B1026; --t-surface:#141A3A; --t-cont:#1C2449; --t-line:#232B55; --t-sel:#2A2363;
+  --t-fg:#F5F6FB; --t-muted:#8F97B5; --t-frame:#000; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#070A1A; --fg:#F5F6FB; --muted:#8F97B5; --line:#232B55; --card:#0B1026;
+  --accent:#B3A4FF; --accent-soft:#2A2363; --star-ink:#FFC94D;
+  --aurora:#2DD4BF; --aurora-soft:#0F3B36; --warn:#FF8A6E; --warn-soft:#3A1810;
+  --t-bg:#0B1026; --t-surface:#141A3A; --t-cont:#1C2449; --t-line:#232B55; --t-sel:#2A2363;
+  --t-fg:#F5F6FB; --t-muted:#8F97B5; --t-frame:#000; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 var(--f-body);padding:32px 16px 72px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.5px}
+h2{font-size:24px} h3{font-size:17px}
+p{margin:0;max-width:72ch}
+.kick{font:600 12px/1 var(--f-mono);letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+.kick.ist{color:var(--warn)}
+header{display:flex;flex-direction:column;gap:14px}
+.lede{font-size:17px;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:18px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.box p{font-size:14px;color:var(--muted)}
+.dec{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 12px 12px 0;padding:12px 16px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.dec b{color:var(--accent)}
+code{font:13px var(--f-mono);background:var(--accent-soft);padding:1px 5px;border-radius:5px}
+.toggle{position:fixed;top:12px;right:12px;font:600 12px var(--f-mono);background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:99px;padding:6px 12px;cursor:pointer;z-index:5}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media (max-width:820px){.pair{grid-template-columns:1fr}}
+.cap{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.cap p{font-size:13.5px;color:var(--muted)}
+.shot{width:100%;border-radius:14px;border:6px solid var(--t-frame);display:block}
+table{border-collapse:collapse;font-size:14px;width:100%}
+td,th{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+kbd{font:600 12px var(--f-mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--card)}
+
+/* ---------- Tablet ---------- */
+.fit{width:100%;position:relative}
+.tab{width:1280px;height:800px;transform-origin:0 0;position:absolute;left:0;top:0;border-radius:28px;background:var(--t-frame);padding:10px;box-shadow:0 24px 50px -24px rgba(11,16,38,.5)}
+.tab.port{width:800px;height:1280px}
+.scr{width:100%;height:100%;border-radius:20px;overflow:hidden;background:var(--t-bg);color:var(--t-fg);display:flex;font-size:14px;line-height:1.45;position:relative}
+.rail{width:88px;flex:none;display:flex;flex-direction:column;align-items:center;gap:14px;padding:58px 0 0;background:var(--t-bg)}
+.rail div{display:flex;flex-direction:column;align-items:center;gap:4px;font:500 12px var(--f-body);color:var(--t-muted)}
+.rail i{font-style:normal;width:56px;height:32px;border-radius:99px;display:grid;place-items:center;font-size:17px}
+.rail .on{color:var(--accent);font-weight:700} .rail .on i{background:var(--accent-soft)}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.status{height:30px;flex:none;display:flex;justify-content:space-between;padding:6px 20px 0 8px;font:500 12px var(--f-mono);color:var(--t-muted)}
+.topbar{height:58px;flex:none;display:flex;align-items:center;gap:14px;padding:0 20px 0 12px}
+.topbar .t{font:700 22px var(--f-display);flex:1;display:flex;align-items:center;gap:10px}
+.topbar .t .logo{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#B3A4FF,#4527D9);box-shadow:0 0 0 3px rgba(255,201,77,.35)}
+.ib{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--t-muted);font-size:17px;flex:none}
+.ib.hover{background:var(--t-cont);color:var(--t-fg)}
+.seg{font:600 12px var(--f-mono);color:var(--accent)}
+.body{flex:1;display:flex;min-height:0;gap:0}
+.pane{min-width:0;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:4px 16px 16px;-webkit-mask-image:linear-gradient(#000 90%,transparent)}
+.list{width:400px;flex:none}
+.detail{flex:1;background:var(--t-surface);border-radius:24px 24px 0 0;margin-right:12px;padding:20px 24px;border:1px solid var(--t-line);border-bottom:0}
+.handle{width:12px;flex:none;display:grid;place-items:center}
+.handle::before{content:"";width:4px;height:48px;border-radius:4px;background:var(--t-line)}
+.handle.drag::before{background:var(--accent);height:64px}
+
+/* App-Bausteine */
+.lbl{font:700 11px var(--f-mono);letter-spacing:1px;text-transform:uppercase;color:var(--t-muted);display:flex;align-items:center;gap:6px}
+.lbl.aur{color:var(--aurora)} .lbl .dot{width:8px;height:8px;border-radius:50%;background:var(--aurora)}
+.lbl .n{margin-left:auto;font-weight:500;letter-spacing:0;text-transform:none;color:var(--accent);font-family:var(--f-body);font-size:13px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--t-line);background:var(--t-surface);border-radius:8px;padding:5px 11px;font:500 13px var(--f-body);white-space:nowrap}
+.chip.comet{border-color:transparent;background:#FFE9A8;color:#3D2C00}
+.chip.comet::before{content:"✦ "}
+.chip.sel{background:var(--accent-soft);border-color:transparent;color:var(--accent);font-weight:600}
+.card{background:var(--t-surface);border:1px solid var(--t-line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:5px;flex:none;position:relative}
+.card.sel{background:var(--t-sel);border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}
+.card.hov{box-shadow:0 6px 16px -8px rgba(11,16,38,.35);border-color:var(--accent-soft)}
+.card.focus{outline:2px solid var(--aurora);outline-offset:2px}
+.card .src{font:500 11.5px var(--f-mono);color:var(--t-muted);display:flex;gap:6px;align-items:center}
+.card .src .new{color:var(--aurora);font-weight:700}
+.card .src .fav{width:13px;height:13px;border-radius:3px;background:var(--c,#C2401F);flex:none}
+.card .ti{font:600 15px/1.3 var(--f-body)}
+.card .ex{font-size:13px;color:var(--t-muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .row{display:flex;gap:10px}
+.card .row .tx{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+.card .thumb{width:84px;height:64px;border-radius:9px;flex:none;background:linear-gradient(135deg,var(--g1,#B3A4FF),var(--g2,#2DD4BF))}
+.card .acts{display:flex;align-items:center;gap:6px;margin-top:2px}
+.card .acts .sp{flex:1}
+.card .acts span{color:var(--t-muted);font-size:14px;width:26px;text-align:center}
+.card .more{font:600 11.5px var(--f-mono);color:var(--aurora)}
+.mini .ti{font-size:14px}
+.nova{background:linear-gradient(160deg,var(--nova),var(--nova2));color:var(--nova-ink);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;flex:none}
+.nova::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 88% 10%,rgba(255,201,77,.25),transparent 40%),radial-gradient(1.2px 1.2px at 20% 30%,#fff,transparent),radial-gradient(1.2px 1.2px at 70% 60%,#fff,transparent),radial-gradient(1px 1px at 45% 85%,#DCE0EE,transparent),radial-gradient(1px 1px at 90% 40%,#fff,transparent);pointer-events:none}
+.nova>*{position:relative}
+.badge{align-self:flex-start;background:var(--star);color:#2B1E00;font:700 11px var(--f-mono);letter-spacing:1px;border-radius:99px;padding:4px 10px}
+.burst{display:flex;align-items:center;gap:10px;font:500 12px var(--f-mono);color:var(--nova-ink3)}
+.nova h4{margin:0;font:700 30px/1.05 var(--f-display);letter-spacing:-.5px}
+.nova .meta{font:500 12px var(--f-mono);color:var(--nova-ink3)}
+.nova .img{border-radius:12px;background:linear-gradient(135deg,#0E1636 0%,#1D3B6E 45%,#2DD4BF 120%);position:relative;overflow:hidden}
+.nova .img::after{content:"";position:absolute;left:18%;top:22%;width:64%;height:56%;border-radius:8px;background:linear-gradient(#0B1026,#141A3A);box-shadow:0 0 0 1px #2E3566}
+.rep{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--nova-line)}
+.rep .av{width:26px;height:26px;border-radius:50%;flex:none;background:var(--c,#C2401F)}
+.rep .who{font:600 12px var(--f-mono);color:var(--star)} .rep .who span{color:var(--nova-ink3);font-weight:500}
+.rep b{display:block;font:600 14px/1.3 var(--f-body);color:var(--nova-ink)}
+.rep p{font-size:12.5px;color:var(--nova-ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nova .all{font:600 13px var(--f-body);color:var(--star)}
+.lb{background:linear-gradient(135deg,#3A1F3F,#24236A);color:var(--nova-ink);border-radius:20px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;flex:none}
+.lb .k{font:700 11.5px var(--f-mono);letter-spacing:1px;color:var(--star)}
+.lb h4{margin:0;font:700 26px var(--f-display)}
+.lb p{font-size:14px;color:var(--nova-ink2);max-width:none}
+.h2{font:700 20px var(--f-display);display:flex;align-items:center;gap:8px;margin-top:4px}
+.tile{background:var(--t-surface);border:1px solid var(--t-line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;min-height:104px}
+.tile i{font-style:normal;font-size:20px;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.tile b{font:600 15px var(--f-body)} .tile span{font-size:12.5px;color:var(--t-muted)}
+.rub{background:var(--t-surface);border:1px solid var(--t-line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;border-top:5px solid var(--c)}
+.rub .hd{display:flex;align-items:baseline;gap:8px} .rub .hd b{font:700 17px var(--f-display);flex:1} .rub .hd span{font:500 12px var(--f-mono);color:var(--t-muted)}
+.rub .line{font-size:13px;color:var(--t-muted);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.ptb{display:flex;align-items:center;gap:6px;padding:0 0 10px;border-bottom:1px solid var(--t-line)}
+.ptb .who{flex:1;display:flex;flex-direction:column;min-width:0}
+.ptb .who b{font:600 14px var(--f-body)} .ptb .who span{font:500 11.5px var(--f-mono);color:var(--t-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptb .sup{font:600 12px var(--f-body);color:var(--aurora);border:1px solid var(--aurora);border-radius:99px;padding:4px 10px;white-space:nowrap}
+.web{flex:1;display:flex;flex-direction:column;gap:12px;padding-top:14px;overflow:hidden}
+.web .sitebar{height:36px;border-radius:8px;background:#C2401F;display:flex;align-items:center;padding:0 12px;color:#fff;font:700 15px var(--f-display);gap:8px}
+.web h3{font:700 28px/1.15 var(--f-body);margin:0;letter-spacing:-.3px}
+.web .by{font-size:12.5px;color:var(--t-muted)}
+.web .hero{height:200px;border-radius:10px;background:linear-gradient(135deg,#1D3B6E,#2DD4BF);flex:none}
+.web p{font-size:15px;line-height:1.6;max-width:68ch}
+.ln{height:10px;border-radius:5px;background:var(--t-cont)}
+.menu{position:absolute;background:var(--t-surface);border:1px solid var(--t-line);border-radius:12px;box-shadow:0 14px 30px -10px rgba(11,16,38,.45);padding:6px 0;min-width:230px;z-index:3}
+.menu div{padding:8px 16px;font-size:14px;display:flex;gap:12px;align-items:center}
+.menu div span{margin-left:auto;font:500 11.5px var(--f-mono);color:var(--t-muted)}
+.menu div.h{background:var(--t-cont)}
+.menu hr{border:0;border-top:1px solid var(--t-line);margin:4px 0}
+.cursor{position:absolute;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:22px solid #111;transform:rotate(-28deg);z-index:4;filter:drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff)}
+.tip{position:absolute;background:#2B3150;color:#fff;font:500 12px var(--f-body);padding:5px 9px;border-radius:6px;z-index:4;white-space:nowrap}
+.scrim{position:absolute;inset:0;background:rgba(7,10,26,.45);display:grid;place-items:center;z-index:5}
+.dlg{width:640px;background:var(--t-surface);color:var(--t-fg);border-radius:28px;padding:24px 28px;display:flex;flex-direction:column;gap:14px}
+.dlg h3{font:700 22px var(--f-display)}
+.dlg .g{display:grid;grid-template-columns:1fr 1fr;gap:6px 28px}
+.dlg .g div{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:5px 0;border-bottom:1px solid var(--t-line)}
+.dlg .g .s{font:700 11px var(--f-mono);color:var(--t-muted);letter-spacing:1px;text-transform:uppercase;border:0;padding-top:10px}
+.dlg .ok{align-self:flex-end;font:600 14px var(--f-body);color:var(--accent)}
+.set-l{width:340px;flex:none;padding:4px 12px 16px;display:flex;flex-direction:column;gap:2px}
+.set-l div{padding:11px 16px;border-radius:99px;font-size:14.5px;display:flex;gap:14px;align-items:center}
+.set-l div i{font-style:normal;width:20px;text-align:center;color:var(--t-muted)}
+.set-l div.on{background:var(--accent-soft);color:var(--accent);font-weight:600} .set-l div.on i{color:var(--accent)}
+.sw{display:flex;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--t-line)}
+.sw .tx{flex:1} .sw b{font:500 15px var(--f-body);display:block} .sw span{font-size:13px;color:var(--t-muted)}
+.sw .s{width:52px;height:32px;border-radius:99px;background:var(--accent);position:relative;flex:none}
+.sw .s::after{content:"";position:absolute;right:4px;top:4px;width:24px;height:24px;border-radius:50%;background:#fff}
+.sw .s.off{background:var(--t-cont);border:2px solid var(--t-muted)} .sw .s.off::after{left:4px;right:auto;top:6px;width:16px;height:16px;background:var(--t-muted)}
+.opt{display:flex;gap:12px;align-items:center;padding:10px 0;font-size:14.5px}
+.opt i{font-style:normal;width:20px;height:20px;border-radius:50%;border:2px solid var(--t-muted)}
+.opt.on i{border:6px solid var(--accent)}
+.new-tag{font:700 10px var(--f-mono);background:var(--aurora-soft);color:var(--aurora);border-radius:99px;padding:2px 8px;letter-spacing:.5px}
+.annot{position:absolute;z-index:6;background:var(--warn);color:#fff;font:700 13px var(--f-mono);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+ol.notes{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted);max-width:none}
+ol.notes b{color:var(--fg)}
+</style></head>
+<body>
+<button class="toggle" onclick="flip()">Hell / Dunkel</button>
+<div class="wrap">
+
+<header>
+  <span class="kick">PlanetFOSS Android · Konzept 11 · 23.11.2026</span>
+  <h1>Ein echter Tablet-Modus</h1>
+  <p class="lede">Auf dem Pixel Tablet ist PlanetFOSS heute eine Handy-App, die sich streckt. Nur „Aktuell“ nutzt die Breite. Supernova, Logbuch und Entdecken sitzen als 720-dp-Spalte in der Mitte, und jedes Antippen ersetzt die Liste durch einen neuen Bildschirm. Der Vorschlag: Liste und Inhalt nebeneinander, jede Seite für die Breite gestaltet, dazu Tastatur und Maus.</p>
+  <p class="lede" style="font-size:14.5px">Text zum Konzept: <code>docs/11-tablet-mode.md</code>. Alle Tablets unten sind in echter Größe gebaut (1280 × 800 dp, Pixel Tablet quer) und nur verkleinert. Oben rechts lässt sich auf Dunkel umschalten.</p>
+</header>
+
+<section>
+  <span class="kick ist">Befund</span>
+  <h2>Was das Tablet heute zeigt</h2>
+  <div class="pair">
+    <div><div class="cap"><h3>Supernova</h3><p>Das Titelbild nimmt fast die ganze Höhe. Der erste Bericht beginnt am unteren Rand, links und rechts bleiben je 200 dp leer.</p></div>
+      <img class="shot" src="store-screenshots/raw/tab-de-supernova.png" alt="Supernova-Seite heute auf dem Tablet"></div>
+    <div><div class="cap"><h3>Logbuch</h3><p>Nach dem Kopf füllt das Supernova-Bild als 16:9-Block den Bildschirm. Der eigentliche Inhalt kommt erst nach zwei Bildschirmhöhen.</p></div>
+      <img class="shot" src="store-screenshots/raw/tab-de-logbuch.png" alt="Logbuch heute auf dem Tablet"></div>
+  </div>
+  <div class="cols">
+    <div class="box"><h3>Gut heute</h3><p>Navigationsleiste an der Seite, zwei versetzte Spalten in Aktuell, Rubrik, Thema, Quelle und Gespeichert (ab 700 dp, höchstens 1200 dp).</p></div>
+    <div class="box"><h3>Verschenkt</h3><p>Supernovas, Logbuch, Wochenrückblick, Entdecken, Suche und Einstellungen: alles eine Spalte von 720 dp, mittig.</p></div>
+    <div class="box"><h3>Umständlich</h3><p>Öffnen heißt immer Seitenwechsel: Karte, zurück, nächste Karte, zurück. Für Tastatur und Maus gibt es keine Kürzel, kein Hover und keinen Rechtsklick.</p></div>
+  </div>
+</section>
+
+<section>
+  <span class="kick">Grundsatz</span>
+  <h2>Das Fenster entscheidet, nicht das Gerät</h2>
+  <table>
+    <tr><th>Fensterbreite</th><th>Beispiele</th><th>Aufbau</th></tr>
+    <tr><td>unter 600 dp</td><td>Handy hoch, halber Splitscreen</td><td>wie heute</td></tr>
+    <tr><td>600–839 dp</td><td>Tablet hoch (800 dp), Foldable offen hoch</td><td>ein Bereich, Stream zweispaltig, Detailseiten in breiter Form</td></tr>
+    <tr><td>840–1199 dp</td><td>kleines Tablet quer, Foldable quer</td><td><b>zwei Bereiche:</b> Liste 360 dp, Inhalt daneben</td></tr>
+    <tr><td>ab 1200 dp</td><td>Pixel Tablet quer, Desktop-Fenster</td><td>zwei Bereiche: Liste 400 dp, Inhalt bis 880 dp</td></tr>
+  </table>
+</section>
+
+<!-- 1 Aktuell, nichts gewählt -->
+<section>
+  <span class="kick">Bildschirm 1 · quer · Entscheidung D-T2</span>
+  <h2>Aktuell: links der Stream, rechts die Lage</h2>
+  <p>Ist nichts geöffnet, bleibt der rechte Bereich nicht grau. Er zeigt, was gerade brennt: die Supernova mit ihren Berichten und das Logbuch von heute. Die Liste links wird einspaltig und kompakt. Von allein öffnet sich kein Artikel, denn das würde Aufrufe für die Quellen zählen, die niemand gemacht hat.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div class="on"><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><div class="t"><span class="logo"></span>PlanetFOSS</div><span class="ib">⌕</span><span class="seg">DE + EN</span><span class="ib">⚙</span></div>
+      <div class="body">
+        <div class="pane list">
+          <div class="lbl aur"><span class="dot"></span>Im Aufwind<span class="n">Alle Themen →</span></div>
+          <div class="chips"><span class="chip comet">CachyOS</span><span class="chip">KDE Plasma</span><span class="chip">Docker</span></div>
+          <div class="lbl" style="margin-top:4px">Neu seit deinem Besuch · 7</div>
+          <div class="card"><div class="src"><span class="fav" style="--c:#E95420"></span>OMG! Ubuntu · gestern</div><div class="row"><div class="tx"><div class="ti">Ubuntu 27.04 daily builds are available to download</div></div><div class="thumb" style="--g1:#E95420;--g2:#FFC94D"></div></div><div class="chips"><span class="chip">Ubuntu 27.04</span></div></div>
+          <div class="card"><div class="src"><span class="fav" style="--c:#C2401F"></span>9to5Linux · vor 7 Std. <span class="new">NEU</span></div><div class="ti">CachyOS November 2026 ISO bringt Package Installer 2.0</div><div class="more">● 4 weitere Quellen</div><div class="chips"><span class="chip comet">CachyOS</span><span class="chip">Distros</span></div></div>
+          <div class="card"><div class="src"><span class="fav" style="--c:#4A86CF"></span>This Week in GNOME · vorgestern</div><div class="ti">#275 Grand Theft Auto-Paste</div><div class="ex">Updates on what happens across the GNOME project from week to week.</div></div>
+          <div class="card"><div class="src"><span class="fav" style="--c:#7A5600"></span>LinuxNews · vor 3 Std.</div><div class="ti">Yuvomi bringt den Familienplaner auf den eigenen Server</div></div>
+        </div>
+        <div class="handle"></div>
+        <div class="pane detail" style="gap:14px">
+          <div class="lbl">Gerade · Sonntag, 23. November</div>
+          <div class="nova">
+            <div class="burst"><span class="badge">✦ SUPERNOVA</span>brennt seit 5 Std.</div>
+            <div style="display:grid;grid-template-columns:5fr 7fr;gap:18px;align-items:start">
+              <div class="img" style="height:170px"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><h4>CachyOS</h4><div class="meta">5 Beiträge · 4 Quellen</div>
+                <div class="rep"><span class="av" style="--c:#C2401F"></span><div><div class="who">Linux und Ich <span>DE · vor 5 Std.</span></div><b>CachyOS 2026-11: Package Installer 2.0 bringt AUR, Flatpak und AppImages zusammen</b></div></div>
+                <div class="rep"><span class="av" style="--c:#4A86CF"></span><div><div class="who">Linuxiac <span>EN · vor 7 Std.</span></div><b>CachyOS November ISO lands with Linux 6.18 LTS</b></div></div>
+                <span class="all">Alle 5 Berichte →</span>
+              </div>
+            </div>
+          </div>
+          <div class="lb"><span class="k">LOGBUCH · SONNTAG, 23. NOVEMBER 2026</span><h4>Debian 13.8</h4><p>In den 24 Stunden bis 6 Uhr haben 26 Quellen 49 Beiträge veröffentlicht. Über die größte Geschichte berichteten 4 Quellen.</p></div>
+        </div>
+      </div>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- 2 Supernova im Detailbereich -->
+<section>
+  <span class="kick">Bildschirm 2 · quer</span>
+  <h2>Supernova öffnet sich daneben, das Bild steht links</h2>
+  <p>Die Karte links bleibt markiert, der Stream bleibt an seiner Stelle. Rechts steht das Bild in 5 von 12 Spalten, höchstens 40 % der Fensterhöhe. Kopf und die ersten drei Berichte sind ohne Scrollen zu sehen. Tippt man ein Thema an, öffnet es sich im selben Bereich, und „Zurück“ springt dort einen Schritt zurück.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div class="on"><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><div class="t"><span class="logo"></span>PlanetFOSS</div><span class="ib">⌕</span><span class="seg">DE + EN</span><span class="ib">⚙</span></div>
+      <div class="body">
+        <div class="pane list">
+          <div class="card mini"><div class="src"><span class="fav" style="--c:#E95420"></span>OMG! Ubuntu · gestern</div><div class="ti">Ubuntu 27.04 daily builds are available to download</div></div>
+          <div class="card sel"><div class="src"><span class="fav" style="--c:#C2401F"></span>9to5Linux · vor 7 Std.</div><div class="ti">CachyOS November 2026 ISO bringt Package Installer 2.0</div><div class="more">✦ Supernova · 4 weitere Quellen</div></div>
+          <div class="card mini"><div class="src"><span class="fav" style="--c:#4A86CF"></span>This Week in GNOME · vorgestern</div><div class="ti">#275 Grand Theft Auto-Paste</div></div>
+          <div class="card mini"><div class="src"><span class="fav" style="--c:#7A5600"></span>LinuxNews · vor 3 Std.</div><div class="ti">Yuvomi bringt den Familienplaner auf den eigenen Server</div></div>
+          <div class="card mini"><div class="src"><span class="fav" style="--c:#2E7D32"></span>Phoronix · vor 4 Std.</div><div class="ti">AMD Contributes Integration For Content-Adaptive Backlight Modulation To GNOME</div></div>
+        </div>
+        <div class="handle"></div>
+        <div class="pane detail" style="padding:0;background:transparent;border:0">
+          <div class="nova" style="border-radius:24px 24px 0 0;flex:1;padding:22px 24px">
+            <div style="display:flex;align-items:center;gap:10px"><span class="badge">✦ SUPERNOVA</span><span class="burst">vor 5 Stunden</span><span style="flex:1"></span><span class="ib" style="color:var(--nova-ink2)">⤢</span><span class="ib" style="color:var(--nova-ink2)">✕</span></div>
+            <div style="display:grid;grid-template-columns:5fr 7fr;gap:22px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:12px"><div class="img" style="height:230px"></div>
+                <div class="chips"><span class="chip" style="background:transparent;color:var(--nova-ink2);border-color:var(--nova-line)">Distros</span><span class="chip" style="background:transparent;color:var(--nova-ink2);border-color:var(--nova-line)">Arch Linux</span></div>
+                <span class="all">Thema CachyOS folgen ✓</span></div>
+              <div style="display:flex;flex-direction:column;gap:4px"><h4>CachyOS</h4><div class="meta" style="margin-bottom:6px">5 Beiträge · 4 Quellen · DE + EN</div>
+                <div class="rep"><span class="av" style="--c:#C2401F"></span><div><div class="who">Linux und Ich <span>DE · vor 5 Std.</span></div><b>CachyOS 2026-11: Package Installer 2.0 bringt AUR, Flatpak und AppImages zusammen</b><p>CachyOS hat sein sechstes Release des Jahres veröffentlicht. Die größte Neuerung ist ein runderneuerter Package Installer.</p></div></div>
+                <div class="rep"><span class="av" style="--c:#4A86CF"></span><div><div class="who">Linuxiac <span>EN · vor 7 Std.</span></div><b>CachyOS November 2026 ISO lands with Linux 6.18 LTS and 7.3 kernels</b><p>The new snapshot also brings Package Installer 2.0 and refreshed Plasma.</p></div></div>
+                <div class="rep"><span class="av" style="--c:#C2401F"></span><div><div class="who">9to5Linux <span>EN · vor 7 Std.</span></div><b>CachyOS November 2026 ISO Release Brings CachyOS Package Installer 2.0</b></div></div>
+                <div class="rep"><span class="av" style="--c:#7A5600"></span><div><div class="who">LinuxNews <span>DE · vor 9 Std.</span></div><b>CachyOS: neues ISO mit Paketinstallierer 2.0</b></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- 3 Artikel im Detailbereich -->
+<section>
+  <span class="kick">Bildschirm 3 · quer · Entscheidung D-T1</span>
+  <h2>Den Artikel neben der Liste lesen</h2>
+  <p>Ein Custom Tab lässt sich nicht einbetten. Auf breiten Fenstern öffnet der Artikel deshalb im App-eigenen Browser im rechten Bereich, mit Trackerschutz und Unterstützen-Link wie heute. Die Leiste oben hat <i>Merken</i>, <i>Stern</i>, <i>Teilen</i>, <i>Im Browser öffnen</i>, <i>Vollbild</i> und <i>Schließen</i>. Abschaltbar über den neuen Schalter <i>Artikel neben der Liste öffnen</i>. Hier zu sehen: Hover mit der Maus und ein Rechtsklick auf eine Karte.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div class="on"><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><div class="t"><span class="logo"></span>PlanetFOSS</div><span class="ib">⌕</span><span class="seg">DE + EN</span><span class="ib">⚙</span></div>
+      <div class="body">
+        <div class="pane list">
+          <div class="card mini"><div class="src"><span class="fav" style="--c:#E95420"></span>OMG! Ubuntu · gestern</div><div class="ti">Ubuntu 27.04 daily builds are available to download</div></div>
+          <div class="card mini hov"><div class="src"><span class="fav" style="--c:#C2401F"></span>9to5Linux · vor 7 Std.</div><div class="ti">CachyOS November 2026 ISO bringt Package Installer 2.0</div></div>
+          <div class="card sel"><div class="src"><span class="fav" style="--c:#7A5600"></span>LinuxNews · vor 3 Std.</div><div class="ti">Yuvomi bringt den Familienplaner auf den eigenen Server</div><div class="chips"><span class="chip">Selfhosting</span></div></div>
+          <div class="card mini"><div class="src"><span class="fav" style="--c:#4A86CF"></span>This Week in GNOME · vorgestern</div><div class="ti">#275 Grand Theft Auto-Paste</div></div>
+          <div class="card mini"><div class="src"><span class="fav" style="--c:#2E7D32"></span>Phoronix · vor 4 Std.</div><div class="ti">AMD Contributes Integration For Content-Adaptive Backlight Modulation</div></div>
+        </div>
+        <div class="handle"></div>
+        <div class="pane detail" style="padding:14px 20px">
+          <div class="ptb"><span class="ib">✕</span><div class="who"><b>LinuxNews</b><span>linuxnews.de/yuvomi-familienplaner-selfhosting</span></div><span class="sup">♥ LinuxNews unterstützen</span><span class="ib">☆</span><span class="ib" style="color:var(--accent)">▮</span><span class="ib">⇪</span><span class="ib hover">↗</span><span class="ib">⤢</span></div>
+          <div class="web">
+            <div class="sitebar">LN <span style="font:500 12px var(--f-body);opacity:.8">LinuxNews</span></div>
+            <h3>Yuvomi bringt den Familienplaner auf den eigenen Server</h3>
+            <div class="by">von Ferdinand Thommes · 23. November 2026</div>
+            <div class="hero"></div>
+            <p>Yuvomi vereint Familienkalender, Aufgaben, Essensplanung und Einkaufslisten in einer Anwendung, die sich selbst betreiben lässt.</p>
+            <div class="ln" style="width:92%"></div><div class="ln" style="width:86%"></div><div class="ln" style="width:90%"></div><div class="ln" style="width:60%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tip" style="left:1034px;top:150px">Im Browser öffnen (O)</div>
+    <div class="cursor" style="left:1046px;top:118px"></div>
+    <div class="menu" style="left:320px;top:248px"><div>↗ Im Browser öffnen<span>O</span></div><div class="h">▮ Merken<span>B</span></div><div>☆ Stern<span>S</span></div><div>⇪ Teilen</div><hr><div>Quelle 9to5Linux</div><div>Thema CachyOS</div><hr><div>Quelle ausblenden</div></div>
+    <div class="cursor" style="left:312px;top:236px"></div>
+  </div></div></div>
+</section>
+
+<!-- 4 Logbuch -->
+<section>
+  <span class="kick">Bildschirm 4 · quer</span>
+  <h2>Logbuch und Wochenrückblick in zwei Spalten</h2>
+  <p>Der Kopf geht über die volle Breite. Das Supernova-Bild wird zu einem Band von höchstens 220 dp statt eines bildschirmfüllenden 16:9-Blocks. Die Abschnitte laufen versetzt in zwei Spalten. Den Tag wechselt man oben mit ‹ › oder mit den Pfeiltasten.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div class="on"><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><span class="ib">←</span><div class="t">Logbuch</div><span class="ib">‹</span><span style="font:600 13px var(--f-mono)">So, 23.11.</span><span class="ib" style="opacity:.35">›</span><span class="ib">⚙</span></div>
+      <div class="body"><div class="pane" style="flex:1;padding:4px 24px 16px;gap:16px">
+        <div class="lb" style="flex-direction:row;gap:24px;align-items:stretch;padding:0;overflow:hidden">
+          <div style="padding:20px 0 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1"><span class="k">LOGBUCH · SONNTAG, 23. NOVEMBER 2026</span><h4>Debian 13.8</h4><p>In den 24 Stunden bis 6 Uhr haben 26 Quellen 49 Beiträge veröffentlicht. Über die größte Geschichte berichteten 4 Quellen: „Debian 13.8“. Neu zur Supernova wurde Debian 13.8. Dazu kam eine neue Version.</p></div>
+          <div style="width:42%;background:linear-gradient(160deg,#1F4C63,#2E6E86 60%,#7FB7C9);position:relative"><span style="position:absolute;left:46%;top:42%;font-size:34px;color:#cfe7f0">@</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="h2">✦ Supernovas</div>
+            <div class="nova" style="padding:14px 16px;gap:6px"><h4 style="font-size:22px">Debian 13.8</h4><div class="meta">4 Quellen · 6 Beiträge</div>
+              <div class="rep"><span class="av" style="--c:#A80030"></span><div><div class="who">Debian News <span>EN</span></div><b>Updated Debian 13: 13.8 released</b></div></div>
+              <div class="rep"><span class="av" style="--c:#C2401F"></span><div><div class="who">9to5Linux <span>EN</span></div><b>Debian 13.8 “Trixie” Released with 60 Security Fixes</b></div></div></div>
+            <div class="h2">Meistgelesen</div>
+            <div class="card mini"><div class="src">1 · Linux und Ich</div><div class="ti">CachyOS 2026-11: Package Installer 2.0</div></div>
+            <div class="card mini"><div class="src">2 · GNU/Linux.ch</div><div class="ti">GNOME-Extensions auf NixOS</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="h2">☄ Kometen</div>
+            <div class="chips"><span class="chip comet">CachyOS</span><span class="chip comet">Firefox 147</span><span class="chip comet">Mesa 26.1</span></div>
+            <div class="h2">Neue Versionen</div>
+            <div class="card mini"><div class="src">Release · KDE</div><div class="ti">Plasma 6.8.4 – Bugfix-Release</div></div>
+            <div class="card mini"><div class="src">Release · Mozilla</div><div class="ti">Firefox 147.0.1</div></div>
+            <div class="card mini"><div class="src">Release · Kernel</div><div class="ti">Linux 6.18.5 LTS</div></div>
+            <div class="h2">Neue Quellen</div>
+            <div class="card mini"><div class="src">Blog · DE</div><div class="ti">Tuxblog – „Linux im Alltag“</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- 5 Entdecken -->
+<section>
+  <span class="kick">Bildschirm 5 · quer</span>
+  <h2>Entdecken als Raster</h2>
+  <p>Die Kacheln stehen in einer Reihe. Die Rubriken werden zu Karten in drei Spalten, jede mit ihrer Farbe, ihrer Zahl und drei heißen Themen. Mit zwei Bereichen öffnet eine Rubrik rechts, und das Raster schrumpft auf zwei Spalten.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div class="on"><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><div class="t">Entdecken</div><span class="ib">⌕</span><span class="seg">DE + EN</span><span class="ib">⚙</span></div>
+      <div class="body"><div class="pane" style="flex:1;padding:4px 24px 16px;gap:16px">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+          <div class="tile" style="background:linear-gradient(160deg,var(--nova),var(--nova2));color:#fff;border:0"><i style="background:rgba(255,201,77,.2);color:var(--star)">✦</i><b>Himmel</b><span style="color:var(--nova-ink3)">1 Supernova, 3 Kometen</span></div>
+          <div class="tile"><i>☾</i><b>Logbuch</b><span>Debian 13.8 · heute 6:00</span></div>
+          <div class="tile"><i>▦</i><b>Wochenrückblick</b><span>KW 47</span></div>
+          <div class="tile"><i style="color:var(--star-ink);background:#FFE9A8">★</i><b>Sternstunden</b><span>12 Beiträge</span></div>
+          <div class="tile"><i>▶</i><b>Videos</b><span>8 neue</span></div>
+        </div>
+        <div class="lbl">Rubriken</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div class="rub" style="--c:#4527D9"><div class="hd"><b>Distros</b><span>214 · 7 Tage</span></div><div class="line">Neue Versionen, Pakete, Projekte rund um Linux-Distributionen</div><div class="chips"><span class="chip comet">CachyOS</span><span class="chip">Debian 13.8</span><span class="chip">Fedora 45</span></div></div>
+          <div class="rub" style="--c:#0B7A6E"><div class="hd"><b>Desktop</b><span>168</span></div><div class="line">GNOME, KDE Plasma, COSMIC und alles auf dem Schreibtisch</div><div class="chips"><span class="chip">KDE Plasma</span><span class="chip">GNOME</span><span class="chip">COSMIC</span></div></div>
+          <div class="rub" style="--c:#C2401F"><div class="hd"><b>Selfhosting</b><span>97</span></div><div class="line">Dienste für den eigenen Server und das Homelab</div><div class="chips"><span class="chip">Docker</span><span class="chip">Nextcloud</span><span class="chip">Immich</span></div></div>
+          <div class="rub" style="--c:#B7791F"><div class="hd"><b>Hardware</b><span>83</span></div><div class="line">Notebooks, Grafik, Treiber und Firmware</div><div class="chips"><span class="chip">Mesa</span><span class="chip">NVIDIA</span><span class="chip">Framework</span></div></div>
+          <div class="rub" style="--c:#6B46C1"><div class="hd"><b>Entwicklung</b><span>141</span></div><div class="line">Sprachen, Werkzeuge, Kernel-Entwicklung</div><div class="chips"><span class="chip">Rust</span><span class="chip">Linux-Kernel</span><span class="chip">Python</span></div></div>
+          <div class="rub" style="--c:#2B6CB0"><div class="hd"><b>Sicherheit</b><span>59</span></div><div class="line">Lücken, Updates und Datenschutz</div><div class="chips"><span class="chip">OpenSSH</span><span class="chip">Firefox</span></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="tile" style="min-height:0;flex-direction:row;align-items:center"><i>#</i><b style="flex:1">Alle Themen</b><span>412</span></div>
+          <div class="tile" style="min-height:0;flex-direction:row;align-items:center"><i>◉</i><b style="flex:1">Alle Quellen</b><span>186</span></div>
+        </div>
+      </div></div>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- 6 Thema mit Seitenspalte -->
+<section>
+  <span class="kick">Bildschirm 6 · quer</span>
+  <h2>Thema und Quelle: Kopf als Seitenspalte</h2>
+  <p>Heute steht der Themenkopf über dem Stream und scrollt weg. Auf ganzer Breite bleibt er als 320-dp-Spalte stehen, mit Beschreibung, <i>Folgen</i>, verwandten Themen und bei Quellen dem Unterstützen-Kasten. Daneben laufen die Beiträge in zwei Spalten.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div class="on"><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><span class="ib">←</span><div class="t">GNOME</div><span class="ib">⌕</span><span class="ib">⚙</span></div>
+      <div class="body">
+        <div class="pane" style="width:340px;flex:none;padding:4px 8px 16px 16px">
+          <div class="card" style="gap:10px;padding:16px">
+            <div class="src">46 Beiträge · 18 Quellen · seit 09/2026</div>
+            <div style="font-size:14px">GNOME ist eine der großen Desktop-Umgebungen für Linux und Standard bei Ubuntu und Fedora. Zweimal im Jahr erscheint eine neue Version.</div>
+            <div style="display:flex;gap:8px"><span class="chip sel">✓ Folge ich</span><span class="chip">🔔 Benachrichtigen</span></div>
+            <div class="lbl" style="margin-top:4px">Rubrik</div><div class="chips"><span class="chip">Desktop</span></div>
+            <div class="lbl">Verwandt</div><div class="chips"><span class="chip">KDE Plasma</span><span class="chip">Flatpak</span><span class="chip">COSMIC</span><span class="chip">X11</span><span class="chip">Qt</span><span class="chip">Linux-Kernel</span></div>
+          </div>
+          <div class="card" style="background:var(--aurora-soft);border-color:transparent"><div class="lbl aur">Diskutiert auf</div><div style="font-size:13px">Mastodon · 14 Antworten zu „GNOME 50 Alpha“</div></div>
+        </div>
+        <div class="pane" style="flex:1;padding:4px 20px 16px 8px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="card"><div class="src"><span class="fav" style="--c:#2E7D32"></span>Phoronix · vorgestern</div><div class="ti">AMD Contributes Integration For Content-Adaptive Backlight Modulation To GNOME</div><div class="ex">Merged today to GNOME's Mutter compositor is support for the Adaptive Backlight Modulation DRM/KMS connector property.</div><div class="chips"><span class="chip">GNOME</span><span class="chip">Desktop</span></div></div>
+              <div class="card"><div class="src"><span class="fav" style="--c:#E95420"></span>OMG! Ubuntu · vor 4 Tagen</div><div class="row"><div class="tx"><div class="ti">Dhruva Dock for GNOME brings the desktop bling</div></div><div class="thumb" style="--g1:#2B3150;--g2:#C2401F"></div></div><div class="chips"><span class="chip">GNOME</span></div></div>
+              <div class="card mini"><div class="src"><span class="fav" style="--c:#4A86CF"></span>This Week in GNOME</div><div class="ti">#275 Grand Theft Auto-Paste</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="card"><div class="src"><span class="fav" style="--c:#C2401F"></span>Linux und Ich · vor 3 Tagen</div><div class="row"><div class="tx"><div class="ti">Gnome sammelt 60.000 Dollar für sein Fellowship-Programm</div></div><div class="thumb"></div></div><div class="ex">Die Gnome Foundation hat ihre Spendenaktion zum Jahresende gestartet.</div></div>
+              <div class="card"><div class="src"><span class="fav" style="--c:#7A5600"></span>GNU/Linux.ch · vor 6 Tagen</div><div class="ti">GNOME-Extensions auf NixOS</div><div class="ex">Wie ich schon öfter geschrieben hatte, liebe ich die schlichte Eleganz und die einfache Bedienbarkeit von GNOME.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- 7 Einstellungen -->
+<section>
+  <span class="kick">Bildschirm 7 · quer · Entscheidung D-T4</span>
+  <h2>Einstellungen in zwei Bereichen</h2>
+  <p>Links stehen die 13 Abschnitte, rechts der gewählte, wie in Androids eigenen Einstellungen. Die Navigationsleiste bleibt dabei sichtbar. Der neue Schalter für Bildschirm 3 steht unter <i>Browser</i>.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><span class="ib">←</span><div class="t">Einstellungen</div></div>
+      <div class="body">
+        <div class="set-l">
+          <div><i>◎</i>Radar</div><div><i>✦</i>Supernovas</div><div><i>☾</i>Logbuch</div><div><i>♥</i>Gefolgt</div><div><i>⊘</i>Ausgeblendet</div><div><i>▮</i>Gespeichert</div><div><i>◐</i>Darstellung</div><div><i>A</i>Sprache</div><div class="on"><i>↗</i>Browser</div><div><i>⛨</i>Trackerschutz</div><div><i>◉</i>Für die Quellen zählen</div><div><i>i</i>Über PlanetFOSS</div><div><i>✧</i>freiversum</div>
+        </div>
+        <div class="pane detail" style="max-width:760px">
+          <div class="h2" style="margin:0 0 4px">Browser</div>
+          <div class="sw"><div class="tx"><b>Artikel neben der Liste öffnen <span class="new-tag">NEU</span></b><span>Auf breiten Bildschirmen öffnet ein Artikel rechts im App-eigenen Browser, mit Trackerschutz. Aus: wie unten gewählt, über den ganzen Bildschirm.</span></div><span class="s"></span></div>
+          <div class="lbl" style="margin-top:12px">Artikel sonst öffnen in</div>
+          <div class="opt on"><i></i>Custom Tab (Browser in der App)</div>
+          <div class="opt"><i></i>App-eigener Browser</div>
+          <div class="opt"><i></i>Immer fragen</div>
+          <div class="sw" style="margin-top:6px"><div class="tx"><b>JavaScript</b><span>Im App-eigenen Browser. Manche Seiten brauchen es für Bilder und Videos.</span></div><span class="s"></span></div>
+          <div class="sw"><div class="tx"><b>Browserdaten löschen</b><span>Cookies, Cache und gespeicherte Anmeldungen des App-eigenen Browsers</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- 8 Hochformat -->
+<section>
+  <span class="kick">Bildschirm 8 · hoch (800 × 1280 dp) · Entscheidung D-T3</span>
+  <h2>Hochkant: ein Bereich, aber breite Seiten</h2>
+  <p>Mit 800 dp passen keine zwei sinnvollen Bereiche nebeneinander, eine Liste mit 320 dp und ein Inhalt mit 480 dp wären beide zu eng. Aktuell bleibt deshalb zweispaltig wie heute. Detailseiten öffnen über den ganzen Bildschirm, aber in ihrer breiten Form: Bei der Supernova steht das Bild neben dem Kopf, darunter folgen die Berichte.</p>
+  <div class="pair">
+    <div class="fit" data-w="800" data-h="1280"><div class="tab port"><div class="scr" style="flex-direction:column">
+      <div class="main">
+        <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+        <div class="topbar"><div class="t"><span class="logo"></span>PlanetFOSS</div><span class="ib">⌕</span><span class="seg">DE + EN</span><span class="ib">⚙</span></div>
+        <div class="pane" style="flex:1;padding:4px 16px">
+          <div class="lbl aur"><span class="dot"></span>Im Aufwind</div>
+          <div class="chips"><span class="chip comet">CachyOS</span><span class="chip">KDE Plasma</span><span class="chip">Docker</span></div>
+          <div class="card" style="gap:8px"><div class="nova" style="padding:0;height:250px;border-radius:12px;background:linear-gradient(135deg,#6B46C1,#B3A4FF)"></div><div class="src"><span class="fav" style="--c:#7A5600"></span>LinuxNews · vor 3 Std.</div><div class="ti" style="font-size:22px">Yuvomi bringt den Familienplaner auf den eigenen Server</div></div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div class="card mini"><div class="src">OMG! Ubuntu</div><div class="ti">Ubuntu 27.04 daily builds are available</div></div>
+            <div class="card mini"><div class="src">9to5Linux</div><div class="ti">CachyOS November 2026 ISO</div><div class="more">● 4 weitere</div></div>
+            <div class="card mini"><div class="src">Phoronix</div><div class="ti">AMD Adaptive Backlight for GNOME</div></div>
+          </div>
+          <div class="lbl">Aktuell</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:12px"><div class="card"><div class="src">This Week in GNOME</div><div class="ti">#275 Grand Theft Auto-Paste</div><div class="ex">Updates on what happens across the GNOME project from week to week.</div></div><div class="card mini"><div class="src">GNU/Linux.ch</div><div class="ti">GNOME-Extensions auf NixOS</div></div></div>
+            <div style="display:flex;flex-direction:column;gap:12px"><div class="card"><div class="row"><div class="tx"><div class="src">Linux und Ich</div><div class="ti">Gnome sammelt 60.000 Dollar</div></div><div class="thumb"></div></div></div><div class="card mini"><div class="src">Linuxiac</div><div class="ti">Firefox 147 lands with tab groups sync</div></div></div>
+          </div>
+        </div>
+        <div style="height:80px;flex:none;display:grid;grid-template-columns:repeat(4,1fr);background:var(--t-cont);border-top:1px solid var(--t-line);padding-top:10px">
+          <div style="text-align:center;font:700 12px var(--f-body);color:var(--accent)"><div style="width:56px;height:30px;margin:0 auto 4px;border-radius:99px;background:var(--accent-soft);display:grid;place-items:center">☰</div>Aktuell</div>
+          <div style="text-align:center;font:500 12px var(--f-body);color:var(--t-muted)"><div style="height:34px;display:grid;place-items:center">◎</div>Radar</div>
+          <div style="text-align:center;font:500 12px var(--f-body);color:var(--t-muted)"><div style="height:34px;display:grid;place-items:center">✧</div>Entdecken</div>
+          <div style="text-align:center;font:500 12px var(--f-body);color:var(--t-muted)"><div style="height:34px;display:grid;place-items:center">▮</div>Gespeichert</div>
+        </div>
+      </div>
+    </div></div></div>
+    <div class="fit" data-w="800" data-h="1280"><div class="tab port"><div class="scr" style="flex-direction:column">
+      <div class="main">
+        <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+        <div class="topbar"><span class="ib">←</span><div class="t">Supernovas</div><span class="seg">DE + EN</span><span class="ib">⚙</span></div>
+        <div class="pane" style="flex:1;padding:4px 20px">
+          <div class="nova" style="padding:22px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center">
+              <div style="display:flex;flex-direction:column;gap:10px"><span class="badge">✦ SUPERNOVA</span><h4 style="font-size:40px">CachyOS</h4><div class="meta">5 Beiträge · 4 Quellen · vor 5 Std.</div><span class="all">Thema folgen</span></div>
+              <div class="img" style="height:210px"></div>
+            </div>
+            <div class="rep"><span class="av" style="--c:#C2401F"></span><div><div class="who">Linux und Ich <span>DE · vor 5 Std.</span></div><b>CachyOS 2026-11: Package Installer 2.0 bringt AUR, Flatpak und AppImages zusammen</b><p>CachyOS hat sein sechstes Release des Jahres veröffentlicht. Die größte Neuerung ist ein runderneuerter Package Installer.</p></div></div>
+            <div class="rep"><span class="av" style="--c:#4A86CF"></span><div><div class="who">Linuxiac <span>EN · vor 7 Std.</span></div><b>CachyOS November 2026 ISO lands with Linux 6.18 LTS and 7.3 kernels</b></div></div>
+            <div class="rep"><span class="av" style="--c:#C2401F"></span><div><div class="who">9to5Linux <span>EN · vor 7 Std.</span></div><b>CachyOS November 2026 ISO Release Brings Package Installer 2.0</b></div></div>
+            <div class="rep"><span class="av" style="--c:#7A5600"></span><div><div class="who">LinuxNews <span>DE · vor 9 Std.</span></div><b>CachyOS: neues ISO mit Paketinstallierer 2.0</b></div></div>
+          </div>
+          <div class="lbl" style="margin-top:6px">Diese Woche</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="nova" style="padding:14px"><span class="meta">✦ seit Mo</span><h4 style="font-size:22px">Debian 13.8</h4><span class="meta">6 Beiträge</span></div>
+            <div class="nova" style="padding:14px"><span class="meta">✦ seit Di</span><h4 style="font-size:22px">KDE Plasma 6.8</h4><span class="meta">9 Beiträge</span></div>
+            <div class="card"><div class="src">☄ Komet</div><div class="ti">Firefox 147</div></div>
+            <div class="card"><div class="src">☄ Komet</div><div class="ti">Mesa 26.1</div></div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+  </div>
+</section>
+
+<!-- 9 Tastatur -->
+<section>
+  <span class="kick">Bildschirm 9 · Tastatur · Entscheidung D-T5</span>
+  <h2>Tastenkürzel, mit <kbd>?</kbd> oder <kbd>Meta</kbd> + <kbd>/</kbd></h2>
+  <p>Die Kürzel stehen zusätzlich in Androids eigener Kürzel-Übersicht (<code>onProvideKeyboardShortcuts</code>). <kbd>J</kbd> und <kbd>K</kbd> bewegen den Fokusrahmen durch die Liste, <kbd>Enter</kbd> öffnet rechts, <kbd>Esc</kbd> schließt.</p>
+  <div class="fit" data-w="1280" data-h="800"><div class="tab"><div class="scr">
+    <div class="rail"><div class="on"><i>☰</i>Aktuell</div><div><i>◎</i>Radar</div><div><i>✧</i>Entdecken</div><div><i>▮</i>Gespeichert</div></div>
+    <div class="main">
+      <div class="status"><span>10:00</span><span>▼ ▮</span></div>
+      <div class="topbar"><div class="t"><span class="logo"></span>PlanetFOSS</div><span class="ib">⌕</span><span class="seg">DE + EN</span><span class="ib">⚙</span></div>
+      <div class="body">
+        <div class="pane list">
+          <div class="card mini"><div class="src">OMG! Ubuntu · gestern</div><div class="ti">Ubuntu 27.04 daily builds are available to download</div></div>
+          <div class="card mini focus"><div class="src">9to5Linux · vor 7 Std.</div><div class="ti">CachyOS November 2026 ISO bringt Package Installer 2.0</div></div>
+          <div class="card mini"><div class="src">This Week in GNOME</div><div class="ti">#275 Grand Theft Auto-Paste</div></div>
+        </div>
+        <div class="handle"></div>
+        <div class="pane detail"><div class="lbl">Gerade</div><div class="nova" style="height:300px"></div></div>
+      </div>
+    </div>
+    <div class="scrim"><div class="dlg">
+      <h3>Tastenkürzel</h3>
+      <div class="g">
+        <div class="s">Navigieren</div><div class="s">Beitrag</div>
+        <div>Aktuell, Radar, Entdecken, Gespeichert<span><kbd>Strg</kbd> <kbd>1</kbd>–<kbd>4</kbd></span></div>
+        <div>Öffnen (rechts)<span><kbd>Enter</kbd></span></div>
+        <div>Nächster / voriger Beitrag<span><kbd>J</kbd> <kbd>K</kbd></span></div>
+        <div>Im Browser öffnen<span><kbd>O</kbd></span></div>
+        <div>Suchen<span><kbd>/</kbd></span></div>
+        <div>Merken<span><kbd>B</kbd></span></div>
+        <div>Neu laden<span><kbd>Strg</kbd> <kbd>R</kbd></span></div>
+        <div>Stern<span><kbd>S</kbd></span></div>
+        <div>Bereich schließen<span><kbd>Esc</kbd></span></div>
+        <div>Menü des Beitrags<span><kbd>⇧</kbd> <kbd>F10</kbd></span></div>
+        <div>Einstellungen<span><kbd>Strg</kbd> <kbd>,</kbd></span></div>
+        <div>Logbuch: Tag zurück / vor<span><kbd>←</kbd> <kbd>→</kbd></span></div>
+      </div>
+      <span class="ok">Schließen</span>
+    </div></div>
+  </div></div></div>
+</section>
+
+<section>
+  <span class="kick">Offen</span>
+  <h2>Entscheidungen</h2>
+  <div class="dec"><b>D-T1 Artikel neben der Liste</b>Vorschlag: auf breiten Fenstern im App-eigenen Browser rechts, abschaltbar. Alternative: immer nach dem gewählten Browsermodus über den ganzen Bildschirm.</div>
+  <div class="dec"><b>D-T2 Rechter Bereich ohne Auswahl</b>Vorschlag: die Lage (brennende Supernova und Logbuch von heute). Alternative: die erste Karte von selbst öffnen, wie Mail-Apps. Dagegen spricht, dass dabei Aufrufe gezählt würden, die niemand gemacht hat.</div>
+  <div class="dec"><b>D-T3 Tablet hochkant</b>Vorschlag: ein Bereich, Stream zweispaltig, Detailseiten breit. Alternative: zwei schmale Bereiche (320 + 480 dp).</div>
+  <div class="dec"><b>D-T4 Einstellungen</b>Vorschlag: zwei Bereiche, Navigationsleiste bleibt sichtbar. Alternative: wie heute.</div>
+  <div class="dec"><b>D-T5 Buchstaben</b>Vorschlag: <kbd>B</kbd> merken, <kbd>S</kbd> Stern, <kbd>O</kbd> im Browser öffnen. Alternative: die Feedly-Belegung.</div>
+</section>
+
+<section>
+  <span class="kick">Reihenfolge</span>
+  <h2>Phasen</h2>
+  <ol class="notes">
+    <li><b>T0 Breite Seiten:</b> Supernova, Logbuch, Wochenrückblick, Entdecken ohne Umbau der Navigation. Behebt, was die Store-Bilder zeigen, und ist das kleinste Risiko.</li>
+    <li><b>T1 Liste und Inhalt:</b> Aktuell, Radar, Gespeichert, Suche, Rubrik-, Themen- und Quellenlisten bekommen den Detailbereich mit eigenem Zurück und dem Lagebild. Deep Links und Benachrichtigungen öffnen rechts.</li>
+    <li><b>T2 Artikel rechts</b> im App-eigenen Browser mit eigener Leiste (D-T1).</li>
+    <li><b>T3 Tastatur und Maus:</b> Kürzel, Hover, Tooltips, Rechtsklick-Menüs, Fokusrahmen. Menüs und Dialoge statt Bottom Sheets.</li>
+    <li><b>T4 Feinschliff:</b> Einstellungen in zwei Bereichen, Seitenspalte bei Thema und Quelle, verschiebbarer Trenner, Foldable-Scharnier.</li>
+    <li><b>T5 Prüfen:</b> Pixel Tablet hoch und quer, Pixel Fold, Splitscreen, Handy quer, TalkBack in beiden Bereichen, Hell und Dunkel, DE und EN, 130 % Schrift. Danach neue Store-Bilder.</li>
+  </ol>
+  <p style="color:var(--muted);font-size:14px">Nach jeder Phase muss das Handy genau so aussehen und sich so verhalten wie vorher.</p>
+</section>
+
+</div>
+<script>
+function fit(){document.querySelectorAll('.fit').forEach(f=>{const w=+f.dataset.w,h=+f.dataset.h,s=f.clientWidth/w;f.style.height=(h*s)+'px';f.firstElementChild.style.transform='scale('+s+')'})}
+addEventListener('resize',fit);fit();document.fonts&&document.fonts.ready.then(fit);
+function flip(){const r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=d==='dark'?'light':'dark'}
+</script>
+</body></html>

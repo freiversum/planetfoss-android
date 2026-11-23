@@ -31,3 +31,15 @@ object Radius {
 
 /** Lists and settings never get wider than this; on tablets and in landscape they stay centred. */
 val ContentMaxWidth = 720.dp
+
+/**
+ * Wide screens (docs/11-tablet-mode.md, T0). The width of the screen's own area decides, not the device, so
+ * split screen on a tablet stays a phone layout. From [TwoColumnsFrom] lists and pages use two columns.
+ */
+val TwoColumnsFrom = 700.dp
+
+/** Two columns are never wider than this together, so cards keep a readable line length. */
+val WideMaxWidth = 1200.dp
+
+/** From this card width a picture stands beside the text instead of above it. */
+val SideBySideFrom = 600.dp

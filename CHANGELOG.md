@@ -8,6 +8,12 @@ versions follow [Semantic Versioning](https://semver.org/).
 Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-release.md`, "Next release").
 
 ### Added
+- Tablets and other wide screens (first step of the tablet mode, `docs/11-tablet-mode.md`): pages use the width
+  instead of a narrow column in the middle. A supernova shows its picture beside the reports, so the first reports are
+  in view without scrolling (also on top of Latest). Supernovas, the logbook and the weekly review put their cards in
+  two columns under headings over the whole width, with lower pictures; a single supernova of the logbook and the cover
+  story of the weekly review stand beside their picture. Discover shows the sky, logbook, weekly review, Sternstunden
+  and videos as a row of tiles and the rubrics as cards in three columns. Phones and split screen stay as they were.
 - Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
   linkding, Linkwarden or Readeck with its address and an API token. "Connect" tries the service first and says what is
   wrong (token, address, server not reachable). From then on, every article you save is sent there in the background,

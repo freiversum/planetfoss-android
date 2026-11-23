@@ -24,9 +24,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -170,142 +172,150 @@ fun WeeklyScreen(onBack: () -> Unit, onLogbook: (String) -> Unit = {}, vm: Weekl
                 r == null -> CenterMessage(stringResource(R.string.loading), loading = true)
                 else -> Column(Modifier.fillMaxSize()) {
                     ui.error?.let { ErrorBanner(errorText(it, hasData = true)) { vm.load() } }
-                    LazyColumn(
-                        contentPadding = PaddingValues(Space.l),
-                        verticalArrangement = Arrangement.spacedBy(Space.m),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        val width = Modifier.widthIn(max = ContentMaxWidth).fillMaxWidth()
-                        // no duplicates (as on the website): the cover story's supernova is shown with it, the next ones
-                        // as cards, the rest as chips; stories of a supernova card are already left out by the server
-                        val cover = r.stories.firstOrNull()
-                        val novaCards = r.supernovas.filter { it.card }
-                        val novaRest = r.supernovas.filter { !it.card && !it.cover }
-                        item(key = "head") { Masthead(r, width) }
-                        cover?.let { c -> item(key = "cover") { CoverStory(c, width) } }
+                    // wide: headings and wide blocks over both columns, cards and rows in two columns (docs/11-tablet-mode.md)
+                    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                        val two = maxWidth >= net.planetfoss.app.ui.theme.TwoColumnsFrom
+                        val full = StaggeredGridItemSpan.FullLine
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(if (two) 2 else 1),
+                            contentPadding = PaddingValues(Space.l),
+                            verticalItemSpacing = Space.m,
+                            horizontalArrangement = Arrangement.spacedBy(Space.l),
+                            modifier = Modifier.fillMaxHeight().widthIn(max = (if (two) net.planetfoss.app.ui.theme.WideMaxWidth else ContentMaxWidth) + Space.l * 2),
+                        ) {
+                            val width = Modifier.fillMaxWidth()
+                            // no duplicates (as on the website): the cover story's supernova is shown with it, the next ones
+                            // as cards, the rest as chips; stories of a supernova card are already left out by the server
+                            val cover = r.stories.firstOrNull()
+                            val novaCards = r.supernovas.filter { it.card }
+                            val novaRest = r.supernovas.filter { !it.card && !it.cover }
+                            item(key = "head", span = full) { Masthead(r, width) }
+                            cover?.let { c -> item(key = "cover", span = full) { CoverStory(c, width, side = two) } }
 
-                        item(key = "novas-h") { SectionHead(stringResource(R.string.weekly_novas), width, hint = stringResource(R.string.weekly_novas_hint)) }
-                        if (novaCards.isEmpty() && novaRest.isEmpty()) {
-                            item(key = "novas-none") {
-                                Text(stringResource(if (r.supernovas.isEmpty()) R.string.weekly_none else R.string.weekly_nova_cover), width,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            item(key = "novas-h", span = full) { SectionHead(stringResource(R.string.weekly_novas), width, hint = stringResource(R.string.weekly_novas_hint)) }
+                            if (novaCards.isEmpty() && novaRest.isEmpty()) {
+                                item(key = "novas-none", span = full) {
+                                    Text(stringResource(if (r.supernovas.isEmpty()) R.string.weekly_none else R.string.weekly_nova_cover), width,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
                             }
-                        }
-                        items(novaCards, key = { "nova-" + it.key }) { n -> NovaIssueCard(n, width) { actions.topic(TopicRef(n.key, n.label, true)) } }
-                        if (novaRest.isNotEmpty()) {
-                            item(key = "novas-rest") {
-                                Column(width, verticalArrangement = Arrangement.spacedBy(Space.s)) {
-                                    if (novaCards.isNotEmpty()) Label(stringResource(R.string.weekly_more_novas))
-                                    FlowRow(horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s)) {
-                                        novaRest.forEach { n ->
-                                            ChipTag(pluralStringResource(R.plurals.weekly_nova_chip, n.sources, n.label, n.sources), supernova = true) { actions.topic(TopicRef(n.key, n.label, true)) }
+                            items(novaCards, key = { "nova-" + it.key }) { n -> NovaIssueCard(n, width, band = two) { actions.topic(TopicRef(n.key, n.label, true)) } }
+                            if (novaRest.isNotEmpty()) {
+                                item(key = "novas-rest", span = full) {
+                                    Column(width, verticalArrangement = Arrangement.spacedBy(Space.s)) {
+                                        if (novaCards.isNotEmpty()) Label(stringResource(R.string.weekly_more_novas))
+                                        FlowRow(horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s)) {
+                                            novaRest.forEach { n ->
+                                                ChipTag(pluralStringResource(R.plurals.weekly_nova_chip, n.sources, n.label, n.sources), supernova = true) { actions.topic(TopicRef(n.key, n.label, true)) }
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        val more = r.stories.drop(1)
-                        if (more.isNotEmpty()) {
-                            item(key = "stories-h") { SectionHead(stringResource(R.string.weekly_stories), width, hint = stringResource(R.string.weekly_stories_hint)) }
-                            itemsIndexed(more, key = { _, s -> "story-" + s.id }) { i, s -> StoryRow(i + 1, s, width) { actions.bundle(s.id) } }
-                        }
+                            val more = r.stories.drop(1)
+                            if (more.isNotEmpty()) {
+                                item(key = "stories-h", span = full) { SectionHead(stringResource(R.string.weekly_stories), width, hint = stringResource(R.string.weekly_stories_hint)) }
+                                itemsIndexed(more, key = { _, s -> "story-" + s.id }) { i, s -> StoryRow(i + 1, s, width) { actions.bundle(s.id) } }
+                            }
 
-                        if (r.releases.isNotEmpty()) {
-                            item(key = "rel-h") { SectionHead(stringResource(R.string.weekly_releases), width, hint = stringResource(R.string.weekly_releases_hint)) }
-                            item(key = "rel") {
-                                FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s), maxItemsInEachRow = 2) {
-                                    r.releases.forEach { t ->
-                                        OutlinedCard(onClick = { actions.topic(TopicRef(t.key, t.label)) }, shape = Radius.s, modifier = Modifier.weight(1f)) {
-                                            Row(Modifier.height(IntrinsicSize.Min)) {
-                                                Box(Modifier.width(4.dp).fillMaxHeight().background(LocalPlanetColors.current.aurora))
-                                                Column(Modifier.padding(horizontal = Space.m, vertical = Space.s)) {
-                                                    Text(
-                                                        buildString { append(t.entity); t.version?.let { append(" "); append(it) } },
-                                                        style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                                                    )
-                                                    Text(pluralStringResource(R.plurals.n_sources, t.sources, t.sources), style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            if (r.releases.isNotEmpty()) {
+                                item(key = "rel-h", span = full) { SectionHead(stringResource(R.string.weekly_releases), width, hint = stringResource(R.string.weekly_releases_hint)) }
+                                item(key = "rel", span = full) {
+                                    val perRow = if (two) 4 else 2
+                                    FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s), maxItemsInEachRow = perRow) {
+                                        r.releases.forEach { t ->
+                                            OutlinedCard(onClick = { actions.topic(TopicRef(t.key, t.label)) }, shape = Radius.s, modifier = Modifier.weight(1f)) {
+                                                Row(Modifier.height(IntrinsicSize.Min)) {
+                                                    Box(Modifier.width(4.dp).fillMaxHeight().background(LocalPlanetColors.current.aurora))
+                                                    Column(Modifier.padding(horizontal = Space.m, vertical = Space.s)) {
+                                                        Text(
+                                                            buildString { append(t.entity); t.version?.let { append(" "); append(it) } },
+                                                            style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                                                        )
+                                                        Text(pluralStringResource(R.plurals.n_sources, t.sources, t.sources), style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if (r.rubrics.isNotEmpty()) {
-                            item(key = "rub-h") { SectionHead(stringResource(R.string.weekly_rubrics), width, hint = stringResource(R.string.weekly_rubrics_hint)) }
-                            items(r.rubrics, key = { "rub-" + it.slug }) { rb ->
-                                Column(width, verticalArrangement = Arrangement.spacedBy(Space.s)) {
-                                    val tint = rubricColor(rb.slug) ?: MaterialTheme.colorScheme.primary
-                                    Box(Modifier.fillMaxWidth().height(4.dp).clip(CircleShape).background(tint))
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Text(rb.name.uppercase(), style = MetaStyle.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp), color = tint, modifier = Modifier.weight(1f))
-                                        Text(pluralStringResource(R.plurals.n_posts, rb.items, rb.items), style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    }
-                                    ItemCard(rb.item, Modifier.fillMaxWidth())
-                                }
-                            }
-                        }
-
-                        if (r.numbers.items > 0 && r.days.isNotEmpty()) {
-                            item(key = "num-h") { SectionHead(stringResource(R.string.weekly_numbers), width) }
-                            item(key = "num-days") { DaysBox(r, width) }
-                            if (r.sections.isNotEmpty()) {
-                                item(key = "num-sections") {
-                                    BarsBox(stringResource(R.string.weekly_sections), r.sections.take(8).map { Bar(it.name, it.items, rubricColor(it.slug)) }, r.texts.sections, width)
-                                }
-                            }
-                            if (r.topSources.isNotEmpty()) {
-                                item(key = "num-sources") {
-                                    BarsBox(stringResource(R.string.weekly_top), r.topSources.map { Bar(it.name, it.items, LocalPlanetColors.current.aurora, it.logo, it.color) }, r.texts.sources, width)
-                                }
-                            }
-                        }
-
-                        if (r.videos.isNotEmpty()) {
-                            item(key = "videos-h") { SectionHead("▶ " + stringResource(R.string.weekly_videos), width) }
-                            items(r.videos, key = { "video-" + it.id }) { ItemCard(it, width) }
-                        }
-                        if (r.starred.isNotEmpty()) {
-                            item(key = "starred-h") { SectionHead("★ " + stringResource(R.string.weekly_starred), width) }
-                            items(r.starred, key = { "star-" + it.id }) { ItemCard(it, width) }
-                        }
-                        if (r.topics.isNotEmpty()) {
-                            item(key = "topics-h") { SectionHead(stringResource(R.string.weekly_topics), width, hint = stringResource(R.string.weekly_topics_hint)) }
-                            item(key = "topics") {
-                                FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s)) {
-                                    r.topics.forEach { t -> ChipTag(t.label, supernova = false, comet = t.comet) { actions.topic(TopicRef(t.key, t.label)) } }
-                                }
-                            }
-                        }
-                        // the week in the logbook (website: below the review): one card per morning, the cover story marked
-                        if (r.logbook.isNotEmpty()) {
-                            item(key = "logbook-h") { SectionHead(stringResource(R.string.logbook_week), width, hint = stringResource(R.string.logbook_week_hint)) }
-                            item(key = "logbook") {
-                                FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s), maxItemsInEachRow = 2) {
-                                    r.logbook.forEach { d -> LogDayCard(d, Modifier.weight(1f).fillMaxRowHeight()) { onLogbook(d.day) } }
-                                    // an odd number: an empty half keeps the last card at half width
-                                    if (r.logbook.size % 2 == 1) Box(Modifier.weight(1f))
-                                }
-                            }
-                        }
-                        if (r.archive.size > 1) {
-                            item(key = "archive-h") { SectionHead(stringResource(R.string.weekly_archive), width) }
-                            item(key = "archive") {
-                                FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-                                    r.archive.forEach { w ->
-                                        FilterChip(
-                                            selected = w == r.week,
-                                            onClick = { if (w != r.week) vm.load(w) },
-                                            label = { Text(stringResource(R.string.weekly_kw, w.substringAfter('-').toInt(), w.substringBefore('-').toInt())) },
-                                        )
+                            if (r.rubrics.isNotEmpty()) {
+                                item(key = "rub-h", span = full) { SectionHead(stringResource(R.string.weekly_rubrics), width, hint = stringResource(R.string.weekly_rubrics_hint)) }
+                                items(r.rubrics, key = { "rub-" + it.slug }) { rb ->
+                                    Column(width, verticalArrangement = Arrangement.spacedBy(Space.s)) {
+                                        val tint = rubricColor(rb.slug) ?: MaterialTheme.colorScheme.primary
+                                        Box(Modifier.fillMaxWidth().height(4.dp).clip(CircleShape).background(tint))
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text(rb.name.uppercase(), style = MetaStyle.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp), color = tint, modifier = Modifier.weight(1f))
+                                            Text(pluralStringResource(R.plurals.n_posts, rb.items, rb.items), style = MetaStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        }
+                                        ItemCard(rb.item, Modifier.fillMaxWidth())
                                     }
                                 }
                             }
+
+                            if (r.numbers.items > 0 && r.days.isNotEmpty()) {
+                                item(key = "num-h", span = full) { SectionHead(stringResource(R.string.weekly_numbers), width) }
+                                item(key = "num-days", span = full) { DaysBox(r, width) }
+                                if (r.sections.isNotEmpty()) {
+                                    item(key = "num-sections") {
+                                        BarsBox(stringResource(R.string.weekly_sections), r.sections.take(8).map { Bar(it.name, it.items, rubricColor(it.slug)) }, r.texts.sections, width)
+                                    }
+                                }
+                                if (r.topSources.isNotEmpty()) {
+                                    item(key = "num-sources") {
+                                        BarsBox(stringResource(R.string.weekly_top), r.topSources.map { Bar(it.name, it.items, LocalPlanetColors.current.aurora, it.logo, it.color) }, r.texts.sources, width)
+                                    }
+                                }
+                            }
+
+                            if (r.videos.isNotEmpty()) {
+                                item(key = "videos-h", span = full) { SectionHead("▶ " + stringResource(R.string.weekly_videos), width) }
+                                items(r.videos, key = { "video-" + it.id }) { ItemCard(it, width) }
+                            }
+                            if (r.starred.isNotEmpty()) {
+                                item(key = "starred-h", span = full) { SectionHead("★ " + stringResource(R.string.weekly_starred), width) }
+                                items(r.starred, key = { "star-" + it.id }) { ItemCard(it, width) }
+                            }
+                            if (r.topics.isNotEmpty()) {
+                                item(key = "topics-h", span = full) { SectionHead(stringResource(R.string.weekly_topics), width, hint = stringResource(R.string.weekly_topics_hint)) }
+                                item(key = "topics", span = full) {
+                                    FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s)) {
+                                        r.topics.forEach { t -> ChipTag(t.label, supernova = false, comet = t.comet) { actions.topic(TopicRef(t.key, t.label)) } }
+                                    }
+                                }
+                            }
+                            // the week in the logbook (website: below the review): one card per morning, the cover story marked
+                            if (r.logbook.isNotEmpty()) {
+                                item(key = "logbook-h", span = full) { SectionHead(stringResource(R.string.logbook_week), width, hint = stringResource(R.string.logbook_week_hint)) }
+                                item(key = "logbook", span = full) {
+                                    val perRow = if (two) 4 else 2
+                                    FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s), verticalArrangement = Arrangement.spacedBy(Space.s), maxItemsInEachRow = perRow) {
+                                        r.logbook.forEach { d -> LogDayCard(d, Modifier.weight(1f).fillMaxRowHeight()) { onLogbook(d.day) } }
+                                        // an incomplete last row: empty places keep the last cards at their width
+                                        repeat((perRow - r.logbook.size % perRow) % perRow) { Box(Modifier.weight(1f)) }
+                                    }
+                                }
+                            }
+                            if (r.archive.size > 1) {
+                                item(key = "archive-h", span = full) { SectionHead(stringResource(R.string.weekly_archive), width) }
+                                item(key = "archive", span = full) {
+                                    FlowRow(width, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
+                                        r.archive.forEach { w ->
+                                            FilterChip(
+                                                selected = w == r.week,
+                                                onClick = { if (w != r.week) vm.load(w) },
+                                                label = { Text(stringResource(R.string.weekly_kw, w.substringAfter('-').toInt(), w.substringBefore('-').toInt())) },
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            item(key = "end", span = full) { Box(Modifier.padding(bottom = Space.l)) }
                         }
-                        item(key = "end") { Box(Modifier.padding(bottom = Space.l)) }
                     }
                 }
             }
@@ -368,56 +378,74 @@ private fun KeyFigure(label: String, value: String, modifier: Modifier, sub: Str
 
 /** Cover story: big picture, name, lead article, teaser and how other sources covered it. */
 @Composable
-private fun CoverStory(s: WeekStory, modifier: Modifier) {
+private fun CoverStory(s: WeekStory, modifier: Modifier, side: Boolean = false) {
     val actions = LocalItemActions.current
-    val planet = LocalPlanetColors.current
     val lead = s.lead
     Card(modifier, shape = Radius.card, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
-        Column {
+        val picture = @Composable { m: Modifier ->
             lead?.image?.let { img ->
                 AsyncImage(
                     model = img.large,
                     contentDescription = null,
                     contentScale = if (img.fit) ContentScale.Fit else ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).background(NovaSpace).clickable(role = Role.Button) { actions.bundle(s.id) },
+                    modifier = m.background(NovaSpace).clickable(role = Role.Button) { actions.bundle(s.id) },
                 )
             }
-            Column(Modifier.padding(Space.l), verticalArrangement = Arrangement.spacedBy(Space.s)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
-                    Label(stringResource(R.string.weekly_cover), MaterialTheme.colorScheme.primary)
-                    Text(pluralStringResource(R.plurals.bundle_sources, s.sources, s.sources), style = MetaStyle, color = planet.aurora, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-                s.supernova?.let { n -> ChipTag(n.label, supernova = true) { actions.topic(TopicRef(n.key, n.label, true)) } }
-                Text(
-                    s.name,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.clickable(role = Role.Button) { actions.bundle(s.id) }.semantics { heading() },
-                )
-                if (lead != null) {
-                    Column(
-                        Modifier.fillMaxWidth().clip(Radius.s).clickable(role = Role.Button) { actions.openFrom(lead, "liste") }.padding(vertical = Space.xs),
-                        verticalArrangement = Arrangement.spacedBy(Space.xxs),
-                    ) {
-                        Text(lead.source.name, style = MetaStyle, fontWeight = FontWeight.Bold)
-                        if (lead.title != s.name) Text(lead.title, style = MaterialTheme.typography.titleMedium)
-                        lead.excerpt?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 4, overflow = TextOverflow.Ellipsis) }
-                    }
-                }
-                if (s.reports.isNotEmpty()) {
-                    Label(stringResource(R.string.weekly_cover_reports))
-                    Column {
-                        s.reports.forEachIndexed { i, rep ->
-                            if (i > 0) HorizontalDivider()
-                            CoverReport(rep) { actions.open(rep.url) }
-                        }
-                    }
-                }
-                TextButton(onClick = { actions.bundle(s.id) }, contentPadding = PaddingValues(0.dp)) {
-                    Text(pluralStringResource(R.plurals.weekly_cover_all, s.sources, s.sources) + " →")
+        }
+        // side (wide screens): the picture beside the story instead of a block over the whole width
+        if (side) {
+            Row {
+                if (lead?.image != null) picture(Modifier.weight(1f).aspectRatio(16f / 10f))
+                Box(Modifier.weight(1f)) { CoverText(s) }
+            }
+        } else {
+            Column {
+                picture(Modifier.fillMaxWidth().aspectRatio(16f / 10f))
+                CoverText(s)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CoverText(s: WeekStory) {
+    val actions = LocalItemActions.current
+    val planet = LocalPlanetColors.current
+    val lead = s.lead
+    Column(Modifier.padding(Space.l), verticalArrangement = Arrangement.spacedBy(Space.s)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.s)) {
+            Label(stringResource(R.string.weekly_cover), MaterialTheme.colorScheme.primary)
+            Text(pluralStringResource(R.plurals.bundle_sources, s.sources, s.sources), style = MetaStyle, color = planet.aurora, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+        s.supernova?.let { n -> ChipTag(n.label, supernova = true) { actions.topic(TopicRef(n.key, n.label, true)) } }
+        Text(
+            s.name,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.clickable(role = Role.Button) { actions.bundle(s.id) }.semantics { heading() },
+        )
+        if (lead != null) {
+            Column(
+                Modifier.fillMaxWidth().clip(Radius.s).clickable(role = Role.Button) { actions.openFrom(lead, "liste") }.padding(vertical = Space.xs),
+                verticalArrangement = Arrangement.spacedBy(Space.xxs),
+            ) {
+                Text(lead.source.name, style = MetaStyle, fontWeight = FontWeight.Bold)
+                if (lead.title != s.name) Text(lead.title, style = MaterialTheme.typography.titleMedium)
+                lead.excerpt?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 4, overflow = TextOverflow.Ellipsis) }
+            }
+        }
+        if (s.reports.isNotEmpty()) {
+            Label(stringResource(R.string.weekly_cover_reports))
+            Column {
+                s.reports.forEachIndexed { i, rep ->
+                    if (i > 0) HorizontalDivider()
+                    CoverReport(rep) { actions.open(rep.url) }
                 }
             }
+        }
+        TextButton(onClick = { actions.bundle(s.id) }, contentPadding = PaddingValues(0.dp)) {
+            Text(pluralStringResource(R.plurals.weekly_cover_all, s.sources, s.sources) + " →")
         }
     }
 }
@@ -449,7 +477,7 @@ private fun SourceDot(logo: String?, color: String?, modifier: Modifier = Modifi
 
 /** A supernova of the week as a night-blue card with picture, badge, name, quote and numbers (`.wk-nova`). */
 @Composable
-private fun NovaIssueCard(n: WeekNova, modifier: Modifier, onOpen: () -> Unit) {
+private fun NovaIssueCard(n: WeekNova, modifier: Modifier, band: Boolean = false, onOpen: () -> Unit) {
     val planet = LocalPlanetColors.current
     Card(onClick = onOpen, modifier = modifier, shape = Radius.card, colors = CardDefaults.cardColors(containerColor = NovaSpace, contentColor = NovaInk)) {
         Column(Modifier.fillMaxWidth().drawBehind { novaSky() }) {
@@ -458,7 +486,8 @@ private fun NovaIssueCard(n: WeekNova, modifier: Modifier, onOpen: () -> Unit) {
                     model = img.large,
                     contentDescription = null,
                     contentScale = if (img.fit) ContentScale.Fit else ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f),
+                    // band: in a column on a wide screen, a lower picture so the text stays in view
+                    modifier = Modifier.fillMaxWidth().aspectRatio(if (band) 2f else 16f / 9f),
                 )
             }
             Column(Modifier.padding(Space.l), verticalArrangement = Arrangement.spacedBy(Space.s)) {

@@ -305,14 +305,14 @@ fun ItemListContent(
         else -> Column(Modifier.fillMaxSize()) {
             state.error?.let { ErrorBanner(errorText(it, hasData = true, since = state.since), onRetry ?: {}) }
             BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                val two = maxWidth >= TwoColumnsFrom
+                val two = maxWidth >= net.planetfoss.app.ui.theme.TwoColumnsFrom
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Fixed(if (two) 2 else 1),
                     state = listState,
                     contentPadding = PaddingValues(Space.l),
                     verticalItemSpacing = Space.m,
                     horizontalArrangement = Arrangement.spacedBy(Space.m),
-                    modifier = Modifier.fillMaxHeight().widthIn(max = (if (two) TwoColumnsMaxWidth else ContentMaxWidth) + Space.l * 2),
+                    modifier = Modifier.fillMaxHeight().widthIn(max = (if (two) net.planetfoss.app.ui.theme.WideMaxWidth else ContentMaxWidth) + Space.l * 2),
                 ) {
                     header?.invoke(this)
                     // the front page on top, as the website's start page: lead story by weight and three side stories,
@@ -535,12 +535,6 @@ private const val StarredAfter = 7
 
 /** Replies from the fediverse on a topic without a story split: after this many posts (website: after the list). */
 private const val RepliesAfter = 6
-
-/** Two columns from this width of the list (tablets, phones in landscape beside the rail). */
-private val TwoColumnsFrom = 700.dp
-
-/** Two columns are never wider than this together, so cards keep a readable line length. */
-private val TwoColumnsMaxWidth = 1200.dp
 
 /** Ask for the next page when the last five cards come into view. */
 @Composable
