@@ -60,6 +60,9 @@ private val NIGHT_STARS = listOf(
     Triple(0.63f, 0.65f, 0.8f), Triple(0.78f, 0.3f, 1f), Triple(0.91f, 0.7f, 1.2f),
 )
 
+/** True for pages in the list pane while a detail pane stands beside it (wide screens, docs/11-tablet-mode.md). */
+val LocalBesidePane = androidx.compose.runtime.staticCompositionLocalOf { false }
+
 /** Light status bar icons while the night header is on screen; the theme's choice again afterwards. */
 @Composable
 private fun LightStatusIcons() {
@@ -97,7 +100,9 @@ fun TabTopBar(
         drawRect(planet.night)
         NIGHT_STARS.forEach { (x, y, r) -> drawCircle(Color.White.copy(alpha = 0.5f), radius = r * density, center = Offset(size.width * x, size.height * y)) }
     }
-    if (brand) LightStatusIcons()
+    // beside the detail pane the night header covers only the list; the status bar has one icon colour for the whole
+    // window, so it follows the larger pane on the right
+    if (brand && !LocalBesidePane.current) LightStatusIcons()
     TopAppBar(
         modifier = if (brand) night else Modifier,
         colors = if (brand) {

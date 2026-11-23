@@ -150,7 +150,10 @@
       Concept and mockups 2026-11-23: `docs/11-tablet-mode.md`, `docs/tablet-mode-mockup.html`; phases T0–T5
   - [ ] Decisions D-T1 to D-T5 (Christoph)
   - [x] T0 wide forms of Supernova, Logbook, Weekly review, Discover (2026-11-23; emulator as Pixel Tablet both ways and as phone)
-  - [ ] T1 list and detail side by side (Latest, Radar, Saved, search, lists), situation pane
+  - [x] T1 list and detail side by side (Latest, Radar, Saved, search, lists), situation pane (2026-11-23; D-T2 and D-T3
+        as proposed, not confirmed yet; emulator as Pixel Tablet both ways, rotation with two pages open, phone)
+  - [ ] T1 rest: mark the card that is open on the right; logbook entry of today in the situation pane; open deep links
+        and notifications (topic, source, logbook) on the right instead of full width; search not checked on the tablet yet
   - [ ] T2 article in the detail pane (app's own browser)
   - [ ] T3 keyboard shortcuts, hover, right click, focus ring; menus/dialogs instead of sheets
   - [ ] T4 settings in two panes, topic side column, draggable divider, foldable hinge

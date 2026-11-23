@@ -6,6 +6,20 @@ package net.planetfoss.app.ui
 import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.createGraph
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import net.planetfoss.app.ui.theme.ListPane
+import net.planetfoss.app.ui.theme.ListPaneWide
+import net.planetfoss.app.ui.theme.PanesFrom
+import net.planetfoss.app.ui.theme.WideMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -168,11 +182,67 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
         if (settings.loaded && !settings.setupDone && nav.currentDestination?.hasRoute(SetupRoute::class) != true) nav.navigate(SetupRoute)
     }
 
+    // Two panes (docs/11-tablet-mode.md, T1): in a wide window the lists stay on the left and what they open goes to a
+    // detail pane on the right with its own back stack. Phones, split screen, tablets in portrait and phones in
+    // landscape keep one pane as before. Without anything open the pane shows the situation (burning supernovas).
+    val detailNav = rememberNavController()
+    val windowInfo = currentWindowAdaptiveInfo()
+    val windowWidth = with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
+    val twoPanes = windowWidth >= PanesFrom && windowInfo.windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
+    val split = twoPanes && destination?.isListPage() == true
+    val splitNow by rememberUpdatedState(split)
+    // a list opens its target fresh in the pane; inside the pane it goes on top (back returns there)
+    val toDetail: (Any, Boolean) -> Unit = { route, fromPane ->
+        if (splitNow) {
+            if (!fromPane) detailNav.popBackStack(SituationRoute, inclusive = false)
+            // no launchSingleTop: a topic from a topic page is the same destination with other arguments
+            detailNav.navigate(route)
+        } else {
+            nav.navigate(route)
+        }
+    }
+    val resetPane = { runCatching { detailNav.popBackStack(SituationRoute, inclusive = false) }; Unit }
+    val onSettingsPane = { nav.navigate(SettingsRoute) { launchSingleTop = true } }
+    val onSearchPane = { nav.navigate(SearchRoute) { launchSingleTop = true } }
+    val paneBack = { detailNav.popBackStack(); Unit }
+    val paneGraph: NavGraphBuilder.() -> Unit = {
+        composable<SituationRoute> {
+            SupernovaScreen(onSettingsPane, onTopic = { key, label -> toDetail(ListRoute("topic", key, label), true) }, title = stringResource(R.string.situation_title))
+        }
+        composable<SupernovasRoute> {
+            SupernovaScreen(onSettingsPane, onTopic = { key, label -> toDetail(ListRoute("topic", key, label), true) }, onBack = paneBack)
+        }
+        composable<ListRoute> { e -> ItemListScreen(onSettingsPane, onSearchPane, onBack = paneBack, fallbackTitle = e.toRoute<ListRoute>().title) }
+        composable<WeeklyRoute> { net.planetfoss.app.ui.weekly.WeeklyScreen(onBack = paneBack, onLogbook = { toDetail(LogbookRoute(it), true) }) }
+        composable<LogbookRoute> { net.planetfoss.app.ui.logbook.LogbookScreen(onBack = paneBack, onWeekly = { toDetail(WeeklyRoute(it), true) }) }
+    }
+    val viewModelStore = checkNotNull(LocalViewModelStoreOwner.current).viewModelStore
+    // the window became narrow (rotation, fold, split screen): what was open in the pane goes on top of the list
+    LaunchedEffect(twoPanes) {
+        if (twoPanes) return@LaunchedEffect
+        // taken off the pane from the top (its whole back stack is not public API), then put on the list in order
+        val open = ArrayDeque<Any>()
+        runCatching {
+            // after a rotation the activity is new and the pane was never shown: its saved back stack comes back only
+            // with a graph (and the store the pane's NavHost will use, which must be set first)
+            if (runCatching { detailNav.graph }.isFailure) {
+                detailNav.setViewModelStore(viewModelStore)
+                detailNav.graph = detailNav.createGraph(SituationRoute, builder = paneGraph)
+            }
+            while (true) {
+                val route = detailNav.currentBackStackEntry?.paneRoute() ?: break
+                open.addFirst(route)
+                if (!detailNav.popBackStack()) break
+            }
+        }
+        open.forEach { nav.navigate(it) }
+    }
+
     val inside: (String) -> Unit = { if (UrlPolicy.isWebUrl(it)) nav.navigate(BrowserRoute(it)) }
     val outside: (String) -> Unit = { if (settings.browserMode == BrowserMode.CHOOSER) openWithChooser(context, it) else openOutsideApp(context, it) }
-    val actions = remember(nav, settings.browserMode) {
+    fun itemActions(fromPane: Boolean): ItemActions {
         val internal = settings.browserMode == BrowserMode.INTERNAL
-        ItemActions(
+        return ItemActions(
             // the only plain-URL opens are a bundle's other reports
             open = { url -> appVm.opened(url, "buendel"); if (internal) inside(url) else outside(url) },
             openFrom = { item, place ->
@@ -190,12 +260,14 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
             openOtherLabel = if (internal) R.string.open_in_browser else R.string.open_in_app,
             toggleSave = savedVm::toggle,
             toggleStar = { starVm.toggle(it.id) },
-            rubric = { nav.navigate(ListRoute("rubric", it.slug, it.name)) },
-            topic = { nav.navigate(ListRoute("topic", it.key, it.label)) },
-            source = { nav.navigate(ListRoute("source", it.slug, it.name)) },
-            bundle = { nav.navigate(ListRoute("bundle", it.toString())) },
+            rubric = { toDetail(ListRoute("rubric", it.slug, it.name), fromPane) },
+            topic = { toDetail(ListRoute("topic", it.key, it.label), fromPane) },
+            source = { toDetail(ListRoute("source", it.slug, it.name), fromPane) },
+            bundle = { toDetail(ListRoute("bundle", it.toString()), fromPane) },
         )
     }
+    val actions = remember(nav, settings.browserMode) { itemActions(fromPane = false) }
+    val paneActions = remember(nav, settings.browserMode) { itemActions(fromPane = true) }
     val onSettings = { nav.navigate(SettingsRoute) { launchSingleTop = true } }
     val onSearch = { nav.navigate(SearchRoute) { launchSingleTop = true } }
     val back: () -> Unit = { if (!nav.popBackStack()) nav.openTab(HomeRoute) }
@@ -214,7 +286,6 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
     val pages = remember(shift) { PageTransitions(shift) { e -> Tab.entries.any { e.destination.hasRoute(it.routeClass) } } }
     // Expressive: short navigation bar on phones, wide navigation rail on large screens – and a rail
     // on a phone in landscape too, where a bar at the bottom would leave room for a single card
-    val windowInfo = currentWindowAdaptiveInfo()
     val adaptive = if (!windowInfo.windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)) {
         NavigationSuiteType.WideNavigationRailCollapsed
     } else {
@@ -245,6 +316,7 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
     }
     val tabTaps = remember { Tab.entries.associateWith { MutableSharedFlow<Unit>(extraBufferCapacity = 1) } }
     val onTab: (Tab) -> Unit = { tab ->
+        resetPane()
         when {
             lastTab != tab.name -> nav.openTab(tab.route)
             destination?.hasRoute(tab.routeClass) == true -> tabTaps.getValue(tab).tryEmit(Unit)
@@ -273,75 +345,104 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
                 }
             },
         ) {
-            NavHost(
-                nav, startDestination = HomeRoute,
-                modifier = if (hidesOnScroll) Modifier.nestedScroll(barOnScroll) else Modifier,
-                enterTransition = pages.enter, exitTransition = pages.exit,
-                popEnterTransition = pages.popEnter, popExitTransition = pages.popExit,
-                predictivePopEnterTransition = pages.predictivePopEnter, predictivePopExitTransition = pages.predictivePopExit,
-            ) {
-                composable<RadarRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://radar" })) { TabPage(Tab.Radar) { net.planetfoss.app.ui.radar.RadarScreen(onSettings, onSearch) } }
-                // planetfoss://today: the former Today tab (older widgets and links) now opens Latest
-                composable<HomeRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://today" })) {
-                    TabPage(Tab.Latest) {
-                        ItemListScreen(
-                            onSettings, onSearch, onStarred = { nav.navigate(ListRoute("starred")) }, onTopics = { nav.navigate(TopicsRoute) },
-                            onVideos = { nav.navigate(ListRoute("videos")) }, onHelp = { nav.navigate(HelpRoute) }, onWeekly = { nav.navigate(WeeklyRoute(it)) },
-                            onSky = { nav.navigate(SupernovasRoute) }, onLogbook = { nav.navigate(LogbookRoute(it)) },
-                        )
+            val listWidth = if (windowWidth >= WideMaxWidth) ListPaneWide else ListPane
+            // the list's NavHost stays the first child in every layout, so it keeps its state when the pane comes and goes
+            Row(Modifier.fillMaxSize()) {
+                CompositionLocalProvider(net.planetfoss.app.ui.components.LocalBesidePane provides split) {
+                    NavHost(
+                        nav, startDestination = HomeRoute,
+                        modifier = (if (split) Modifier.width(listWidth) else Modifier.weight(1f)).then(if (hidesOnScroll) Modifier.nestedScroll(barOnScroll) else Modifier),
+                        enterTransition = pages.enter, exitTransition = pages.exit,
+                        popEnterTransition = pages.popEnter, popExitTransition = pages.popExit,
+                        predictivePopEnterTransition = pages.predictivePopEnter, predictivePopExitTransition = pages.predictivePopExit,
+                    ) {
+                        composable<RadarRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://radar" })) { TabPage(Tab.Radar) { net.planetfoss.app.ui.radar.RadarScreen(onSettings, onSearch) } }
+                        // planetfoss://today: the former Today tab (older widgets and links) now opens Latest
+                        composable<HomeRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://today" })) {
+                            TabPage(Tab.Latest) {
+                                ItemListScreen(
+                                    onSettings, onSearch, onStarred = { toDetail(ListRoute("starred"), false) }, onTopics = { nav.navigate(TopicsRoute) },
+                                    onVideos = { toDetail(ListRoute("videos"), false) }, onHelp = { nav.navigate(HelpRoute) }, onWeekly = { toDetail(WeeklyRoute(it), false) },
+                                    onSky = { toDetail(SupernovasRoute, false) }, onLogbook = { toDetail(LogbookRoute(it), false) },
+                                    novasBeside = split,
+                                )
+                            }
+                        }
+                        composable<DiscoverRoute> {
+                            TabPage(Tab.Discover) {
+                                RubricsScreen(
+                                    onSettings, onSearch,
+                                    onRubric = { toDetail(ListRoute("rubric", it.slug, it.name), false) },
+                                    onTopic = actions.topic,
+                                    onVideos = { toDetail(ListRoute("videos"), false) },
+                                    onStarred = { toDetail(ListRoute("starred"), false) },
+                                    onTopics = { nav.navigate(TopicsRoute) },
+                                    onSources = { nav.navigate(SourcesRoute) },
+                                    onWeekly = { toDetail(WeeklyRoute(), false) },
+                                    onLogbook = { toDetail(LogbookRoute(), false) },
+                                    onSky = { toDetail(SupernovasRoute, false) },
+                                )
+                            }
+                        }
+                        composable<TopicsRoute> { TopicsScreen(onBack = back, onTopic = actions.topic) }
+                        composable<SourcesRoute> { SourcesScreen(onBack = back, onSource = actions.source) }
+                        composable<SupernovasRoute> {
+                            SupernovaScreen(onSettings, onTopic = { key, label -> toDetail(ListRoute("topic", key, label), false) }, onBack = back)
+                        }
+                        composable<SavedRoute> { TabPage(Tab.Saved) { SavedScreen(onSettings) } }
+                        composable<WeeklyRoute> { net.planetfoss.app.ui.weekly.WeeklyScreen(onBack = back, onLogbook = { nav.navigate(LogbookRoute(it)) }) }
+                        composable<LogbookRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://logbook/{day}" })) {
+                            net.planetfoss.app.ui.logbook.LogbookScreen(onBack = back, onWeekly = { nav.navigate(WeeklyRoute(it)) })
+                        }
+                        composable<SettingsRoute> { SettingsScreen(onBack = back, onHelp = { nav.navigate(HelpRoute) }, onSetup = { nav.navigate(SetupRoute) }, onWhatsNew = { nav.navigate(WhatsNewRoute) }, onBookmarks = { nav.navigate(BookmarkServiceRoute) }) }
+                        composable<SetupRoute> { SetupScreen(onDone = back) }
+                        composable<HelpRoute> { HelpScreen(onBack = back) }
+                        composable<WhatsNewRoute> { net.planetfoss.app.ui.settings.WhatsNewScreen(onBack = back) }
+                        composable<BookmarkServiceRoute> { net.planetfoss.app.ui.settings.BookmarkServiceScreen(onBack = back) }
+                        composable<SearchRoute> { SearchScreen(onBack = back, onTopic = actions.topic) }
+                        composable<ListRoute> { e ->
+                            ItemListScreen(onSettings, onSearch, onBack = back, fallbackTitle = e.toRoute<ListRoute>().title)
+                        }
+                        composable<BrowserRoute> { e ->
+                            val r = e.toRoute<BrowserRoute>()
+                            BrowserScreen(r.url, javaScript = settings.browserJavaScript, onClose = back, support = r.support?.let { Support(it, if (r.supportName != null) "forward" else "self", r.supportName) to r.sourceName.orEmpty() })
+                        }
+                        composable<TopicRoute>(
+                            deepLinks = listOf(
+                                navDeepLink { uriPattern = "planetfoss://supernova/{key}" },
+                                navDeepLink { uriPattern = "planetfoss://topic/{key}" },
+                            ),
+                        ) { ItemListScreen(onSettings, onSearch, onBack = back) }
+                        composable<SourceLinkRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://source/{slug}" })) {
+                            ItemListScreen(onSettings, onSearch, onBack = back)
+                        }
                     }
                 }
-                composable<DiscoverRoute> {
-                    TabPage(Tab.Discover) {
-                        RubricsScreen(
-                            onSettings, onSearch,
-                            onRubric = { nav.navigate(ListRoute("rubric", it.slug, it.name)) },
-                            onTopic = actions.topic,
-                            onVideos = { nav.navigate(ListRoute("videos")) },
-                            onStarred = { nav.navigate(ListRoute("starred")) },
-                            onTopics = { nav.navigate(TopicsRoute) },
-                            onSources = { nav.navigate(SourcesRoute) },
-                            onWeekly = { nav.navigate(WeeklyRoute()) },
-                            onLogbook = { nav.navigate(LogbookRoute()) },
-                            onSky = { nav.navigate(SupernovasRoute) },
-                        )
+                if (split) {
+                    VerticalDivider()
+                    CompositionLocalProvider(LocalItemActions provides paneActions) {
+                        NavHost(detailNav, startDestination = SituationRoute, modifier = Modifier.weight(1f), builder = paneGraph)
                     }
-                }
-                composable<TopicsRoute> { TopicsScreen(onBack = back, onTopic = actions.topic) }
-                composable<SourcesRoute> { SourcesScreen(onBack = back, onSource = actions.source) }
-                composable<SupernovasRoute> {
-                    SupernovaScreen(onSettings, onTopic = { key, label -> nav.navigate(ListRoute("topic", key, label)) }, onBack = back)
-                }
-                composable<SavedRoute> { TabPage(Tab.Saved) { SavedScreen(onSettings) } }
-                composable<WeeklyRoute> { net.planetfoss.app.ui.weekly.WeeklyScreen(onBack = back, onLogbook = { nav.navigate(LogbookRoute(it)) }) }
-                composable<LogbookRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://logbook/{day}" })) {
-                    net.planetfoss.app.ui.logbook.LogbookScreen(onBack = back, onWeekly = { nav.navigate(WeeklyRoute(it)) })
-                }
-                composable<SettingsRoute> { SettingsScreen(onBack = back, onHelp = { nav.navigate(HelpRoute) }, onSetup = { nav.navigate(SetupRoute) }, onWhatsNew = { nav.navigate(WhatsNewRoute) }, onBookmarks = { nav.navigate(BookmarkServiceRoute) }) }
-                composable<SetupRoute> { SetupScreen(onDone = back) }
-                composable<HelpRoute> { HelpScreen(onBack = back) }
-                composable<WhatsNewRoute> { net.planetfoss.app.ui.settings.WhatsNewScreen(onBack = back) }
-                composable<BookmarkServiceRoute> { net.planetfoss.app.ui.settings.BookmarkServiceScreen(onBack = back) }
-                composable<SearchRoute> { SearchScreen(onBack = back, onTopic = actions.topic) }
-                composable<ListRoute> { e ->
-                    ItemListScreen(onSettings, onSearch, onBack = back, fallbackTitle = e.toRoute<ListRoute>().title)
-                }
-                composable<BrowserRoute> { e ->
-                    val r = e.toRoute<BrowserRoute>()
-                    BrowserScreen(r.url, javaScript = settings.browserJavaScript, onClose = back, support = r.support?.let { Support(it, if (r.supportName != null) "forward" else "self", r.supportName) to r.sourceName.orEmpty() })
-                }
-                composable<TopicRoute>(
-                    deepLinks = listOf(
-                        navDeepLink { uriPattern = "planetfoss://supernova/{key}" },
-                        navDeepLink { uriPattern = "planetfoss://topic/{key}" },
-                    ),
-                ) { ItemListScreen(onSettings, onSearch, onBack = back) }
-                composable<SourceLinkRoute>(deepLinks = listOf(navDeepLink { uriPattern = "planetfoss://source/{slug}" })) {
-                    ItemListScreen(onSettings, onSearch, onBack = back)
                 }
             }
         }
     }
+}
+
+/** The detail pane's start: the situation while nothing is open (wide screens). */
+@Serializable data object SituationRoute
+
+/** Pages that are lists: on a wide screen they stay on the left and open their targets in the detail pane. */
+private fun NavDestination.isListPage() = Tab.entries.any { hasRoute(it.routeClass) } || hasRoute(ListRoute::class) || hasRoute(TopicsRoute::class) ||
+    hasRoute(SourcesRoute::class) || hasRoute(SearchRoute::class) || hasRoute(TopicRoute::class) || hasRoute(SourceLinkRoute::class)
+
+/** The route of a page in the detail pane, to move it on top of the list when the window becomes narrow. */
+private fun NavBackStackEntry.paneRoute(): Any? = when {
+    destination.hasRoute(ListRoute::class) -> toRoute<ListRoute>()
+    destination.hasRoute(SupernovasRoute::class) -> SupernovasRoute
+    destination.hasRoute(WeeklyRoute::class) -> toRoute<WeeklyRoute>()
+    destination.hasRoute(LogbookRoute::class) -> toRoute<LogbookRoute>()
+    else -> null
 }
 
 private fun NavDestination.fillsScreen() = hasRoute(SettingsRoute::class) || hasRoute(BrowserRoute::class) || hasRoute(HelpRoute::class) || hasRoute(WhatsNewRoute::class) || hasRoute(BookmarkServiceRoute::class) || hasRoute(SetupRoute::class)

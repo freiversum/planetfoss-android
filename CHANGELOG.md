@@ -14,6 +14,12 @@ Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-re
   two columns under headings over the whole width, with lower pictures; a single supernova of the logbook and the cover
   story of the weekly review stand beside their picture. Discover shows the sky, logbook, weekly review, Sternstunden
   and videos as a row of tiles and the rubrics as cards in three columns. Phones and split screen stay as they were.
+- Tablets in landscape and other wide windows (from 840 dp, second step of the tablet mode): lists and what they open
+  stand side by side. Latest, Radar, Discover, Saved, search and the topic and source lists stay on the left; a topic,
+  source, rubric, story, the supernovas, a logbook entry or a weekly review opens on the right, with its own way back.
+  While nothing is open, the right side shows the burning supernovas ("Right now"), which then no longer stand on top
+  of Latest. Switching tabs empties the right side. When the window becomes narrow (rotation, split screen), what was
+  open on the right moves on top of the list. Phones, split screen and tablets in portrait keep one page at a time.
 - Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
   linkding, Linkwarden or Readeck with its address and an API token. "Connect" tries the service first and says what is
   wrong (token, address, server not reachable). From then on, every article you save is sent there in the background,

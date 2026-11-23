@@ -115,6 +115,8 @@ fun ItemListScreen(
     /** Latest: the supernova sky (end of the row “This week in the sky”) and a logbook entry (card or marker). */
     onSky: () -> Unit = {},
     onLogbook: (String) -> Unit = {},
+    /** Latest beside the detail pane: the burning supernovas stand there (the situation), not on top of the list. */
+    novasBeside: Boolean = false,
     vm: ItemListViewModel = hiltViewModel(),
 ) {
     val ui by vm.state.collectAsStateWithLifecycle()
@@ -164,7 +166,7 @@ fun ItemListScreen(
             val actions = LocalItemActions.current
             val home = vm.target == ListTarget.Home
             // Latest (docs/09-latest-tab.md): burning supernovas on top, then “Rising” – comets first, then the orbit topics
-            val burning = ui.burning.takeIf { home }.orEmpty()
+            val burning = ui.burning.takeIf { home && !novasBeside }.orEmpty()
             val rising = if (home) Latest.rising(ui.comets, ui.orbit, burning).takeIf { it.isNotEmpty() } else null
             // the newest logbook entry: a card on top in the morning until read (D-L3), otherwise a marker at its 6:00
             val logbookCard = home && Latest.logbookAsCard(ui.logbook, ui.logbookRead)

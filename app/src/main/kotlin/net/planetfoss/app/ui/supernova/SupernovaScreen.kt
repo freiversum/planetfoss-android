@@ -60,7 +60,14 @@ import net.planetfoss.app.ui.components.rememberNotifyRequest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SupernovaScreen(onSettings: () -> Unit, onTopic: (String, String) -> Unit, onBack: (() -> Unit)? = null, vm: SupernovaViewModel = hiltViewModel()) {
+fun SupernovaScreen(
+    onSettings: () -> Unit,
+    onTopic: (String, String) -> Unit,
+    onBack: (() -> Unit)? = null,
+    /** Another title: the situation in the detail pane on wide screens (“Right now”). */
+    title: String? = null,
+    vm: SupernovaViewModel = hiltViewModel(),
+) {
     val state by vm.state.collectAsStateWithLifecycle()
     val lang by vm.lang.collectAsStateWithLifecycle()
     val notifyOn by vm.notifyOn.collectAsStateWithLifecycle()
@@ -71,7 +78,7 @@ fun SupernovaScreen(onSettings: () -> Unit, onTopic: (String, String) -> Unit, o
 
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
-        topBar = { TabTopBar(stringResource(R.string.tab_supernovas), lang, vm::setLang, onSettings, scroll, onBack = onBack) },
+        topBar = { TabTopBar(title ?: stringResource(R.string.tab_supernovas), lang, vm::setLang, onSettings, scroll, onBack = onBack) },
     ) { padding ->
         RefreshBox(
             isRefreshing = state.refreshing && state.items.isNotEmpty(),

@@ -43,3 +43,10 @@ val WideMaxWidth = 1200.dp
 
 /** From this card width a picture stands beside the text instead of above it. */
 val SideBySideFrom = 600.dp
+
+/** From this window width lists and what they open stand side by side (T1); the window must also be at least 480 dp high. */
+val PanesFrom = 840.dp
+
+/** Width of the list beside the detail pane; [ListPaneWide] from a window of [WideMaxWidth]. */
+val ListPane = 360.dp
+val ListPaneWide = 400.dp

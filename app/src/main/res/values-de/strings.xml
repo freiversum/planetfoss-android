@@ -3,6 +3,8 @@
     <string name="wordmark_title">PlanetFOSS, %1$s</string>
     <string name="tab_home">Neueste</string>
     <string name="tab_supernovas">Supernovas</string>
+    <!-- wide screens: the detail pane while nothing is open (burning supernovas) -->
+    <string name="situation_title">Gerade</string>
     <string name="tab_saved">Gespeichert</string>
     <string name="settings">Einstellungen</string>
     <string name="back">Zurück</string>
