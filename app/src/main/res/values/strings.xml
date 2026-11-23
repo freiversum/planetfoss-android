@@ -627,10 +627,12 @@
     <string name="whatsnew_new">New</string>
     <string name="whatsnew_better">Better</string>
     <string name="whatsnew_fixed">Fixed</string>
-    <string name="whatsnew_066_title">Your own bookmark service</string>
+    <string name="whatsnew_066_title">Tablet mode and your own bookmark service</string>
     <string name="whatsnew_066_1">Saved articles can also go to your own Karakeep, linkding, Linkwarden or Readeck: Settings → Saved → Bookmark service.</string>
     <string name="whatsnew_066_2">Back online, the app reloads by itself, and the offline hint says how old the shown state is.</string>
     <string name="whatsnew_066_3">Discover, topics and sources show the last loaded state offline instead of an empty page.</string>
+    <string name="whatsnew_066_5">Tablets and wide windows show the list and what you open side by side: articles open on the right, settings in two panes.</string>
+    <string name="whatsnew_066_6">With a keyboard, J and K move from post to post, Enter opens, B saves and S stars; ? shows all shortcuts. A right click opens a post\'s menu.</string>
     <string name="whatsnew_066_4">Settings end with the night sky of freiversum – tap the stars, or call the UFO.</string>
     <string name="whatsnew_065_title">Supernovas the moment they ignite</string>
     <string name="whatsnew_065_1">New supernovas show up as soon as they ignite, like on planetfoss.net. The notification follows half an hour later.</string>

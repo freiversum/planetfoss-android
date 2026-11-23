@@ -141,14 +141,14 @@
 - [ ] Bookmark service phase 2: wallabag (OAuth2) and Nextcloud Bookmarks (Login Flow v2)
 - [ ] Bookmark service: plain HTTP for LAN instances (network security config allows HTTPS only today) and
       self-signed certificates – only if readers ask
-- [ ] Idea (2026-11-22): a full tablet mode. Today only Latest uses the width (rail plus two staggered columns from
+- [x] Idea (2026-11-22): a full tablet mode (built 2026-11-23 as T0–T5, rests below). Today only Latest uses the width (rail plus two staggered columns from
       700 dp); seen on the Pixel Tablet emulator while making the store images: Supernovas, Logbook and topic pages sit
       in one centred column with wide empty margins, a supernova's lead image takes most of the screen and its reports
       start below the fold. Ideas: list and detail side by side (open an article, supernova or topic in a right-hand
       pane instead of a new screen), supernova reports next to the image, Logbook and Weekly review in two columns,
       Discover as a grid, landscape and portrait both thought through, keyboard and mouse (shortcuts, hover)
       Concept and mockups 2026-11-23: `docs/11-tablet-mode.md`, `docs/tablet-mode-mockup.html`; phases T0–T5
-  - [ ] Decisions D-T1 to D-T5 (Christoph)
+  - [x] Decisions D-T1 to D-T5 (Christoph, 2026-11-23: all as proposed)
   - [x] T0 wide forms of Supernova, Logbook, Weekly review, Discover (2026-11-23; emulator as Pixel Tablet both ways and as phone)
   - [x] T1 list and detail side by side (Latest, Radar, Saved, search, lists), situation pane (2026-11-23; D-T2 and D-T3
         as proposed, not confirmed yet; emulator as Pixel Tablet both ways, rotation with two pages open, phone)

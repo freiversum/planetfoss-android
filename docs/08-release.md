@@ -214,6 +214,14 @@ entry (0.6.6, dated 2026-11-26) and its strings are already in. On the day:
      sent to the user's own chosen service on the user's action differently from collection); decide in the console.
 4. GitHub release (first line for users, `lui:` comments for linuxundich.de), draft below.
 5. Tag `v0.6.6` on `main`, build from the tag on tinytin, then `intern` gets `main` merged as usual.
+6. Google Play, added 2026-11-23: upload the new tablet screenshots (`fastlane/…/tenInchScreenshots/`, tablet mode).
+   Data safety is unchanged by the tablet mode: on wide screens articles open in the app's own browser by default
+   (PRIVACY.md says so), the site sees the same as from any browser, counting is the same opt-in call.
+
+Tablet mode (added after collecting, 2026-11-23): T0–T5 of `docs/11-tablet-mode.md`, checked in the Werkbank emulator
+(tablet both ways, foldable size, split screen, phone landscape, dark, German, 130 % font); R8 and `lintRelease` pass
+(2026-11-23, unsigned, on tinytin); the signed release APK still needs a look on the Pixel 10 on the day. Not on hardware: a real tablet, a real mouse, TalkBack by
+ear.
 
 Tested before collecting: bookmark service end to end against Christoph's own Karakeep on the Pixel 10 (also saved in
 airplane mode and delivered afterwards, English UI); offline behaviour on the Pixel 10 and the emulator. Not yet on
@@ -224,27 +232,36 @@ the phone: a failed send with "Try again" (emulator only).
 de-DE:
 
 ```text
-- Gespeichertes auf Wunsch auch im eigenen Lesezeichendienst: Karakeep, linkding, Linkwarden oder Readeck
-- Offline: Ist das Netz wieder da, lädt die App von selbst neu; der Hinweis sagt, wie alt der Stand ist
-- Entdecken, Themen und Quellen zeigen offline den letzten Stand statt einer leeren Seite
-- Die Einstellungen enden mit dem Nachthimmel von freiversum
+- Tablets: Liste und Inhalt nebeneinander, Artikel daneben lesen, Einstellungen in zwei Bereichen
+- Tastatur und Maus: Tastenkürzel (? zeigt alle), Rechtsklick-Menü, Tooltips
+- Gespeichertes auf Wunsch im eigenen Lesezeichendienst: Karakeep, linkding, Linkwarden oder Readeck
+- Offline: Ist das Netz wieder da, lädt die App selbst neu; der Hinweis sagt, wie alt der Stand ist
+- Entdecken, Themen und Quellen zeigen offline den letzten Stand
+- Einstellungen enden mit dem Nachthimmel von freiversum
 ```
 
 en-US:
 
 ```text
+- Tablets: list and content side by side, read articles beside the list, settings in two panes
+- Keyboard and mouse: shortcuts (? shows them all), right-click menu, tooltips
 - Saved articles can also go to your own bookmark service: Karakeep, linkding, Linkwarden or Readeck
 - Offline: back online, the app reloads by itself; the hint says how old the shown state is
-- Discover, topics and sources show the last loaded state offline instead of an empty page
+- Discover, topics and sources show the last loaded state offline
 - Settings end with the night sky of freiversum
 ```
 
 ### GitHub release notes (draft)
 
 ```markdown
-PlanetFOSS 0.6.6 can send saved articles to your own bookmark service and copes better without a connection.
+PlanetFOSS 0.6.6 brings a real tablet mode, keyboard shortcuts, your own bookmark service and copes better without a connection.
 
 ### Added
+- Tablet mode: on tablets and wide windows the list stays on the left and what you open goes to the right, articles
+  included (in the app's browser; Settings → Open articles). Supernova, logbook, weekly review and Discover use the
+  width, Settings come in two panes, and the handle between list and content can be dragged.
+- Keyboard and mouse: Ctrl+1–4, / to search, J/K from post to post, Enter, O, B, S; ? shows all shortcuts. Right click
+  opens a post's menu, middle click opens it in the browser.
 - Bookmark service: Karakeep, linkding, Linkwarden or Readeck (Settings → Saved → Bookmark service). Saved articles
   are sent from the phone directly to your server; planetfoss.net never sees the token or the bookmarks.
 - The freiversum night sky at the end of Settings, with a few things to discover.
@@ -256,6 +273,6 @@ PlanetFOSS 0.6.6 can send saved articles to your own bookmark service and copes 
 
 Install: `planetfoss-0.6.6.apk` below (Android 14 or newer), or Google Play (closed test).
 
-<!-- lui:de PlanetFOSS 0.6.6 schickt Gespeichertes auf Wunsch an den eigenen Lesezeichendienst und kommt besser ohne Netz zurecht. -->
-<!-- lui:en PlanetFOSS 0.6.6 sends saved articles to your own bookmark service and copes better without a connection. -->
+<!-- lui:de PlanetFOSS 0.6.6 bringt einen echten Tablet-Modus, Tastenkürzel und den eigenen Lesezeichendienst. -->
+<!-- lui:en PlanetFOSS 0.6.6 brings a real tablet mode, keyboard shortcuts and your own bookmark service. -->
 ```
