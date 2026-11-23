@@ -156,7 +156,7 @@ private enum class Tab(val route: Any, val routeClass: KClass<*>, @StringRes val
  * already open goes back to its page (from a pushed list) or to the top of its list.
  */
 @Composable
-fun PlanetFossNavigation(newIntents: Flow<Intent>) {
+fun PlanetFossNavigation(newIntents: Flow<Intent>, shortcuts: Flow<net.planetfoss.app.ui.components.Shortcut> = kotlinx.coroutines.flow.emptyFlow()) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
     val destination = entry?.destination
@@ -234,17 +234,23 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
                     item?.let { i ->
                         val saved = i.id in net.planetfoss.app.ui.components.LocalSavedIds.current
                         val starred = i.id in net.planetfoss.app.ui.components.LocalStars.current.mine
-                        androidx.compose.material3.IconButton(onClick = { paneActs.toggleStar(i) }) {
-                            if (starred) Icon(androidx.compose.material.icons.Icons.Filled.Star, stringResource(R.string.unstar), tint = androidx.compose.material3.MaterialTheme.colorScheme.tertiary)
-                            else Icon(painterResource(R.drawable.ic_star_border), stringResource(R.string.star))
+                        net.planetfoss.app.ui.components.Hint(stringResource(if (starred) R.string.unstar else R.string.star)) {
+                            androidx.compose.material3.IconButton(onClick = { paneActs.toggleStar(i) }) {
+                                if (starred) Icon(androidx.compose.material.icons.Icons.Filled.Star, stringResource(R.string.unstar), tint = androidx.compose.material3.MaterialTheme.colorScheme.tertiary)
+                                else Icon(painterResource(R.drawable.ic_star_border), stringResource(R.string.star))
+                            }
                         }
-                        androidx.compose.material3.IconButton(onClick = { paneActs.toggleSave(i) }) {
-                            Icon(painterResource(if (saved) R.drawable.ic_bookmark else R.drawable.ic_bookmark_border), stringResource(if (saved) R.string.unsave else R.string.save))
+                        net.planetfoss.app.ui.components.Hint(stringResource(if (saved) R.string.unsave else R.string.save)) {
+                            androidx.compose.material3.IconButton(onClick = { paneActs.toggleSave(i) }) {
+                                Icon(painterResource(if (saved) R.drawable.ic_bookmark else R.drawable.ic_bookmark_border), stringResource(if (saved) R.string.unsave else R.string.save))
+                            }
                         }
                     }
                     // over the whole screen: the same page as a full-screen browser, the pane goes back
-                    androidx.compose.material3.IconButton(onClick = { paneBack(); nav.navigate(r) }) {
-                        Icon(painterResource(R.drawable.ic_open_in_full), stringResource(R.string.browser_full_screen))
+                    net.planetfoss.app.ui.components.Hint(stringResource(R.string.browser_full_screen)) {
+                        androidx.compose.material3.IconButton(onClick = { paneBack(); nav.navigate(r) }) {
+                            Icon(painterResource(R.drawable.ic_open_in_full), stringResource(R.string.browser_full_screen))
+                        }
                     }
                 },
             )
@@ -332,6 +338,7 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
             topic = { toDetail(ListRoute("topic", it.key, it.label), fromPane) },
             source = { toDetail(ListRoute("source", it.slug, it.name), fromPane) },
             bundle = { toDetail(ListRoute("bundle", it.toString()), fromPane) },
+            openOutside = { item -> appVm.opened(item.url, "liste"); openOutsideApp(context, item.url) },
         )
     }
     val actions = remember(nav, settings.browserMode) { itemActions(fromPane = false) }
@@ -392,6 +399,31 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
             !nav.popBackStack(tab.route, inclusive = false) -> nav.openTab(tab.route)
         }
     }
+    // keyboard (T3): global shortcuts here, the rest goes to the list on screen (the left one beside a pane)
+    val listKeys = remember { MutableSharedFlow<net.planetfoss.app.ui.components.Shortcut>(extraBufferCapacity = 8) }
+    var showKeys by rememberSaveable { mutableStateOf(false) }
+    val onTabNow by rememberUpdatedState(onTab)
+    LaunchedEffect(shortcuts) {
+        shortcuts.collect { k ->
+            when (k) {
+                net.planetfoss.app.ui.components.Shortcut.Latest -> onTabNow(Tab.Latest)
+                net.planetfoss.app.ui.components.Shortcut.Radar -> onTabNow(Tab.Radar)
+                net.planetfoss.app.ui.components.Shortcut.Discover -> onTabNow(Tab.Discover)
+                net.planetfoss.app.ui.components.Shortcut.Saved -> onTabNow(Tab.Saved)
+                net.planetfoss.app.ui.components.Shortcut.Search -> onSearch()
+                net.planetfoss.app.ui.components.Shortcut.Settings -> onSettings()
+                net.planetfoss.app.ui.components.Shortcut.Help -> showKeys = true
+                // Esc: empty the right side; a page over the whole screen (browser, settings) closes
+                net.planetfoss.app.ui.components.Shortcut.Close -> when {
+                    splitNow && detailNav.currentBackStackEntry?.destination?.hasRoute(SituationRoute::class) == false -> resetPane()
+                    nav.currentDestination?.fillsScreen() == true -> back()
+                }
+                else -> listKeys.tryEmit(k)
+            }
+        }
+    }
+    if (showKeys) net.planetfoss.app.ui.components.KeysDialog { showKeys = false }
+
     @Composable
     fun TabPage(tab: Tab, content: @Composable () -> Unit) = CompositionLocalProvider(LocalTabTaps provides tabTaps.getValue(tab), content = content)
     CompositionLocalProvider(
@@ -419,6 +451,7 @@ fun PlanetFossNavigation(newIntents: Flow<Intent>) {
                 CompositionLocalProvider(
                     net.planetfoss.app.ui.components.LocalBesidePane provides split,
                     net.planetfoss.app.ui.components.LocalPaneOpen provides paneOpen,
+                    net.planetfoss.app.ui.components.LocalListKeys provides listKeys,
                 ) {
                     NavHost(
                         nav, startDestination = HomeRoute,

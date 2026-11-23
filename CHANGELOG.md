@@ -29,6 +29,12 @@ Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-re
   star, save and "Full screen", which opens the page over the whole screen; back returns to both sides. Settings →
   *Open articles* → *Open articles beside the list* (only on wide screens, on by default) turns it off; then articles
   open as chosen below. Videos and sources that ask for the user's own browser still go outside.
+- Keyboard and mouse (tablets, Chromebooks, phones with a keyboard): Ctrl+1–4 switch tabs, / or Ctrl+F searches,
+  Ctrl+R or F5 refreshes the list, Ctrl+, opens Settings, Esc empties the right side or closes a page over the whole
+  screen, ? shows all shortcuts (also in Android's list with Meta+/). In a list J and K move a cursor from post to post,
+  Enter opens it, O opens it in the browser outside the app, B saves it, S stars it. A right click on a post opens its
+  menu, a middle click opens it in the browser; star, save and menu buttons show a tooltip on hover or long press, and
+  a focused post gets a visible ring. Keys typed into a text field never trigger a shortcut.
 - Saved articles can also go to your own bookmark service: Settings → *Saved* → *Bookmark service* connects Karakeep,
   linkding, Linkwarden or Readeck with its address and an API token. "Connect" tries the service first and says what is
   wrong (token, address, server not reachable). From then on, every article you save is sent there in the background,

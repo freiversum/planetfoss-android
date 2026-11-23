@@ -137,121 +137,124 @@ fun ItemListScreen(
     LoadMoreAtEnd(listState, state.hasMore, vm::loadMore)
     ScrollToTopOnTabTap(listState, scroll)
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
-        topBar = {
-            if (onBack == null) {
-                TabTopBar(title, lang, vm::setLang, onSettings, scroll, onSearch = onSearch, brand = true)
-            } else {
-                TopAppBar(
-                    title = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                    navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back)) } },
-                    actions = {
-                        if (vm.hideable != null) HideButton(vm, title)
-                        if (vm.followable != null) FollowButton(vm, title)
-                    },
-                    scrollBehavior = scroll,
-                )
-            }
-        },
-    ) { padding ->
-        RefreshBox(
-            isRefreshing = state.refreshing && state.items.isNotEmpty(),
-            onRefresh = vm::refresh,
-            modifier = Modifier.padding(padding).fillMaxSize(),
-        ) {
-            // a source's list starts with its support box when it has a link (subscription, donation, or a recommended project)
-            val source = state.items.firstOrNull()?.source?.takeIf { vm.target is ListTarget.Source }
-            val support = source?.support?.takeIf { UrlPolicy.isWebUrl(it.url) }
-            val actions = LocalItemActions.current
-            val home = vm.target == ListTarget.Home
-            // Latest (docs/09-latest-tab.md): burning supernovas on top, then “Rising” – comets first, then the orbit topics
-            val burning = ui.burning.takeIf { home && !novasBeside }.orEmpty()
-            val rising = if (home) Latest.rising(ui.comets, ui.orbit, burning).takeIf { it.isNotEmpty() } else null
-            // the newest logbook entry: a card on top in the morning until read (D-L3), otherwise a marker at its 6:00
-            val logbookCard = home && Latest.logbookAsCard(ui.logbook, ui.logbookRead)
-            val logbookMark = ui.logbook?.takeIf { home && !logbookCard }
-            // the parts on top arrive after the cached posts: until the user scrolls, Latest stays at its top, otherwise the
-            // grid keeps the first post in view and the supernova lands above it, out of sight
-            if (home) {
-                // saved with the page: back from an article in the app's browser the list must stay where it was (19.11.)
-                var touched by rememberSaveable { mutableStateOf(false) }
-                LaunchedEffect(listState.isScrollInProgress) { if (listState.isScrollInProgress) touched = true }
-                LaunchedEffect(burning.map { it.key }, rising?.size, logbookCard, ui.weekly != null) { if (!touched) listState.scrollToItem(0) }
-            }
-            val head = ui.head?.takeIf { vm.target is ListTarget.Topic }
-            // a bundle: how many sources report, in which language (the website's bundle page)
-            val bundle = ui.bundle?.takeIf { vm.target is ListTarget.Bundle }
-            val hiddenNote = ui.hiddenCount.takeIf { it > 0 }
-            // Latest, Monday to Wednesday: last week's review, as on the website's start page
-            val weekly = ui.weekly?.takeIf { vm.target == ListTarget.Home }
-            // Discover: posts new since the last visit, counted among the loaded ones
-            val newSince = net.planetfoss.app.ui.components.LocalNewSince.current
-            val allSeen = net.planetfoss.app.ui.components.LocalAllSeen.current
-            val fresh = if (home && newSince != null) state.items.count { net.planetfoss.app.data.SeenRepository.isNew(it.publishedAt.toEpochMilli(), newSince) } else 0
-            val header: (LazyStaggeredGridScope.() -> Unit)? =
-                if (!home && !introOpen && weekly == null && head == null && bundle == null && hiddenNote == null && (source == null || support == null)) null else ({
-                bundle?.let { b -> item(key = "bundle", span = StaggeredGridItemSpan.FullLine) { BundleHeadBox(b) } }
-                if (introOpen) item(key = "intro", span = StaggeredGridItemSpan.FullLine) {
-                    IntroHint(onHelp = { vm.closeIntro(); onHelp() }, onClose = vm::closeIntro)
-                }
-                // D-L4: the newest burning supernova in full, further ones compact
-                burning.forEachIndexed { i, n ->
-                    item(key = "nova-" + n.key, span = StaggeredGridItemSpan.FullLine) {
-                        NovaCard(
-                            n, onOpen = { actions.openFrom(it, "supernova") }, onAll = { actions.topic(TopicRef(n.key, n.label, true)) }, compact = i > 0,
-                            note = when (Latest.otherLanguageOnly(n, lang)) {
-                                "en" -> stringResource(R.string.bundle_only_en)
-                                "de" -> stringResource(R.string.bundle_only_de)
-                                else -> null
-                            },
-                        )
-                    }
-                }
-                rising?.let { r -> item(key = "rising", span = StaggeredGridItemSpan.FullLine) { OrbitRow(r, actions.topic, onTopics, title = stringResource(R.string.rising)) } }
-                // the logbook card carries last week's review beside it (Monday to Wednesday); without the card the review stands alone
-                val logbook = ui.logbook
-                // beside the detail pane the logbook and the weekly review stand in the situation there
-                if (novasBeside) {
-                    Unit
-                } else if (logbookCard && logbook != null) {
-                    item(key = "logbook", span = StaggeredGridItemSpan.FullLine) {
-                        net.planetfoss.app.ui.logbook.LogbookBand(logbook, weekly, onLogbook = { onLogbook(logbook.day) }, onWeekly = onWeekly)
-                    }
+    // keyboard (T3): J/K move a cursor over the cards, Enter, O, B, S act on its post, Ctrl+R / F5 refresh
+    net.planetfoss.app.ui.components.KeyCursor(listState, { ui.list.items + listOfNotNull(ui.front?.lead) + ui.front?.side.orEmpty() }, vm::refresh) {
+        Scaffold(
+            modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
+            topBar = {
+                if (onBack == null) {
+                    TabTopBar(title, lang, vm::setLang, onSettings, scroll, onSearch = onSearch, brand = true)
                 } else {
-                    // the same room below as the logbook band leaves
-                    weekly?.let { w ->
-                        item(key = "weekly", span = StaggeredGridItemSpan.FullLine) {
-                            androidx.compose.foundation.layout.Box(Modifier.padding(bottom = Space.s)) { net.planetfoss.app.ui.weekly.WeeklyTeaserCard(w) { onWeekly(w.week) } }
+                    TopAppBar(
+                        title = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back)) } },
+                        actions = {
+                            if (vm.hideable != null) HideButton(vm, title)
+                            if (vm.followable != null) FollowButton(vm, title)
+                        },
+                        scrollBehavior = scroll,
+                    )
+                }
+            },
+        ) { padding ->
+            RefreshBox(
+                isRefreshing = state.refreshing && state.items.isNotEmpty(),
+                onRefresh = vm::refresh,
+                modifier = Modifier.padding(padding).fillMaxSize(),
+            ) {
+                // a source's list starts with its support box when it has a link (subscription, donation, or a recommended project)
+                val source = state.items.firstOrNull()?.source?.takeIf { vm.target is ListTarget.Source }
+                val support = source?.support?.takeIf { UrlPolicy.isWebUrl(it.url) }
+                val actions = LocalItemActions.current
+                val home = vm.target == ListTarget.Home
+                // Latest (docs/09-latest-tab.md): burning supernovas on top, then “Rising” – comets first, then the orbit topics
+                val burning = ui.burning.takeIf { home && !novasBeside }.orEmpty()
+                val rising = if (home) Latest.rising(ui.comets, ui.orbit, burning).takeIf { it.isNotEmpty() } else null
+                // the newest logbook entry: a card on top in the morning until read (D-L3), otherwise a marker at its 6:00
+                val logbookCard = home && Latest.logbookAsCard(ui.logbook, ui.logbookRead)
+                val logbookMark = ui.logbook?.takeIf { home && !logbookCard }
+                // the parts on top arrive after the cached posts: until the user scrolls, Latest stays at its top, otherwise the
+                // grid keeps the first post in view and the supernova lands above it, out of sight
+                if (home) {
+                    // saved with the page: back from an article in the app's browser the list must stay where it was (19.11.)
+                    var touched by rememberSaveable { mutableStateOf(false) }
+                    LaunchedEffect(listState.isScrollInProgress) { if (listState.isScrollInProgress) touched = true }
+                    LaunchedEffect(burning.map { it.key }, rising?.size, logbookCard, ui.weekly != null) { if (!touched) listState.scrollToItem(0) }
+                }
+                val head = ui.head?.takeIf { vm.target is ListTarget.Topic }
+                // a bundle: how many sources report, in which language (the website's bundle page)
+                val bundle = ui.bundle?.takeIf { vm.target is ListTarget.Bundle }
+                val hiddenNote = ui.hiddenCount.takeIf { it > 0 }
+                // Latest, Monday to Wednesday: last week's review, as on the website's start page
+                val weekly = ui.weekly?.takeIf { vm.target == ListTarget.Home }
+                // Discover: posts new since the last visit, counted among the loaded ones
+                val newSince = net.planetfoss.app.ui.components.LocalNewSince.current
+                val allSeen = net.planetfoss.app.ui.components.LocalAllSeen.current
+                val fresh = if (home && newSince != null) state.items.count { net.planetfoss.app.data.SeenRepository.isNew(it.publishedAt.toEpochMilli(), newSince) } else 0
+                val header: (LazyStaggeredGridScope.() -> Unit)? =
+                    if (!home && !introOpen && weekly == null && head == null && bundle == null && hiddenNote == null && (source == null || support == null)) null else ({
+                    bundle?.let { b -> item(key = "bundle", span = StaggeredGridItemSpan.FullLine) { BundleHeadBox(b) } }
+                    if (introOpen) item(key = "intro", span = StaggeredGridItemSpan.FullLine) {
+                        IntroHint(onHelp = { vm.closeIntro(); onHelp() }, onClose = vm::closeIntro)
+                    }
+                    // D-L4: the newest burning supernova in full, further ones compact
+                    burning.forEachIndexed { i, n ->
+                        item(key = "nova-" + n.key, span = StaggeredGridItemSpan.FullLine) {
+                            NovaCard(
+                                n, onOpen = { actions.openFrom(it, "supernova") }, onAll = { actions.topic(TopicRef(n.key, n.label, true)) }, compact = i > 0,
+                                note = when (Latest.otherLanguageOnly(n, lang)) {
+                                    "en" -> stringResource(R.string.bundle_only_en)
+                                    "de" -> stringResource(R.string.bundle_only_de)
+                                    else -> null
+                                },
+                            )
                         }
                     }
-                }
-                if (fresh > 0 && newSince != null) item(key = "new-since", span = StaggeredGridItemSpan.FullLine) {
-                    // same room below as the band above leaves, otherwise the bar sits on the first post
-                    NewSinceBar(fresh, more = fresh == state.items.size && state.hasMore, since = newSince, onAllSeen = allSeen, modifier = Modifier.padding(bottom = Space.s))
-                }
-                head?.let { h -> item(key = "head", span = StaggeredGridItemSpan.FullLine) { TopicHeader(h, actions.topic, actions.rubric) } }
-                if (source != null && support != null) item(key = "support", span = StaggeredGridItemSpan.FullLine) { SupportBox(source.name, support) }
-                // last, right above the posts: inserted on top it would sit above the scroll anchor (the intro) and stay out of view
-                hiddenNote?.let { n -> item(key = "hidden", span = StaggeredGridItemSpan.FullLine) { HiddenNote(n, onSettings) } }
-            })
-            ItemListContent(
-                state, listState, vm::refresh, ad = ui.ad, onAdSeen = vm::adSeen,
-                // a bundle's reports are equals, oldest first: no lead card
-                leadFirst = vm.target !is ListTarget.Bundle,
-                emptyText = stringResource(if (vm.target == ListTarget.Starred) R.string.starred_empty else R.string.empty_home),
-                starred = ui.starred, onAllStarred = onStarred,
-                front = ui.front.takeIf { vm.target == ListTarget.Home }, onVideos = onVideos, onRubric = actions.rubric,
-                header = header,
-                // a supernova's story first, then the rest of the topic – as on the website's topic page
-                storyIds = head?.story.orEmpty().toSet(), restTitle = head?.let { stringResource(R.string.topic_also_about, it.label) },
-                // replies to the own supernova posts, after the story (website: before “More on …”)
-                replies = head?.replies.orEmpty().filter { Hidden.account(it.site, it.handle) !in blocked }, replyPosts = head?.discussions.orEmpty(),
-                onBlockReply = vm::blockAccount,
-                readLine = home,
-                logbookMark = logbookMark, onLogbook = onLogbook,
-                weekSky = if (home) ui.cooled else emptyList(), onSky = onSky,
-            )
+                    rising?.let { r -> item(key = "rising", span = StaggeredGridItemSpan.FullLine) { OrbitRow(r, actions.topic, onTopics, title = stringResource(R.string.rising)) } }
+                    // the logbook card carries last week's review beside it (Monday to Wednesday); without the card the review stands alone
+                    val logbook = ui.logbook
+                    // beside the detail pane the logbook and the weekly review stand in the situation there
+                    if (novasBeside) {
+                        Unit
+                    } else if (logbookCard && logbook != null) {
+                        item(key = "logbook", span = StaggeredGridItemSpan.FullLine) {
+                            net.planetfoss.app.ui.logbook.LogbookBand(logbook, weekly, onLogbook = { onLogbook(logbook.day) }, onWeekly = onWeekly)
+                        }
+                    } else {
+                        // the same room below as the logbook band leaves
+                        weekly?.let { w ->
+                            item(key = "weekly", span = StaggeredGridItemSpan.FullLine) {
+                                androidx.compose.foundation.layout.Box(Modifier.padding(bottom = Space.s)) { net.planetfoss.app.ui.weekly.WeeklyTeaserCard(w) { onWeekly(w.week) } }
+                            }
+                        }
+                    }
+                    if (fresh > 0 && newSince != null) item(key = "new-since", span = StaggeredGridItemSpan.FullLine) {
+                        // same room below as the band above leaves, otherwise the bar sits on the first post
+                        NewSinceBar(fresh, more = fresh == state.items.size && state.hasMore, since = newSince, onAllSeen = allSeen, modifier = Modifier.padding(bottom = Space.s))
+                    }
+                    head?.let { h -> item(key = "head", span = StaggeredGridItemSpan.FullLine) { TopicHeader(h, actions.topic, actions.rubric) } }
+                    if (source != null && support != null) item(key = "support", span = StaggeredGridItemSpan.FullLine) { SupportBox(source.name, support) }
+                    // last, right above the posts: inserted on top it would sit above the scroll anchor (the intro) and stay out of view
+                    hiddenNote?.let { n -> item(key = "hidden", span = StaggeredGridItemSpan.FullLine) { HiddenNote(n, onSettings) } }
+                })
+                ItemListContent(
+                    state, listState, vm::refresh, ad = ui.ad, onAdSeen = vm::adSeen,
+                    // a bundle's reports are equals, oldest first: no lead card
+                    leadFirst = vm.target !is ListTarget.Bundle,
+                    emptyText = stringResource(if (vm.target == ListTarget.Starred) R.string.starred_empty else R.string.empty_home),
+                    starred = ui.starred, onAllStarred = onStarred,
+                    front = ui.front.takeIf { vm.target == ListTarget.Home }, onVideos = onVideos, onRubric = actions.rubric,
+                    header = header,
+                    // a supernova's story first, then the rest of the topic – as on the website's topic page
+                    storyIds = head?.story.orEmpty().toSet(), restTitle = head?.let { stringResource(R.string.topic_also_about, it.label) },
+                    // replies to the own supernova posts, after the story (website: before “More on …”)
+                    replies = head?.replies.orEmpty().filter { Hidden.account(it.site, it.handle) !in blocked }, replyPosts = head?.discussions.orEmpty(),
+                    onBlockReply = vm::blockAccount,
+                    readLine = home,
+                    logbookMark = logbookMark, onLogbook = onLogbook,
+                    weekSky = if (home) ui.cooled else emptyList(), onSky = onSky,
+                )
+            }
         }
     }
 }

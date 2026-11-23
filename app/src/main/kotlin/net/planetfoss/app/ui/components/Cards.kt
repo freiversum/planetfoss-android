@@ -94,6 +94,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.border
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.ui.input.pointer.isSecondaryPressed
+import androidx.compose.ui.input.pointer.isTertiaryPressed
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -160,9 +166,33 @@ fun ItemCard(item: Item, modifier: Modifier = Modifier, lead: Boolean = false) {
     val stars = LocalStars.current
     val time = relative(item.publishedAt)
     val img = item.image
+    // keyboard and mouse (T3): a ring while focused (Tab) or under the J/K cursor; right click opens the menu,
+    // middle click opens the post in the browser outside the app
+    val menu = remember { mutableStateOf(false) }
+    val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
+    val cursorHere = LocalKeyCursor.current == item.id
+    val ring = focused || cursorHere
+    // the J/K cursor also takes the focus, so Enter opens this card and not whatever had the focus before
+    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+    androidx.compose.runtime.LaunchedEffect(cursorHere) { if (cursorHere) runCatching { focus.requestFocus() } }
     Card(
         onClick = { actions.openItem(item) },
-        modifier = modifier.fillMaxWidth().clip(Radius.card).openBeside("article:" + item.url),
+        interactionSource = interaction,
+        modifier = modifier.fillMaxWidth().focusRequester(focus).clip(Radius.card).openBeside("article:" + item.url)
+            .then(if (ring) Modifier.border(2.dp, LocalPlanetColors.current.aurora, Radius.card) else Modifier)
+            .pointerInput(item.id) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val e = awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
+                        if (e.type != androidx.compose.ui.input.pointer.PointerEventType.Press) continue
+                        when {
+                            e.buttons.isSecondaryPressed -> { menu.value = true; e.changes.forEach { it.consume() } }
+                            e.buttons.isTertiaryPressed -> { actions.openOutside(item); e.changes.forEach { it.consume() } }
+                        }
+                    }
+                }
+            },
         shape = Radius.card,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
     ) {
@@ -227,15 +257,19 @@ fun ItemCard(item: Item, modifier: Modifier = Modifier, lead: Boolean = false) {
                 item.categories.firstOrNull()?.let { c -> ChipTag(c.name, false) { actions.rubric(c) } }
                 if (item.isVideo) ChipTag(stringResource(R.string.video), false, onClick = null)
             }
-            StarButton(item.id in stars.mine, item.id in stars.busy) { actions.toggleStar(item) }
-            IconButton(onClick = { actions.toggleSave(item) }) {
-                Icon(
-                    painterResource(if (saved) R.drawable.ic_bookmark else R.drawable.ic_bookmark_border),
-                    stringResource(if (saved) R.string.unsave else R.string.save),
-                    tint = if (saved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            Hint(stringResource(if (item.id in stars.mine) R.string.unstar else R.string.star) + " (S)") {
+                StarButton(item.id in stars.mine, item.id in stars.busy) { actions.toggleStar(item) }
             }
-            ItemMenu(item, actions)
+            Hint(stringResource(if (saved) R.string.unsave else R.string.save) + " (B)") {
+                IconButton(onClick = { actions.toggleSave(item) }) {
+                    Icon(
+                        painterResource(if (saved) R.drawable.ic_bookmark else R.drawable.ic_bookmark_border),
+                        stringResource(if (saved) R.string.unsave else R.string.save),
+                        tint = if (saved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            ItemMenu(item, actions, menu)
         }
     }
 }
@@ -265,11 +299,13 @@ private fun BundleReports(also: List<BundleReport>, onOpen: (String) -> Unit, on
 }
 
 @Composable
-private fun ItemMenu(item: Item, actions: ItemActions) {
+private fun ItemMenu(item: Item, actions: ItemActions, state: androidx.compose.runtime.MutableState<Boolean>) {
     val context = LocalContext.current
-    var open by remember { mutableStateOf(false) }
+    var open by state
     Box {
-        IconButton(onClick = { open = true }) { Icon(Icons.Filled.MoreVert, stringResource(R.string.more_actions)) }
+        Hint(stringResource(R.string.more_actions)) {
+            IconButton(onClick = { open = true }) { Icon(Icons.Filled.MoreVert, stringResource(R.string.more_actions)) }
+        }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.share)) },
@@ -1118,4 +1154,19 @@ internal fun fillsSquare(source: Bitmap): Boolean {
     for (y in 0 until h step step) if (!check(0, y) || !check(w - 1, y)) return false
     // a white edge already blends with the white dot: keep the air around it
     return light * 2 < total
+}
+
+/**
+ * A tooltip for an icon button: shown on mouse hover and on long press (docs/11-tablet-mode.md, T3). [label] may name
+ * the key that does the same.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Hint(label: String, content: @Composable () -> Unit) {
+    androidx.compose.material3.TooltipBox(
+        positionProvider = androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider(androidx.compose.material3.TooltipAnchorPosition.Above),
+        tooltip = { PlainTooltip { Text(label) } },
+        state = androidx.compose.material3.rememberTooltipState(),
+        content = content,
+    )
 }

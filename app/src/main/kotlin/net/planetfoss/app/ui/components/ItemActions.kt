@@ -37,6 +37,8 @@ class ItemActions(
     val source: (Source) -> Unit,
     /** All reports of a story as cards (the website's bundle page). */
     val bundle: (Long) -> Unit = {},
+    /** Open the post in the user's browser outside the app (key O, middle click). */
+    val openOutside: (Item) -> Unit = {},
 ) {
     fun openItem(item: Item) = openFrom(item, "liste")
 }

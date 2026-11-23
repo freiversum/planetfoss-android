@@ -161,7 +161,10 @@
       thread. Fixed 2026-11-23: `tearDown` cancels and joins their scopes before closing the database; eight runs of the
       class green, no “already-closed” errors in the output any more
   - [x] T2 article in the detail pane (app's own browser) (2026-11-23; D-T1, D-T4, D-T5 confirmed as proposed)
-  - [ ] T3 keyboard shortcuts, hover, right click, focus ring; menus/dialogs instead of sheets
+  - [x] T3 keyboard shortcuts, overview (? and Meta+/), J/K cursor in post lists, right and middle click, tooltips,
+        focus ring (2026-11-23; keys checked in the emulator by adb, mouse clicks and hover not – adb cannot send them)
+  - [ ] T3 rest: menus at the pointer and dialogs instead of bottom sheets on wide screens; J/K also in Radar, Saved
+        and the supernova pages (only post lists so far); check right click, middle click and hover with a real mouse
   - [ ] T4 settings in two panes, topic side column, draggable divider, foldable hinge
   - [ ] T5 device checks (tablet both ways, Fold, split screen, TalkBack) and new tablet store images
 

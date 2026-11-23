@@ -10,6 +10,25 @@
     <string name="articles_beside">Open articles beside the list</string>
     <string name="articles_beside_text">On wide screens an article opens on the right in the app\'s own browser, with tracker protection. Off: as chosen below, over the whole screen.</string>
     <string name="browser_full_screen">Full screen</string>
+    <!-- keyboard shortcuts (tablets, keyboards; docs/11-tablet-mode.md T3) -->
+    <string name="close">Close</string>
+    <string name="key_ctrl">Ctrl</string>
+    <string name="keys_title">Keyboard shortcuts</string>
+    <string name="keys_group_navigate">Navigate</string>
+    <string name="keys_group_post">Post</string>
+    <string name="keys_tabs">Latest, Radar, Discover, Saved</string>
+    <string name="keys_search">Search</string>
+    <string name="keys_refresh">Refresh</string>
+    <string name="keys_close">Close the right side</string>
+    <string name="keys_settings">Settings</string>
+    <string name="keys_help">Show the shortcuts</string>
+    <string name="keys_next_prev">Next / previous post</string>
+    <string name="keys_open">Open</string>
+    <string name="keys_outside">Open in the browser</string>
+    <string name="keys_save">Save</string>
+    <string name="keys_star">Star</string>
+    <string name="keys_menu">Menu of a post</string>
+    <string name="keys_right_click">Right click</string>
     <string name="tab_saved">Saved</string>
     <string name="settings">Settings</string>
     <string name="back">Back</string>
