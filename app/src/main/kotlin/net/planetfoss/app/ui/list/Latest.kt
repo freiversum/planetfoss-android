@@ -7,6 +7,7 @@ import net.planetfoss.core.api.Comet
 import net.planetfoss.core.api.ContentLang
 import net.planetfoss.core.api.LogbookTeaser
 import net.planetfoss.core.api.OrbitTopic
+import net.planetfoss.core.api.Item
 import net.planetfoss.core.api.Supernova
 import java.time.Instant
 import java.time.LocalDate
@@ -40,6 +41,18 @@ object Latest {
 
     /** D-L4: burning supernovas, newest first – the first as the big card, the others compact. */
     fun burning(novas: List<Supernova>): List<Supernova> = novas.filter { it.burning }.sortedByDescending { it.ignitedAt }
+
+    /**
+     * The stream below the burning supernovas: without their posts, which stand in the supernova card on top (or in the
+     * situation beside the list) – as the website leaves the band's posts out of “Latest”. A post counts by its topic or
+     * as one of the card's reports (24.11.2026: Ladybird stood in the card and twice more in the stream).
+     */
+    fun withoutNovaPosts(items: List<Item>, burning: List<Supernova>): List<Item> {
+        if (burning.isEmpty()) return items
+        val keys = burning.map { it.key }.toSet()
+        val ids = burning.flatMap { n -> n.reports.map { it.id } }.toSet()
+        return items.filter { it.topic?.key !in keys && it.id !in ids }
+    }
 
     /** Supernovas of the last seven days that no longer burn: the chip row “This week in the sky”. */
     fun cooled(novas: List<Supernova>): List<Supernova> = novas.filterNot { it.burning }.sortedByDescending { it.ignitedAt }

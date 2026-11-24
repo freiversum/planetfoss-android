@@ -74,6 +74,11 @@ Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-re
 - Two fonts of freiversum.de for the card only: Oxanium for its title and Atkinson Hyperlegible Mono for its labels
   (Latin, one weight each, 34 KB together, SIL OFL 1.1).
 
+### Fixed
+- Latest showed the posts of a burning supernova twice: in its card on top and again in the stream below (on
+  2026-11-24 the Ladybird reports of Linux und Ich and LinuxNews). They now stand only in the card, as on the website;
+  beside the right side on tablets, the supernova's topic no longer shows under "Rising" either.
+
 ### Permissions
 - New: "Nearby devices" (`ACCESS_LOCAL_NETWORK`, Android 17+), asked for only when a bookmark service in the home
   network is connected. `ACCESS_NETWORK_STATE` is now declared by the app itself (WorkManager brought it in before).

@@ -49,6 +49,17 @@ class LatestTest {
     }
 
     @Test
+    fun postsOfABurningSupernovaLeaveTheStream() {
+        fun post(id: Long, topic: String?) = item(id, "de").copy(topic = topic?.let { net.planetfoss.core.api.TopicRef(it, it) })
+        val stream = listOf(post(10, "ladybird"), post(11, null), post(0, null), post(12, "firefox-161"))
+        // by topic (10) and as a report of the card (id 0), whatever its topic says
+        val nova = nova("ladybird", burning = true, langs = listOf("de"))
+        assertEquals(listOf(11L, 12L), Latest.withoutNovaPosts(stream, listOf(nova)).map { it.id })
+        // nothing burns: the stream stays as it is
+        assertEquals(stream, Latest.withoutNovaPosts(stream, emptyList()))
+    }
+
+    @Test
     fun burningNewestFirstAndCooledApart() {
         val list = listOf(nova("a", true, "2026-11-09T10:00:00Z"), nova("b", false), nova("c", true, "2026-11-10T10:00:00Z"))
         assertEquals(listOf("c", "a"), Latest.burning(list).map { it.key })

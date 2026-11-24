@@ -169,7 +169,8 @@ fun ItemListScreen(
                 val home = vm.target == ListTarget.Home
                 // Latest (docs/09-latest-tab.md): burning supernovas on top, then “Rising” – comets first, then the orbit topics
                 val burning = ui.burning.takeIf { home && !novasBeside }.orEmpty()
-                val rising = if (home) Latest.rising(ui.comets, ui.orbit, burning).takeIf { it.isNotEmpty() } else null
+                // without what burns – on top or, beside the detail pane, in the situation there
+            val rising = if (home) Latest.rising(ui.comets, ui.orbit, ui.burning).takeIf { it.isNotEmpty() } else null
                 // the newest logbook entry: a card on top in the morning until read (D-L3), otherwise a marker at its 6:00
                 val logbookCard = home && Latest.logbookAsCard(ui.logbook, ui.logbookRead)
                 val logbookMark = ui.logbook?.takeIf { home && !logbookCard }
@@ -238,7 +239,9 @@ fun ItemListScreen(
                     hiddenNote?.let { n -> item(key = "hidden", span = StaggeredGridItemSpan.FullLine) { HiddenNote(n, onSettings) } }
                 })
                 ItemListContent(
-                    state, listState, vm::refresh, ad = ui.ad, onAdSeen = vm::adSeen,
+                    // Latest: the posts of a burning supernova only in its card (on top or beside), not again in the stream
+                    if (home) state.copy(items = Latest.withoutNovaPosts(state.items, ui.burning)) else state,
+                    listState, vm::refresh, ad = ui.ad, onAdSeen = vm::adSeen,
                     // a bundle's reports are equals, oldest first: no lead card
                     leadFirst = vm.target !is ListTarget.Bundle,
                     emptyText = stringResource(if (vm.target == ListTarget.Starred) R.string.starred_empty else R.string.empty_home),
