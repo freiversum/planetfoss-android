@@ -153,7 +153,7 @@ so F-Droid needs the full history (default for its build server).
   1080 x 1920 images per language with captions on a night-sky panorama, live content from many sources through
   `tools/store-proxy.py` (article images only from linuxundich.de, OMG! Ubuntu and LinuxNews), captured in the emulator.
   Ten-inch tablet images redone the same day the same way (five 2560 x 1440 per language, `tablet.html`, Pixel Tablet
-  emulator). Not yet uploaded in the Play Console.
+  emulator). The tablet images were uploaded with 0.6.6 on 2026-11-24 (the 10-inch slot had been empty until then).
 - Privacy policy URL: https://planetfoss.net/datenschutz/ (has an Android app section; German only).
 - Done 2026-11-10: report and block for fediverse replies (UGC policy), decision D1 built, website deploy of `weekly`,
   `meta`, `logbook`, v0.6.0 tagged and the AAB rebuilt (versionCode 139).
@@ -193,8 +193,20 @@ so F-Droid needs the full history (default for its build server).
   `dist/planetfoss-0.6.5.aab` (SHA-256 `8ab8daf43beaab19e5c08ec9905e5e2ab4c54d129ccbe411e4bf171f40211961`) for the
   closed test (Alpha) on Google Play as release "0.6.5 (188)", sent for review the same evening (uploaded per Claude in
   Chrome; Play's only warning again: no native debug symbols). Needs planetfoss.net with `pending=1` (live 2026-11-20).
+- 2026-11-24: v0.6.6 (versionCode 219, tablet mode, keyboard and mouse, bookmark service, supernova posts no longer
+  twice in Latest) tagged two days earlier than planned and built from the tag on tinytin (`werkbank gradle
+  planetfoss-android --release`, unit tests and `lintRelease` in the same run); the signed release APK started in the
+  Werkbank emulator against the live API, phone and tablet size (not on the Pixel 10). APK `dist/planetfoss-0.6.6.apk`
+  (SHA-256 `58ae28126e30b329a692ba00b358dfeda812e4be3cb252b1dd3ab68792d8e7c8`) on the GitHub releases page, bundle
+  `dist/planetfoss-0.6.6.aab` (SHA-256 `ee7e30ea5acf5c712adf12001fe955705bcfa04eb97d7af5b197eba62f8ad306`) as release
+  "0.6.6 (219)" in the closed test (Alpha), sent for review together with the ten-inch tablet screenshots (DE + EN, AI
+  declaration: not labelled) per Claude in Chrome. Play's only warning: no native debug symbols; the console asked
+  nothing about the "Nearby devices" permission. Data safety was left unchanged (still to decide, see below).
 
-## Next release: 0.6.6 (planned 2026-11-26, Google Play)
+## Release 0.6.6 (2026-11-24, Google Play)
+
+Released 2026-11-24 instead of 2026-11-26; the checklist below is kept as a record. Still open from it: whether the
+data safety form wants the bookmark service listed (item 3).
 
 Collected 2026-11-21. Everything since v0.6.5 is in `CHANGELOG.md` under `[Unreleased]`; the in-app "What is new"
 entry (0.6.6, dated 2026-11-26) and its strings are already in. On the day:

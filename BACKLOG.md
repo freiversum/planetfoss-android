@@ -175,7 +175,7 @@
         pane), tablet portrait and landscape in dark, German, 130 % font; accessibility tree: the marked row is
         "checkable/checked" (Compose's way of `selected` for buttons), the handle is "Width of the list"
   - [x] New tablet store images with list and detail side by side (2026-11-23, docs/store-screenshots, DE + EN)
-  - [ ] Upload the new tablet images in the Play Console (Christoph)
+  - [x] Upload the new tablet images in the Play Console (2026-11-24, with 0.6.6)
   - [ ] T5 rest: TalkBack by ear on a real tablet; foldable hinge on a Pixel Fold emulator with a real hinge
 
 ## GitHub presentation
