@@ -1,0 +1,6 @@
+- Tablets: list and content side by side, read articles beside the list, settings in two panes
+- Keyboard and mouse: shortcuts (? shows them all), right-click menu, tooltips
+- Saved articles can also go to your own bookmark service: Karakeep, linkding, Linkwarden or Readeck
+- Offline: back online, the app reloads by itself; the hint says how old the shown state is
+- Discover, topics and sources show the last loaded state offline
+- Settings end with the night sky of freiversum

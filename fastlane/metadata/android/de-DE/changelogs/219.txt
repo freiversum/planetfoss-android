@@ -1,0 +1,6 @@
+- Tablets: Liste und Inhalt nebeneinander, Artikel daneben lesen, Einstellungen in zwei Bereichen
+- Tastatur und Maus: Tastenkürzel (? zeigt alle), Rechtsklick-Menü, Tooltips
+- Gespeichertes auf Wunsch im eigenen Lesezeichendienst: Karakeep, linkding, Linkwarden oder Readeck
+- Offline: Ist das Netz wieder da, lädt die App selbst neu; der Hinweis sagt, wie alt der Stand ist
+- Entdecken, Themen und Quellen zeigen offline den letzten Stand
+- Einstellungen enden mit dem Nachthimmel von freiversum

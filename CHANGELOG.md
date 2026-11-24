@@ -5,7 +5,7 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-release.md`, "Next release").
+## [0.6.6] - 2026-11-24
 
 ### Added
 - Tablets and other wide screens (first step of the tablet mode, `docs/11-tablet-mode.md`): pages use the width
