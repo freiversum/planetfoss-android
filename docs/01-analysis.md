@@ -161,7 +161,7 @@ Proposed: `minSdk 26` (Android 8.0: adaptive icons, notification channels,
 
 1. Data source: **B** (JSON API on planetfoss.net, RSS as fallback) or **A** (RSS only).
 2. Application ID: `net.planetfoss.app` (domain is ours) – name “PlanetFOSS”.
-3. Repository: `gh:linuxundich/planetfoss-android`, public, GPL-3.0-or-later.
+3. Repository: `gh:freiversum/planetfoss-android`, public, GPL-3.0-or-later.
 4. ~~Push~~ – decided: WorkManager only, no bender, no ntfy.
 5. App icon licence (see §6).
 6. F-Droid submission: done by Christoph himself (F-Droid's stance on AI-written

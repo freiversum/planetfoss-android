@@ -63,6 +63,7 @@ Planned as 0.6.6 for Google Play on 2026-11-26 (notes and checklist: `docs/08-re
 - World UFO Day: on 2 July and on 24 June (the phone's date) the UFO comes by on its own each time Settings are opened.
 
 ### Changed
+- The repository moved to the freiversum organization: https://github.com/freiversum/planetfoss-android. Old `github.com/linuxundich/planetfoss-android` links and clone URLs redirect.
 - Offline, the app catches up by itself: as soon as the phone has a working connection again, every screen that says
   "No connection" loads again – no need to tap "Try again".
 - The hint over the last loaded state says how old it is: "No connection to PlanetFOSS. Showing what was loaded at

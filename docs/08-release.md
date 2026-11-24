@@ -43,7 +43,7 @@ Status: 2026-10-30. Preparation; the release itself waits for the decisions belo
 
 ## GitHub (2026-11-17)
 
-- The repository is public: https://github.com/linuxundich/planetfoss-android (branch `main`, tags `vX.Y.Z`).
+- The repository is public: https://github.com/freiversum/planetfoss-android (branch `main`, tags `vX.Y.Z`).
 - Every release gets `planetfoss-<version>.apk` (built from the tag in a clean worktree, signed with the release key
   above) and its `.sha256` on the releases page; first one is v0.6.3 (versionCode 163).
 - Release notes: first line one sentence for users, then the changes, the install note, and the hidden lines
@@ -82,7 +82,7 @@ the benchmark packages were uninstalled from the phone afterwards.
 | # | Question | Notes |
 |---|---|---|
 | 1 | Version | **decided 2026-10-30:** the first release is `v0.2.0` (`v0.1.0` stays a local tag, 0dd9738) |
-| 2 | Repository | `gh:linuxundich/planetfoss-android`, public – **stays private for now** (2026-10-30); F-Droid needs it public |
+| 2 | Repository | `gh:freiversum/planetfoss-android`, public – **stays private for now** (2026-10-30); F-Droid needs it public |
 | 3 | App icon / wordmark licence | **decided 2026-10-30:** CC BY-SA 4.0; the name stays with the official builds (`LICENSES.md`) |
 | 4 | F-Droid AntiFeature `NonFreeNet` | **decided 2026-10-30: yes** – the app depends on planetfoss.net, whose server code is not public; drop it once that code is published |
 | 5 | ~~F-Droid AntiFeature `Tracking`~~ | decided 2026-10-30: counting opened articles and seen sponsor cards is **opt-in** (Settings → Anonymous counting, off by default; renamed 2026-11-07), so no `Tracking` flag |
@@ -98,9 +98,9 @@ Categories:
 License: GPL-3.0-or-later
 AuthorName: Christoph Langner
 WebSite: https://planetfoss.net/
-SourceCode: https://github.com/linuxundich/planetfoss-android
-IssueTracker: https://github.com/linuxundich/planetfoss-android/issues
-Changelog: https://github.com/linuxundich/planetfoss-android/blob/main/CHANGELOG.md
+SourceCode: https://github.com/freiversum/planetfoss-android
+IssueTracker: https://github.com/freiversum/planetfoss-android/issues
+Changelog: https://github.com/freiversum/planetfoss-android/blob/main/CHANGELOG.md
 
 AutoName: PlanetFOSS
 AntiFeatures:
@@ -110,7 +110,7 @@ AntiFeatures:
   # Ads: add once ads are switched on at planetfoss.net (own sponsor cards, affiliate tiles)
 
 RepoType: git
-Repo: https://github.com/linuxundich/planetfoss-android.git
+Repo: https://github.com/freiversum/planetfoss-android.git
 
 Builds:
   - versionName: 0.5.1

@@ -114,7 +114,7 @@ val RELEASE_NOTES = listOf(
 )
 
 private const val SHOWN = 5
-private const val CHANGELOG_URL = "https://github.com/linuxundich/planetfoss-android/blob/main/CHANGELOG.md"
+private const val CHANGELOG_URL = "https://github.com/freiversum/planetfoss-android/blob/main/CHANGELOG.md"
 
 /** The version without the suffix of development builds ("0.6.4-dev+12.gabc" is 0.6.4). */
 fun baseVersion(name: String): String = name.substringBefore('-')

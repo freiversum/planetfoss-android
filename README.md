@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/linuxundich/planetfoss-android/releases/latest"><strong>Download APK</strong></a>
+  <a href="https://github.com/freiversum/planetfoss-android/releases/latest"><strong>Download APK</strong></a>
   &nbsp;·&nbsp;
   <a href="#install">Google Play: closed test</a>
   &nbsp;·&nbsp; F-Droid: planned &nbsp;·&nbsp;
@@ -140,7 +140,7 @@ listed in the [privacy notes](PRIVACY.md).
 <tr>
 <td valign="top">
 
-1. Download `planetfoss-<version>.apk` from the [latest release](https://github.com/linuxundich/planetfoss-android/releases/latest).
+1. Download `planetfoss-<version>.apk` from the [latest release](https://github.com/freiversum/planetfoss-android/releases/latest).
 2. Open it on your phone. Android asks once whether your browser may install apps.
 3. Later versions install over the old one and keep your settings.
 
@@ -222,7 +222,7 @@ every message.
 - [Technical notes](docs/TECHNICAL.md): building, testing and the design documents
 - [Privacy notes](PRIVACY.md): everything that leaves the phone
 - [Changelog](CHANGELOG.md) and [licences of all libraries and assets](LICENSES.md)
-- Found a bug or missing something? [Open an issue](https://github.com/linuxundich/planetfoss-android/issues)
+- Found a bug or missing something? [Open an issue](https://github.com/freiversum/planetfoss-android/issues)
 
 PlanetFOSS for Android is AI-assisted: the code was written with AI assistance,
 following my directions. I made the decisions, reviewed the results and tested
